@@ -1,0 +1,3725 @@
+[
+  {
+    "id": "685b205c4321f4db789e689a",
+    "name": "grok-3",
+    "description": "This is a grok-3 registered by LLM Config",
+    "provider": "azure-foundry",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flowaicoremain6118378342",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "grok-3",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "03101305c3641c3b32d4c8a5f0b4adfa2cd0b33c7968cd7022de3c982c4310ff",
+    "capabilities": ["streaming", "chat-conversation"],
+    "providerSecret_id": "6840745d9bf2de895649b07e",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "grok-3",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 131000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685c5c560eb78a35f8f6b102",
+    "name": "whisper",
+    "description": "This is a whisper registered by LLM Config",
+    "provider": "azure-ai-speech",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "a68e8104925ecff72a0b599274c289478661ecc83748041835ffaceb24d3e686",
+    "capabilities": ["audio-transcription"],
+    "providerSecret_id": "684075889bf2de895649ba82",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "whisper",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685c5c560eb78a35f8f6b104",
+    "name": "whisper",
+    "description": "This is a whisper registered by LLM Config",
+    "provider": "azure-ai-speech",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "28ed75f5ac5c74d6ae1b2c28ac511ba4fe2198564bde2440d1a3521f0b330837",
+    "capabilities": ["audio-transcription"],
+    "providerSecret_id": "6840753be1757b5efeaad783",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "whisper",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685c716e0eb78a35f8f72162",
+    "name": "DeepSeek-R1",
+    "description": "This is a DeepSeek-R1 registered by LLM Config",
+    "provider": "azure-foundry",
+    "forClientRegion": "global",
+    "tags": ["vendor-deepseek"],
+    "directory": "flowaicoremain6118378342",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "DeepSeek-R1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "d3b7727264dc65f3203c5d6731a75a1217767b1b014ee55f57c2905dd58dc8e5",
+    "capabilities": ["streaming", "chat-conversation", "reasoning"],
+    "providerSecret_id": "6840745d9bf2de895649b07e",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "DeepSeek-R1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685c716e0eb78a35f8f72166",
+    "name": "DeepSeek-R1",
+    "description": "This is a DeepSeek-R1 registered by LLM Config",
+    "provider": "azure-foundry",
+    "forClientRegion": "global",
+    "tags": ["vendor-deepseek"],
+    "directory": "flowaicoremain6118378342",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "DeepSeek-R1-2",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "abeaa7ac8b8e8f8f35e5fcb3fb319e80d5092998aedb884b60edad6272f96176",
+    "capabilities": ["streaming", "chat-conversation", "reasoning"],
+    "providerSecret_id": "6840745d9bf2de895649b07e",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "DeepSeek-R1-2",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685d6fd31cf171206ffef97a",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-frce-ca",
+    "remoteConfig": {
+      "region": "francecentral",
+      "deploymentId": "text-embedding-ada-002-a",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "381ff3495fe77a12cee0596ac9abb9816d3f2ac72ca47243879f0446774b6fba",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "6812857cafc5e89a8a375e02",
+    "providerExtraParam": {
+      "region": "francecentral",
+      "modelId": "text-embedding-ada-002-a",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 500
+    }
+  },
+  {
+    "id": "685d6fd31cf171206ffef97e",
+    "name": "gpt-4o-mini",
+    "description": "This is a gpt-4o-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-emea-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "bf12b9c9633b0db71889cf061a46e12737552f0d56dbcc92ce9f38b6b233901d",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "providerSecret_id": "68128752afc5e89a8a376556",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 2000
+    }
+  },
+  {
+    "id": "685d6fd31cf171206ffef980",
+    "name": "gpt-4o-mini",
+    "description": "This is a gpt-4o-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["kenvue", "restricted", "vendor-openai"],
+    "directory": "flow-llm-eaus-kenvue-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "3aa211efa918cd55ad9ab51a467c82ab0cbc17adf103d0024b8966bb9b577754",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "providerSecret_id": "681287d8afc5e89a8a3767a4",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 1500
+    }
+  },
+  {
+    "id": "685d6fd31cf171206ffef982",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["kenvue", "restricted", "vendor-openai"],
+    "directory": "flow-llm-eaus-kenvue-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "9924ecb0d3406ec9dbfafb53a9f5167419bc75206bbbf35c69631903b0b995bd",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "681287d8afc5e89a8a3767a4",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-08-06",
+      "tpm": 2000
+    }
+  },
+  {
+    "id": "685d6fd31cf171206ffef984",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-frce-ca",
+    "remoteConfig": {
+      "region": "francecentral",
+      "deploymentId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "2757cb135141a51b2419efd0ca1528f8d25bd1d7534676309cccd885f8166ba2",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "6812857cafc5e89a8a375e02",
+    "providerExtraParam": {
+      "region": "francecentral",
+      "modelId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 500
+    }
+  },
+  {
+    "id": "685d888f071e1b9370e01bbb",
+    "name": "dall-e-3",
+    "description": "This is a dall-e-3 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "dall-e-3",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "4a2f4584066815e1024e4f22533ea1620e4533e48d86d1d0a5bcf6ef41de73f1",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "dall-e-3",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 1000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685d88901cf171206fff824d",
+    "name": "text-embedding-3-small",
+    "description": "This is a text-embedding-3-small registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "text-embedding-3-small",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "64a998068998ebb715c56053634ced031ebc9b7ab69548f646ecb43485ff2331",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "text-embedding-3-small",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 10000
+    }
+  },
+  {
+    "id": "685d88901cf171206fff8251",
+    "name": "o1",
+    "description": "This is a o1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "o1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "9f3130e41d493157a7f35910ab1fb9c390a8dad8152323e1a1ffca4cc98b0b8f",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "o1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "2024-12-17",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "685d88901cf171206fff824f",
+    "name": "gpt-4.1",
+    "description": "This is a gpt-4.1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-4.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "d1a2cb499b3220ea03ef0c24d26e6e94b90ab529c5f0585083ce43f95986506c",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-4.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 1000000,
+      "release": "2025-04-14",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "685d88901cf171206fff8253",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "c665cf1dbd6ba6006eaa8126b857736f1f5691a60e2fdf2883150e9967cc35ea",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 1000
+    }
+  },
+  {
+    "id": "685d88901cf171206fff8255",
+    "name": "gpt-4o-mini",
+    "description": "This is a gpt-4o-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "cd70dce491cc6e106f04c335ab8b6ccdd0dfe3e840ae434c1f4d9b00bc403ac6",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 1000
+    }
+  },
+  {
+    "id": "685d8890071e1b9370e01bc2",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": [],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "11c3f642250f34c3a64e1b1f9a6488c9e8500944098d63ef03ca5f7a116be265",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-08-06",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "685d8890071e1b9370e01bc4",
+    "name": "o3-mini",
+    "description": "This is a o3-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "o3-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "58ef15f7a01d224d495500f02d49d129a23ce18fb3cc17eb2783352df0e865e9",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "reasoning",
+      "function-calling"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "o3-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "2025-01-31",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "685d9a630867996a2c876b83",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-ncus-ca",
+    "remoteConfig": {
+      "region": "northcentralus",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "27c5839bb0e1d729c1b25f309978e7b5abbfeb64adb641f7dece46fcc5d801b3",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812830aafc5e89a8a3753f9",
+    "providerExtraParam": {
+      "region": "northcentralus",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-05-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "685d9a631cf171206fffd3f8",
+    "name": "gpt-4o-mini",
+    "description": "This is a gpt-4o-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-ncus-ca",
+    "remoteConfig": {
+      "region": "northcentralus",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "b38d0a562d8ec6d9e470b326c183c749698f36467de895ff46dcf3d0c94453f2",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "providerSecret_id": "6812830aafc5e89a8a3753f9",
+    "providerExtraParam": {
+      "region": "northcentralus",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-07-18",
+      "tpm": 45000
+    }
+  },
+  {
+    "id": "685d9a630867996a2c876b86",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-weus-ca",
+    "remoteConfig": {
+      "region": "westus",
+      "deploymentId": "text-embedding-ada-002-b",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "c3700eb991e84ba9ede99fec413197c9b9298657ad9f05ceb1c2ce8802895ff7",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "681286cdafc5e89a8a37629e",
+    "providerExtraParam": {
+      "region": "westus",
+      "modelId": "text-embedding-ada-002-b",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 333
+    }
+  },
+  {
+    "id": "685d9a631cf171206fffd3fa",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-ncus-ca",
+    "remoteConfig": {
+      "region": "northcentralus",
+      "deploymentId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "b863a35a2b1c4eb5c39f023b5a519a39541216b7ceea096ec473c4548d6a5eb7",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "6812830aafc5e89a8a3753f9",
+    "providerExtraParam": {
+      "region": "northcentralus",
+      "modelId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 1000
+    }
+  },
+  {
+    "id": "685d9a630867996a2c876b88",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-openai-ca",
+    "remoteConfig": {
+      "region": "canadaeast",
+      "deploymentId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "1dd925f4c385a9d255e6adb7cb8fee89fc11d6d01226d8fdd4413ae0302017b2",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "68128621afc5e89a8a37609d",
+    "providerExtraParam": {
+      "region": "canadaeast",
+      "modelId": "text-embedding-ada-002",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 1000
+    }
+  },
+  {
+    "id": "685d9a630867996a2c876b8a",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-weus-ca",
+    "remoteConfig": {
+      "region": "westus",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "958ccc3a1c461828b265c052fc8953ec67318718a93e553c9c7b1cf422737f28",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "681286cdafc5e89a8a37629e",
+    "providerExtraParam": {
+      "region": "westus",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-05-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "685d9a631cf171206fffd3fc",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": [],
+    "directory": "flow-core-llm-weus-ca",
+    "remoteConfig": {
+      "region": "westus",
+      "deploymentId": "text-embedding-ada-002-a",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "b3b44acfca84fe75350ff2dfa3048ca67d9c64af64768f27dce811e46f23455c",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "681286cdafc5e89a8a37629e",
+    "providerExtraParam": {
+      "region": "westus",
+      "modelId": "text-embedding-ada-002-a",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 334
+    }
+  },
+  {
+    "id": "685d9a631cf171206fffd3fe",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-weus-ca",
+    "remoteConfig": {
+      "region": "westus",
+      "deploymentId": "text-embedding-ada-002-c",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "8e0017fdce2a7aa1f82fa11956fa9ae2364899a669e481857327f7f8a6fc18cb",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "681286cdafc5e89a8a37629e",
+    "providerExtraParam": {
+      "region": "westus",
+      "modelId": "text-embedding-ada-002-c",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 333
+    }
+  },
+  {
+    "id": "685da1e21cf171206f000715",
+    "name": "gpt-4.1",
+    "description": "This is a gpt-4.1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-4.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "3db1d91dc004efe60a5cfb06b19b464c374a267b776163fda5a6cce7e35e34c5",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-4.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 1000000,
+      "release": "2025-04-14",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "685da1e31cf171206f000717",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "text-embedding-ada-002-a",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "b2dd3c69bd680640d45b1c7fb0efb57217fc1afcd4fb0ec3358cf41a5266b5c8",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "text-embedding-ada-002-a",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 20000
+    }
+  },
+  {
+    "id": "685da1e31cf171206f000719",
+    "name": "gpt-4o-mini",
+    "description": "This is a gpt-4o-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "7632d43ce20687df650db77772c7db508f9b433ca353bb1ecb5d199f3daf4e1b",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-07-18",
+      "tpm": 45000
+    }
+  },
+  {
+    "id": "685da1e31cf171206f00071b",
+    "name": "o3-mini",
+    "description": "This is a o3-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "o3-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "942185fb119316746d90de2fdce2f9129d682eac6db0572560f3a4d650db672c",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "reasoning",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "o3-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "2025-01-31",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "685da1e31cf171206f00071d",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "3d99797db29d7607d348ccbad8868e827d486cc3c128ed4aad1f3c7a0175b36a",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-08-06",
+      "tpm": 30000
+    }
+  },
+  {
+    "id": "685da8401cf171206f002a10",
+    "name": "dall-e-3",
+    "description": "This is a dall-e-3 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "dall-e-3",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "fda1a124fb0f9519c159a323c2ccb8ed8751c0701bbe57aab31c9e71a719d72c",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "dall-e-3",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 1000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "685da8401cf171206f002a12",
+    "name": "o1",
+    "description": "This is a o1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "o1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "991f1a617d0bdf81022f32f68180c1e04c9a53726600f3316bff4847c4f4da13",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "o1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "2024-12-17",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "685da840b0e94bc7f4fd42e6",
+    "name": "text-embedding-ada-002",
+    "description": "This is a text-embedding-ada-002 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "text-embedding-ada-002-b",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "3240311b8e43875ca88aff7ba531155a0db235d6b0bf65025c0acce310699558",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "text-embedding-ada-002-b",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 20000
+    }
+  },
+  {
+    "id": "685da8401cf171206f002a14",
+    "name": "text-embedding-3-small",
+    "description": "This is a text-embedding-3-small registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "text-embedding-3-small",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "790b28943f399d31de514b18d1771a94fc91f3f0019591b4b383aa8e307d440b",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "text-embedding-3-small",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 10000
+    }
+  },
+  {
+    "id": "685dbed71cf171206f007d6f",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "287fa5622fd9550f4ecc31260efbe884c7403d2f920d6049d74d90834855678b",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-08-06",
+      "tpm": 1000
+    }
+  },
+  {
+    "id": "685dbed81cf171206f007d71",
+    "name": "gpt-4o-mini",
+    "description": "This is a gpt-4o-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "69fbb6139d67ea97bbf534807e349e5f9930d45ffc332fa9ab650dc4a0e7fec9",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 45000
+    }
+  },
+  {
+    "id": "685dbed81cf171206f007d73",
+    "name": "gpt-4o",
+    "description": "This is a gpt-4o registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o-2",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "129f85e96cc1c50824971012e5eec973458bfb11d03ba3d856cf805fbb942a30",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "providerSecret_id": "6810e5ee8d03f5f1d19670df",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o-2",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-11-20",
+      "tpm": 6000
+    }
+  },
+  {
+    "id": "685ee9d989b3c7ed2934088e",
+    "name": "whisper",
+    "description": "This is a whisper registered by LLM Config",
+    "provider": "azure-ai-speech",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus-ca",
+    "remoteConfig": {
+      "region": "eastus",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "e8be70c29ba556eac0bedf92cd62c0095a049348c45e0e36b24e453bd3874891",
+    "capabilities": ["audio-transcription"],
+    "providerSecret_id": "684074ef58c7531c8ca6edad",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "whisper",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "tpm": 0
+    }
+  },
+  {
+    "id": "687a92bb5b127cb769c8e9fd",
+    "name": "Phi-4",
+    "description": "This is a Phi-4 registered by LLM Config",
+    "provider": "azure-foundry",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flowaicoremain6118378342",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "Phi-4",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "3a40b1f1ef4ef06c666c380f92e6f32279beba1760eaf15db5d18b66618026e8",
+    "capabilities": ["streaming", "chat-conversation"],
+    "providerSecret_id": "6840745d9bf2de895649b07e",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "Phi-4",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "689c7ecce08089cfca620649",
+    "name": "gpt-5",
+    "description": "This is a gpt-5 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-5",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "49b9033032ecbf3640bb549dbcc4b8edbdacd56a35030d7955e73a73deb418c9",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-5",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 10000
+    }
+  },
+  {
+    "id": "689c7ecce08089cfca62064d",
+    "name": "gpt-5",
+    "description": "This is a gpt-5 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-5",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "68bfdebe20b31b82a62df213f11888095dce9330adb6982e3dec99db6eeda163",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-5",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 10000
+    }
+  },
+  {
+    "id": "689c7ecce08089cfca62064f",
+    "name": "gpt-5-mini",
+    "description": "This is a gpt-5-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-5-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "efcc160fe97adc11dcbd52956506289206f694fe843e06db3aa9d739cad75efd",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-5-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "689c7ecce08089cfca620651",
+    "name": "gpt-5-mini",
+    "description": "This is a gpt-5-mini registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-5-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "c8391ecdcf985156d200aa07adcc9994c5485a3fd897db5aef80eb53d4554f62",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-5-mini",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "689f3d6f7f5450b8e40f842f",
+    "name": "gpt-5-nano",
+    "description": "This is a gpt-5-nano registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-5-nano",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "1979c1e80e14862b36169e6a0f90225dd0b110c4a7ae4712987fe283187321d2",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning",
+      "autocomplete"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-5-nano",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "689f3d707f5450b8e40f8433",
+    "name": "gpt-5-nano",
+    "description": "This is a gpt-5-nano registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-5-nano",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "58a939358abca9b4924fdffb38fa3b08915cdde85a5f81c7e9fc000395d0767c",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning",
+      "autocomplete"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-5-nano",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "68a877ef71f7c4bd1356f847",
+    "name": "gpt-image-1",
+    "description": "This is a gpt-image-1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-image-1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "704db5d13c5d5c1236b416e326e9271aabc0f3f2e65a7576f71166ca77bbad0b",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-image-1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 1000,
+      "release": "2025-04-15",
+      "tpm": 20
+    }
+  },
+  {
+    "id": "68a877ef71f7c4bd1356f84b",
+    "name": "gpt-image-1",
+    "description": "This is a gpt-image-1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-image-1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "c437e2c99bce5af85fd3ed4140ee530b65ce732b202ca4118ace1b313a78ae37",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-image-1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 1000,
+      "release": "2025-04-15",
+      "tpm": 20
+    }
+  },
+  {
+    "id": "68b745c5de51af826b31a30a",
+    "name": "gemini-2.5-flash",
+    "description": "This is a gemini-2.5-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["globo", "restricted", "vendor-gemini"],
+    "directory": "flow-core-llm-ciandt-it-flow-opex-globo",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-it-flow-opx-glob",
+      "clientEmail": "vertex-ai@ciandt-it-flow-opx-glob.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "77872c6b9b316e9210360c495176a1e35c51cdeaf71ba352c568b025d646b2b7",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "autocomplete",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68b736890a7e256f81fcf600",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-2.5-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5de51af826b31a30c",
+    "name": "gemini-2.5-pro",
+    "description": "This is a gemini-2.5-pro registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["globo", "restricted", "vendor-gemini"],
+    "directory": "flow-core-llm-ciandt-it-flow-opex-globo",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-it-flow-opx-glob",
+      "clientEmail": "vertex-ai@ciandt-it-flow-opx-glob.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "ce01e96f7ca2f9174068621eedba53cfe06493ec61d3f9fd1a65eaa44f6b6a73",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "reasoning",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68b736890a7e256f81fcf600",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-2.5-pro",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5719107f105acfa3a",
+    "name": "gemini-embedding-001",
+    "description": "This is a gemini-embedding-001 registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["globo", "restricted", "vendor-gemini"],
+    "directory": "flow-core-llm-ciandt-it-flow-opex-globo",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-it-flow-opx-glob",
+      "clientEmail": "vertex-ai@ciandt-it-flow-opx-glob.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "c8c9e6b855973fce990d63b51bc6bc0b0eec665572634cf648c19eee8702f96b",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "68b736890a7e256f81fcf600",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-embedding-001",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 20000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5719107f105acfa3c",
+    "name": "gemini-2.5-flash",
+    "description": "This is a gemini-2.5-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-central2",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "6bab7bd64e32675d73dc4c6c55a5e3a714f7f8d21e33d4623dba46a4001be804",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "autocomplete",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-central2",
+      "modelId": "gemini-2.5-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5de51af826b31a30e",
+    "name": "gemini-2.0-flash",
+    "description": "This is a gemini-2.0-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-east1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "dbe8fe200655b0a2b0118076a607c67d3115592af38d513b0ff8e0e3e08cf5ff",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-east1",
+      "modelId": "gemini-2.0-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5719107f105acfa3e",
+    "name": "gemini-embedding-001",
+    "description": "This is a gemini-embedding-001 registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-east1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "5fb38f3f94a588d120bea5e3c21bf3cd4368f4422c6dba998b94a005394291bd",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-east1",
+      "modelId": "gemini-embedding-001",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 20000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5de51af826b31a310",
+    "name": "gemini-2.5-flash",
+    "description": "This is a gemini-2.5-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-east1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "6b745672357896efa32758a0182cb8dc37f10179a5cffac8a4424e41e29859e2",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "autocomplete",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-east1",
+      "modelId": "gemini-2.5-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5de51af826b31a312",
+    "name": "gemini-embedding-001",
+    "description": "This is a gemini-embedding-001 registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "5c88752fc8fff90545a7a022f959e4fb058c65447c7d386370d5dfd32dd5e8de",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-embedding-001",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 20000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c5de51af826b31a314",
+    "name": "gemini-2.0-flash",
+    "description": "This is a gemini-2.0-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-central2",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "2c5680dfabd8cfacd93cc2104439b5911d9e38f94c6794ce4c85b8672809bd4b",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-central2",
+      "modelId": "gemini-2.0-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c6de51af826b31a316",
+    "name": "gemini-2.5-pro",
+    "description": "This is a gemini-2.5-pro registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-central2",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "45441c380d85acde40c717bd31b61b82f4aceff7e8da8bd654862b52c77d2e8e",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "reasoning",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-central2",
+      "modelId": "gemini-2.5-pro",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c6719107f105acfa40",
+    "name": "gemini-embedding-001",
+    "description": "This is a gemini-embedding-001 registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-central2",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "5fadb53a2ff77f26760442755f66a1085bd57be253bb4848e376e05598a1af0d",
+    "capabilities": ["streaming", "text-embedding"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-central2",
+      "modelId": "gemini-embedding-001",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 20000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c6de51af826b31a318",
+    "name": "gemini-2.5-flash",
+    "description": "This is a gemini-2.5-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-west1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "53d0beacbf6a73975f235d05c0ccc6b409d98df15f512b82b89c0c4df0870e3d",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "autocomplete",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-west1",
+      "modelId": "gemini-2.5-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c6de51af826b31a31a",
+    "name": "gemini-2.5-flash",
+    "description": "This is a gemini-2.5-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "1feb5dfcf60e6da569a0e8ae745a717536896449cccdda42526298df8a129ee9",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "autocomplete",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-2.5-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68b745c6719107f105acfa42",
+    "name": "gemini-2.5-pro",
+    "description": "This is a gemini-2.5-pro registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "5621bfe0d1877a967329f2ff4407d6380023980e97a6f72edde19ce47527a098",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "reasoning",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-2.5-pro",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68c04106a3f713099ea53f19",
+    "name": "gemini-2.0-flash",
+    "description": "This is a gemini-2.0-flash registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["globo", "restricted", "vendor-gemini"],
+    "directory": "flow-core-llm-ciandt-it-flow-opex-globo",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-it-flow-opx-glob",
+      "clientEmail": "vertex-ai@ciandt-it-flow-opx-glob.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "94363403d40949b23890e488054fe057e95d31734077ca9bc67826f5864379cc",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68b736890a7e256f81fcf600",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-2.0-flash",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68c1e6dfd1c4c33e0233ce18",
+    "name": "DeepSeek-V3-0324",
+    "description": "This is a DeepSeek-V3-0324 registered by LLM Config",
+    "provider": "azure-foundry",
+    "forClientRegion": "global",
+    "tags": ["vendor-deepseek"],
+    "directory": "flowaicoremain6118378342",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "DeepSeek-V3-0324",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "4c20b1bf5137bd67b78ab5e16ec2317e94801b18dd8d8f5d363a01fe1537d177",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "function-calling",
+      "system-instruction"
+    ],
+    "providerSecret_id": "6840745d9bf2de895649b07e",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "DeepSeek-V3-0324",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68c32a58b0beff0316b78950",
+    "name": "mistral-small-2503",
+    "description": "This is a mistral-small-2503 registered by LLM Config",
+    "provider": "azure-foundry",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flowaicoremain6118378342",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "mistral-small-2503",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "1ba0f097ea833670b37123e75ce57408d63e255a465d32748fc823e193ab0906",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "reasoning",
+      "function-calling"
+    ],
+    "providerSecret_id": "6840745d9bf2de895649b07e",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "mistral-small-2503",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5528e0d6236c8aa0236",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "ap-northeast-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "68d0a8d65b2edef2fc9c0095b33a433cb002d79b2f6325454591d8b687b5efe0",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "ap-northeast-1",
+      "modelId": "apac.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa023a",
+    "name": "amazon.nova-lite",
+    "description": "This is a amazon.nova-lite registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "152ff8fd5e6e0ad30a6ef503b1e2a02002779cc6e6d60929df4a46e905be238b",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "video-recognition",
+      "autocomplete"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "amazon.nova-lite-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 300000,
+      "release": "v1.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538491e492a28328a3",
+    "name": "amazon.nova-micro",
+    "description": "This is a amazon.nova-micro registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "f886b6d32a2ee224b8bdd925ce2defddaa293653c9663e861d79fc22b5f98492",
+    "capabilities": ["streaming", "chat-conversation", "autocomplete"],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "amazon.nova-micro-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e55373506955f6599d65",
+    "name": "anthropic.claude-3-5-haiku",
+    "description": "This is a anthropic.claude-3-5-haiku registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "f61d21fd5824b9ec2782103767a408c9284989208059170bd48c77206f4cf27b",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "autocomplete",
+      "system-instruction",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "us.anthropic.claude-3-5-haiku-20241022-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa023c",
+    "name": "amazon.titan-embed-text-v2",
+    "description": "This is a amazon.titan-embed-text-v2 registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "d152e0ddc5f56a83be460c220655b26d87f87f18f51306567fa8876c4d4f5f4c",
+    "capabilities": ["text-embedding"],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "amazon.titan-embed-text-v2:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 8191,
+      "release": "v2.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa0240",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "e88f0dbf24c98b039fb49b5518e8b61200ff1e0c88e41ae8d3e23aa731d05ec3",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e553653e655ed7543c2e",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "5cdb0132e5d0c8d88883c47fe7542c7edbd74e52e34b2c0cbe9f532d3c544e4e",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-2",
+      "modelId": "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538491e492a28328a7",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-west-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "cba24621bb1fa96321ad1e567c61cb6382a9a869f0138df4e486a22c5ecec17e",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-west-2",
+      "modelId": "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538491e492a28328a9",
+    "name": "openai.gpt-oss-20b",
+    "description": "This is a openai.gpt-oss-20b registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "7289735b851b9517bf722bd63bb2b19541ff27f43600a8e0b4e0b195186815b5",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "reasoning",
+      "function-calling",
+      "system-instruction"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "openai.gpt-oss-20b-1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e55373506955f6599d69",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-west-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "f10798b061b4483f9669db739448d7fdb0d208f5a01cd9db436550a8196c0c49",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-west-1",
+      "modelId": "eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e553653e655ed7543c30",
+    "name": "amazon.nova-pro",
+    "description": "This is a amazon.nova-pro registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "b93a783dcd977d3985c2187edfaa1bc7e60009d57f2bcd565c47856eccb1f629",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "reasoning",
+      "video-recognition"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "amazon.nova-pro-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 300000,
+      "release": "v1.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa0242",
+    "name": "anthropic.claude-4-sonnet",
+    "description": "This is a anthropic.claude-4-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-west-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "c0787175c44e0319c377d6a9cc565bd51c47d336922cbd0724ec9d80676ba5fb",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-west-1",
+      "modelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e55373506955f6599d6b",
+    "name": "anthropic.claude-4-sonnet",
+    "description": "This is a anthropic.claude-4-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "88062a42e2dde120cdfc413f33fc3425278ce8fb84c804b5e6591ccfab5963ec",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "us.anthropic.claude-sonnet-4-20250514-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e553653e655ed7543c32",
+    "name": "anthropic.claude-4-sonnet",
+    "description": "This is a anthropic.claude-4-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-central-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "cebe1992ac705aae64e4ace59b8380c0d61c7538c48a9326fc5a521a024a5ece",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-central-1",
+      "modelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa0244",
+    "name": "meta.llama3-70b-instruct",
+    "description": "This is a meta.llama3-70b-instruct registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "833ba0d7d0e6c25a7e3944a53b97101a7d6ef73a6f63649c9a7222b6cbf71f4c",
+    "capabilities": ["streaming", "chat-conversation", "system-instruction"],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "meta.llama3-70b-instruct-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 8000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e55373506955f6599d6d",
+    "name": "meta.llama4-scout-17b-instruct",
+    "description": "This is a meta.llama4-scout-17b-instruct registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "dd12579532b76a4e520650bf7d3ef2f8c8074fc93e19e35542d3f179f697938c",
+    "capabilities": [
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "us.meta.llama4-scout-17b-instruct-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 10000000,
+      "release": "v1.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538491e492a28328ab",
+    "name": "anthropic.claude-4-sonnet",
+    "description": "This is a anthropic.claude-4-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "a15b7b75fa01a51845663c1894d0dc226de2698a9cea13e301351065b2966eef",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-2",
+      "modelId": "us.anthropic.claude-sonnet-4-20250514-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e553653e655ed7543c35",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-central-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "b05bcaa7528aec252a7dccc3b56d4566965f5449cb0b670e4d1f6ef6d6d4c9de",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-central-1",
+      "modelId": "eu.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e55373506955f6599d6f",
+    "name": "amazon.titan-embed-text-v2",
+    "description": "This is a amazon.titan-embed-text-v2 registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-central-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "b1676174d034454de6fe8fd6ea7854b74ae8e53c8b4c4f03ed975964981e2ddb",
+    "capabilities": ["text-embedding"],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-central-1",
+      "modelId": "amazon.titan-embed-text-v2:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 8191,
+      "release": "v2.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e55373506955f6599d71",
+    "name": "amazon.titan-embed-text-v2",
+    "description": "This is a amazon.titan-embed-text-v2 registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-west-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "7e30afd05c1ecbfb9d150d5588fdd78a57e791bc98eaf76e804d7107b600091b",
+    "capabilities": ["text-embedding"],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-west-2",
+      "modelId": "amazon.titan-embed-text-v2:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 8191,
+      "release": "v2.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa0246",
+    "name": "meta.llama3-70b-instruct",
+    "description": "This is a meta.llama3-70b-instruct registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-others"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-west-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "5d6d5baad6b8e3b65e64ce892977fd3b9d270084b365da3a7587d86647c832af",
+    "capabilities": ["streaming", "chat-conversation", "system-instruction"],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-west-2",
+      "modelId": "meta.llama3-70b-instruct-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 8000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f0e5538e0d6236c8aa0248",
+    "name": "openai.gpt-oss-20b",
+    "description": "This is a openai.gpt-oss-20b registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-west-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "02bfb8c6c571c8140ad32313206aa70866994d210314f403ecdcadda36340fcd",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "reasoning",
+      "function-calling",
+      "system-instruction"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-west-2",
+      "modelId": "openai.gpt-oss-20b-1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f12ba1119d3042c3bfbdd2",
+    "name": "amazon.titan-embed-text-v2",
+    "description": "This is a amazon.titan-embed-text-v2 registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto", "vendor-others"],
+    "directory": "flow-core-llm-bedrock-cit-flow-app",
+    "remoteConfig": {
+      "region": "us-east-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "33d0814d4225b1717291c526c5b83e4da2c734eb2af7afce904c10d4b7e63061",
+    "capabilities": ["text-embedding"],
+    "providerSecret_id": "68f11ddb4e3a465bc74deb12",
+    "providerExtraParam": {
+      "region": "us-east-2",
+      "modelId": "amazon.titan-embed-text-v2:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 8191,
+      "release": "v2.0",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f12ba2c2b84e4a86745a3e",
+    "name": "anthropic.claude-4-sonnet",
+    "description": "This is a anthropic.claude-4-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto", "vendor-anthropic"],
+    "directory": "flow-core-llm-bedrock-cit-flow-app",
+    "remoteConfig": {
+      "region": "us-east-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "53f4af76877a4ec79e90fdd575831f0f991fc6d3e87207eeb59e875d75f652bb",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "68f11ddb4e3a465bc74deb12",
+    "providerExtraParam": {
+      "region": "us-east-2",
+      "modelId": "us.anthropic.claude-sonnet-4-20250514-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f6397251ead5a8f10159e3",
+    "name": "anthropic.claude-37-sonnet",
+    "description": "This is a anthropic.claude-37-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto", "vendor-anthropic"],
+    "directory": "flow-core-llm-bedrock-cit-flow-app",
+    "remoteConfig": {
+      "region": "us-east-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "837a3717eb1ab608d00bc337f8df7beb06558bcb1c023a90e17d63d7d1c450db",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "68f11ddb4e3a465bc74deb12",
+    "providerExtraParam": {
+      "region": "us-east-2",
+      "modelId": "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f69bd21940c0bce82802da",
+    "name": "anthropic.claude-4-5-sonnet",
+    "description": "This is a anthropic.claude-4-5-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto", "vendor-anthropic"],
+    "directory": "flow-core-llm-bedrock-cit-flow-app",
+    "remoteConfig": {
+      "region": "us-east-2",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "867406e1fea2c9bac44c3660dfb92a5a7584d4a11f77e6717c6339133c1930f9",
+    "capabilities": [
+      "chat-conversation",
+      "streaming",
+      "function-calling",
+      "image-recognition",
+      "system-instruction",
+      "reasoning"
+    ],
+    "providerSecret_id": "68f11ddb4e3a465bc74deb12",
+    "providerExtraParam": {
+      "region": "us-east-2",
+      "modelId": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68f69bd20ccc4655b7f36931",
+    "name": "anthropic.claude-4-5-sonnet",
+    "description": "This is a anthropic.claude-4-5-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "36fe82962b27ed303a663e7914e1b6f675dbbe174be8d8b10df68606742987ac",
+    "capabilities": [
+      "chat-conversation",
+      "streaming",
+      "function-calling",
+      "image-recognition",
+      "system-instruction",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68fa7432a5a48e58dcd728f0",
+    "name": "anthropic.claude-4-5-haiku",
+    "description": "This is a anthropic.claude-4-5-haiku registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "global",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "us-east-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "4bdeba311c5e4950d55381ed775729cb3c3dfa6f6b9740d8f7a8e31d6e95775c",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "autocomplete",
+      "system-instruction",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "us-east-1",
+      "modelId": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "68fa7432a5a48e58dcd728f4",
+    "name": "anthropic.claude-4-5-haiku",
+    "description": "This is a anthropic.claude-4-5-haiku registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-central-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "6fb10ec95ed37c617f348c514e0eeed1ec374d8975eed8af99fbcd1d35a56ef8",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "autocomplete",
+      "system-instruction",
+      "function-calling"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-central-1",
+      "modelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 200000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "69164de4e9f8416d777f9846",
+    "name": "anthropic.claude-4-5-sonnet",
+    "description": "This is a anthropic.claude-4-5-sonnet registered by LLM Config",
+    "provider": "amazon-bedrock",
+    "forClientRegion": "emea",
+    "tags": ["vendor-anthropic"],
+    "directory": "flow-llm-amazon-core",
+    "remoteConfig": {
+      "region": "eu-central-1",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "hash": "d6d4cab79d6e8576b984bdb1455d4130cd9735c5d3f36066472aa619a4b652ae",
+    "capabilities": [
+      "chat-conversation",
+      "streaming",
+      "function-calling",
+      "image-recognition",
+      "system-instruction",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812966fafc5e89a8a3796a6",
+    "providerExtraParam": {
+      "region": "eu-central-1",
+      "modelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0",
+      "authenticationMethod": "AWSCredentials"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "6929f13a4c38aa2101854ed2",
+    "name": "gpt-5.1",
+    "description": "This is a gpt-5.1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-5.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "90cbf4a57b6fca6cf989b77eb9e88d4d1ce575d9d3df70b7766c598b82f6dbdc",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-5.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-11-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "6929f13b4c38aa2101854ed5",
+    "name": "gemini-3.0-pro",
+    "description": "This is a gemini-3.0-pro registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "global",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "fe78a2776d1d2e414dcf4c9d2f175395a813f11508a692da7efe4ef700885253",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "reasoning",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "global",
+      "modelId": "gemini-3-pro-preview",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "6929f13b4c38aa2101854ed7",
+    "name": "gpt-5.1-codex",
+    "description": "This is a gpt-5.1-codex registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-5.1-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "6b26c4c4c784d0347d9bc45522d1dd48058d987a4326a06cf3cd6b4e1f9855b5",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-5.1-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-11-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "6929f13b8c000a22186d5ea2",
+    "name": "gpt-5.1-codex",
+    "description": "This is a gpt-5.1-codex registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-5.1-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "68b9dee6b021f636052660b5c068706e2cd8e42aeadf313db911ab568bd57398",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-5.1-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-11-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "6929f13b8c000a22186d5ea4",
+    "name": "gpt-5.1",
+    "description": "This is a gpt-5.1 registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-5.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "2d7b09ccf51f364aa0706c77bd8677bcac2aad15aad4b3a02f4a00fb9444399e",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-5.1",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-11-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "692f535bdaa22cf60876817e",
+    "name": "gpt-5-codex",
+    "description": "This is a gpt-5-codex registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["vendor-openai"],
+    "directory": "flow-core-llm-eaus2-ca",
+    "remoteConfig": {
+      "region": "eastus2",
+      "deploymentId": "gpt-5-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "a11fb4e9352840320a02d92ac29111a0170e803a30017fb284711fbd6c74ccab",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "6812820aafc5e89a8a374eb5",
+    "providerExtraParam": {
+      "region": "eastus2",
+      "modelId": "gpt-5-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-09-15",
+      "tpm": 250
+    }
+  },
+  {
+    "id": "692f535cdaa22cf608768189",
+    "name": "gpt-5-codex",
+    "description": "This is a gpt-5-codex registered by LLM Config",
+    "provider": "azure-openai",
+    "forClientRegion": "emea",
+    "tags": [],
+    "directory": "flow-core-llm-swc-ca",
+    "remoteConfig": {
+      "region": "swedencentral",
+      "deploymentId": "gpt-5-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "hash": "6b4807d80748585c1bd45e05c2ad32b17ef6510ec44e11fa3f09bb80ffd955c4",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "providerSecret_id": "681283eeafc5e89a8a375834",
+    "providerExtraParam": {
+      "region": "swedencentral",
+      "modelId": "gpt-5-codex",
+      "authenticationMethod": "ApiKey"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-09-15",
+      "tpm": 250
+    }
+  },
+  {
+    "id": "6941ac41463095cede89f28a",
+    "name": "gemini-2.5-flash-image",
+    "description": "This is a gemini-2.5-flash-image registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-central2",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "852d4b3fbe66dd92c58306af87cbcd1a2e4804854d99911dae17967881353a05",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-central2",
+      "modelId": "gemini-2.5-flash-image",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 64000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "6941ac429764d7b9b271dd40",
+    "name": "gemini-2.5-flash-image",
+    "description": "This is a gemini-2.5-flash-image registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-east1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "c0ec49953bd30a1aac6f0fee877d0399fda157fa226507bc24d6c26d6735b74d",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-east1",
+      "modelId": "gemini-2.5-flash-image",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 64000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "6941ac42463095cede89f293",
+    "name": "gemini-2.5-flash-image",
+    "description": "This is a gemini-2.5-flash-image registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "emea",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "europe-west1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "f5a48c03b0d9e44b33df599c8085ec9bdb3a693c4484f8e210cfefb8d49bcb9a",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "europe-west1",
+      "modelId": "gemini-2.5-flash-image",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 64000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "6941ac42463095cede89f291",
+    "name": "gemini-2.5-flash-image",
+    "description": "This is a gemini-2.5-flash-image registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "us-central1",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "05617c04419b564718958f98acb9c69c78e886486ee7c431f51074d414b62b8c",
+    "capabilities": ["image-creation"],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "us-central1",
+      "modelId": "gemini-2.5-flash-image",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 64000,
+      "release": "v1",
+      "tpm": 0
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fb6",
+    "name": "gpt-4.1",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4.1",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "b97e00548aacc54baad5aef2e566283dca73d3398f9ac2b473543d42123054d4",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4.1",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 1000000,
+      "release": "2025-04-14",
+      "tpm": 5000
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fbc",
+    "name": "gpt-4o-mini",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o-mini",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "76ea511ebfc117e7d0007304fdf3f0de67e237627b1580d06fe6d1cceb21777c",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "autocomplete"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o-mini",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-07-18",
+      "tpm": 45000
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fb7",
+    "name": "gpt-5",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-5",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "f26b6fb1bafff09bef978df83d9c2346a56df635b836ec29aca14af0338e563d",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-5",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 10000
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fb9",
+    "name": "gpt-5-nano",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-5-nano",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "828e200225b96be90210e78d2ad933ab3f6cc78eb1270727c1417cfc66801804",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning",
+      "autocomplete"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-5-nano",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fb8",
+    "name": "gpt-5-mini",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-5-mini",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "14ca29beabd344458d91cc33dc23b2b281f5e08e52b955b315fea5fcd91a3da4",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-5-mini",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-08-07",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fba",
+    "name": "gpt-5.1",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-5.1",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "2787b09440207bca3c341cb419ace7b19312ec9af50229ba60b179cd14697186",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling",
+      "reasoning"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-5.1",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 400000,
+      "release": "2025-11-13",
+      "tpm": 300
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fbb",
+    "name": "gpt-4o",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "gpt-4o",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "cb6c72f0e7c090d8942953d78f9c839285ec5fb39a2fc4aa5eeb45260b7757ca",
+    "capabilities": [
+      "streaming",
+      "system-instruction",
+      "chat-conversation",
+      "image-recognition",
+      "function-calling"
+    ],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "gpt-4o",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 128000,
+      "release": "2024-08-06",
+      "tpm": 30000
+    }
+  },
+  {
+    "id": "6941c7c29764d7b9b2730fbd",
+    "name": "text-embedding-ada-002",
+    "description": "Custom OpenAi model Stretto Project",
+    "provider": "azure-openai",
+    "forClientRegion": "global",
+    "tags": ["restricted", "stretto"],
+    "directory": "flow-custom-provider-stretto-project",
+    "remoteConfig": {
+      "region": "eastus",
+      "deploymentId": "text-embedding-ada-002",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "hash": "516962261a0b0d57e887ea14b9449e025ab33d478ab7ade7c7a79e1f2938e14a",
+    "capabilities": ["streaming", "text-embedding"],
+    "owner": "stretto",
+    "providerSecret_id": "6941c6279764d7b9b272f701",
+    "providerExtraParam": {
+      "region": "eastus",
+      "modelId": "text-embedding-ada-002",
+      "authenticationMethod": "AuthorizationHeader"
+    },
+    "modelInformation": {
+      "maxTokens": 8192,
+      "tpm": 20000
+    }
+  },
+  {
+    "id": "694ed43325fcc4dc7df8ad15",
+    "name": "gemini-3-pro-image-preview",
+    "description": "This is a gemini-3-pro-image-preview registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "global",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "56a451dad97a20e78b882fb73a5d1a91923b2608dfe47ebd5d62c1cf108bdb51",
+    "capabilities": [
+      "image-creation",
+      "system-instruction",
+      "reasoning",
+      "web-searching",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "global",
+      "modelId": "gemini-3-pro-image-preview",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 65536,
+      "release": "v1",
+      "tpm": 0
+    },
+    "createdAt": "2025-12-26T18:30:11.135Z",
+    "updatedAt": "2025-12-26T18:30:11.135Z"
+  },
+  {
+    "id": "694edb3c3464417230d8e9aa",
+    "name": "gemini-3-flash-preview",
+    "description": "This is a gemini-3-flash-preview registered by LLM Config",
+    "provider": "google-gemini",
+    "forClientRegion": "global",
+    "tags": ["vendor-gemini"],
+    "directory": "flow-llm-google-core",
+    "remoteConfig": {
+      "region": "global",
+      "version": "v1",
+      "projectId": "ciandt-flow-platform",
+      "clientEmail": "vertex-ai@ciandt-flow-platform.iam.gserviceaccount.com",
+      "authenticationMethod": "GoogleAuth"
+    },
+    "hash": "a9dfe52816a44db3c9d3bf86e67e107397488e62b873b78a741ea44bc0149c25",
+    "capabilities": [
+      "streaming",
+      "chat-conversation",
+      "image-recognition",
+      "system-instruction",
+      "reasoning",
+      "audio-recognition",
+      "video-recognition",
+      "code-execution",
+      "web-searching",
+      "function-calling",
+      "document-recognition"
+    ],
+    "providerSecret_id": "68128bf0afc5e89a8a3776d3",
+    "providerExtraParam": {
+      "region": "global",
+      "modelId": "gemini-3-flash-preview",
+      "authenticationMethod": "GoogleAuth",
+      "version": "v1"
+    },
+    "modelInformation": {
+      "maxTokens": 1048576,
+      "release": "v1",
+      "tpm": 0
+    },
+    "createdAt": "2025-12-26T19:00:12.712Z",
+    "updatedAt": "2025-12-26T19:00:12.712Z"
+  }
+]
