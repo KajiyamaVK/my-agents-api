@@ -1,0 +1,13 @@
+meta {
+  name: Get Hello
+  type: http
+  seq: 1
+}
+
+request {
+  method: GET
+  url: {{baseUrl}}/
+  headers {
+    Accept: application/json
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "version": "1",
+  "name": "My Agents API",
+  "type": "collection",
+  "items": [
+    {
+      "type": "folder",
+      "name": "App Controller",
+      "items": [
+        { "type": "file", "path": "App Controller/Get Hello.bru" }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Chat Completion",
+      "items": [
+        { "type": "file", "path": "Chat Completion/Create Chat Completion.bru" }
+      ]
+    }
+  ],
+  "environments": ["environments/local.bru", "environments/local.json"]
+}
