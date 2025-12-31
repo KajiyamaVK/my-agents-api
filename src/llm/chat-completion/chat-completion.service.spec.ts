@@ -7,7 +7,12 @@ describe('ChatCompletionService', () => {
 
   beforeEach(async () => {
     jest.resetModules();
-    process.env = { ...OLD_ENV, FLOW_TOKEN: 'test-token', FLOW_TENANT: 'tenant', FLOW_AGENT: 'agent' };
+    process.env = {
+      ...OLD_ENV,
+      FLOW_TOKEN: 'test-token',
+      FLOW_TENANT: 'tenant',
+      FLOW_AGENT: 'agent',
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [ChatCompletionService],
@@ -28,7 +33,12 @@ describe('ChatCompletionService', () => {
   describe('createChatCompletion', () => {
     it('returns parsed data when fetch responds ok', async () => {
       const mockResp = { id: '1', choices: [] };
-      (global as any).fetch = jest.fn().mockResolvedValue({ ok: true, json: jest.fn().mockResolvedValue(mockResp) });
+      (global as any).fetch = jest
+        .fn()
+        .mockResolvedValue({
+          ok: true,
+          json: jest.fn().mockResolvedValue(mockResp),
+        });
 
       const res = await service.createChatCompletion('hello');
 
@@ -44,7 +54,9 @@ describe('ChatCompletionService', () => {
     });
 
     it('returns an error object when response is not ok', async () => {
-      (global as any).fetch = jest.fn().mockResolvedValue({ ok: false, status: 500 });
+      (global as any).fetch = jest
+        .fn()
+        .mockResolvedValue({ ok: false, status: 500 });
 
       const res = await service.createChatCompletion('hello');
 
@@ -71,7 +83,9 @@ describe('ChatCompletionService', () => {
     });
 
     it('returns error when health endpoint returns non-ok', async () => {
-      (global as any).fetch = jest.fn().mockResolvedValue({ ok: false, status: 503 });
+      (global as any).fetch = jest
+        .fn()
+        .mockResolvedValue({ ok: false, status: 503 });
 
       const res = await service.checkHealth();
 
