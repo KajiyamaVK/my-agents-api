@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ChatCompletionController } from './llm/chat-completion/chat-completion.controller';
-import { ChatCompletionService } from './llm/chat-completion/chat-completion.service';
+import { ChatCompletionModule } from './llm/chat-completion/chat-completion.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { LlmModelsController } from './llm/models/llm-models.controller';
-import { LlmModelsService } from './llm/models/llm-models.service';
+import { LlmModelsModule } from './llm/models/llm-models.module';
+import { TokenModule } from './llm/token/token.module';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [AppController, ChatCompletionController, LlmModelsController],
-  providers: [AppService, ChatCompletionService, LlmModelsService],
+  imports: [PrismaModule, ChatCompletionModule, TokenModule, LlmModelsModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
