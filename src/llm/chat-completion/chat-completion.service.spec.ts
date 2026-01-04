@@ -33,14 +33,14 @@ describe('ChatCompletionService', () => {
   describe('createChatCompletion', () => {
     it('returns parsed data when fetch responds ok', async () => {
       const mockResp = { id: '1', choices: [] };
-      (global as any).fetch = jest
-        .fn()
-        .mockResolvedValue({
-          ok: true,
-          json: jest.fn().mockResolvedValue(mockResp),
-        });
+      const userToken = 'test-token';
 
-      const res = await service.createChatCompletion('hello');
+      (global as any).fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: jest.fn().mockResolvedValue(mockResp),
+      });
+
+      const res = await service.createChatCompletion('hello', userToken);
 
       expect(res).toEqual(mockResp);
       expect((global as any).fetch).toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe('ChatCompletionService', () => {
       expect(call[0]).toContain('/openai/chat/completions');
       const opts = call[1];
       expect(opts.method).toBe('post');
-      expect(opts.headers.Authorization).toBe('Bearer test-token');
+      expect(opts.headers.Authorization).toBe('Bearer ' + userToken);
       expect(opts.body).toBeDefined();
     });
 
@@ -58,7 +58,7 @@ describe('ChatCompletionService', () => {
         .fn()
         .mockResolvedValue({ ok: false, status: 500 });
 
-      const res = await service.createChatCompletion('hello');
+      const res = await service.createChatCompletion('hello', 'token');
 
       expect(res).toEqual({ status: 'error', details: 'Status code: 500' });
     });
@@ -66,7 +66,7 @@ describe('ChatCompletionService', () => {
     it('returns an error object when fetch throws', async () => {
       (global as any).fetch = jest.fn().mockRejectedValue(new Error('network'));
 
-      const res = await service.createChatCompletion('hello');
+      const res = await service.createChatCompletion('hello', 'token');
 
       expect(res).toEqual({ status: 'error', details: 'network' });
     });

@@ -3,8 +3,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class ChatCompletionService {
   //Receives a string param that is the message
-  async createChatCompletion(message: string) {
-    const token = process.env.FLOW_TOKEN;
+  async createChatCompletion(message: string, token: string) {
     const flowTenant = process.env.FLOW_TENANT;
     const flowAgent = process.env.FLOW_AGENT;
 

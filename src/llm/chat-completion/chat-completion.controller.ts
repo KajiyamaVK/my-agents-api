@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ChatCompletionService } from './chat-completion.service';
+import { FlowAuthGuard } from 'src/commom/guards/flow.guard';
+import { Token } from 'src/commom/decorators/token.decorator';
 
 @Controller('llm/chat-completion')
+@UseGuards(FlowAuthGuard)
 export class ChatCompletionController {
   constructor(private chatCompletionService: ChatCompletionService) {}
 
@@ -11,7 +14,14 @@ export class ChatCompletionController {
   }
 
   @Post()
-  async createChatCompletion(@Body('message') message: string) {
-    return await this.chatCompletionService.createChatCompletion(message);
+  @UseGuards(FlowAuthGuard)
+  async createChatCompletion(
+    @Body('message') message: string,
+    @Token() token: string,
+  ) {
+    return await this.chatCompletionService.createChatCompletion(
+      message,
+      token,
+    );
   }
 }
