@@ -28,6 +28,17 @@ vars:post-response {
   access_token: access_token
 }
 
+script:post-response {
+  // Parse the response body
+  let body = res.getBody();
+  
+  // Set the 'token' environment variable
+  // (Assumes your API returns { "access_token": "..." })
+  if (body.access_token) {
+      bru.setEnvVar("token", body.access_token);
+  }
+}
+
 settings {
   encodeUrl: true
   timeout: 0
