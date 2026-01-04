@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChatCompletionController } from './chat-completion.controller';
 import { ChatCompletionService } from './chat-completion.service';
-import { FlowAuthGuard } from 'src/commom/guards/flow.guard';
+import { FlowAuthGuard } from 'src/common/guards/flow.guard';
 
 describe('ChatCompletionController', () => {
   let controller: ChatCompletionController;

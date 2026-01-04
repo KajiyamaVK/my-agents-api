@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ChatCompletionService } from './chat-completion.service';
-import { FlowAuthGuard } from 'src/commom/guards/flow.guard';
-import { Token } from 'src/commom/decorators/token.decorator';
+import { FlowAuthGuard } from 'src/common/guards/flow.guard';
+import { Token } from 'src/common/decorators/token.decorator';
 
 @Controller('llm/chat-completion')
 @UseGuards(FlowAuthGuard)

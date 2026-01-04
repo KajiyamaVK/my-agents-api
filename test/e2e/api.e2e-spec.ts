@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
+import { FlowAuthGuard } from 'src/common/guards/flow.guard';
 
 describe('API (e2e)', () => {
   let app: INestApplication;
@@ -46,7 +47,12 @@ describe('API (e2e)', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideGuard(FlowAuthGuard)
+      .useValue({
+        canActivate: jest.fn().mockReturnValue(true),
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
