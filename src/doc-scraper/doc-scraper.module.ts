@@ -1,9 +1,16 @@
 import { Module } from '@nestjs/common';
-import { DocScraperController } from './doc-scraper.controller';
+import { BullModule } from '@nestjs/bullmq';
 import { DocScraperService } from './doc-scraper.service';
+import { DocScraperController } from './doc-scraper.controller';
+import { DocScraperProcessor } from './doc-scraper.processor'; // Importe o processor
 
 @Module({
+  imports: [
+    BullModule.registerQueue({
+      name: 'scrape-docs',
+    }),
+  ],
   controllers: [DocScraperController],
-  providers: [DocScraperService],
+  providers: [DocScraperService, DocScraperProcessor], // Adicione o processor aqui
 })
 export class DocScraperModule {}

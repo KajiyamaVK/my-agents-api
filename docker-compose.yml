@@ -13,10 +13,23 @@ services:
       - FLOW_APP_TO_ACCESS=${FLOW_APP_TO_ACCESS}
       # Standard NestJS prod setting
       - NODE_ENV=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
     volumes:
       # Persistência do SQLite (ajuste o caminho se necessário)
       - ./dev.db:/app/dev.db
       - ./scraped_docs:/app/scraped_docs
+    networks:
+      - proxy-net
+
+  redis:
+    image: redis:alpine
+    container_name: my-agents-redis
+    restart: always
+    ports:
+      - '6379:6379'
     networks:
       - proxy-net
 

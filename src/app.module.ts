@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { BullModule } from '@nestjs/bullmq';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -21,6 +22,14 @@ import { DocScraperModule } from './doc-scraper/doc-scraper.module';
         FLOW_APP_TO_ACCESS: Joi.string().default('llm-api'), // Default if not provided
       }),
     }),
+
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST || 'localhost',
+        port: Number(process.env.REDIS_PORT) || 6379,
+      },
+    }),
+
     PrismaModule,
     ChatCompletionModule,
     TokenModule,
