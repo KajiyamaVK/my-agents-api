@@ -45,7 +45,7 @@ export class TokenService {
 
       return {
         status: 'error',
-        details: `Status code: ${response.status}`,
+        details: `Status code: ${response.status} - ${data.message || 'Unknown error'}`,
       };
     } catch (error) {
       return { status: 'error', details: error.message };
