@@ -7,15 +7,12 @@ import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
 
 describe('DocScraperController (e2e)', () => {
   let app: INestApplication;
+
   const mockScrapeService = {
-    // O retorno do mock aqui não afeta a resposta HTTP do controller,
-    // pois o controller ignora o resultado na thread principal (fire-and-forget),
-    // mas mantemos para evitar erros na Promise de background.
     scrapeDocumentation: jest.fn().mockResolvedValue({
-      status: 'success',
-      message: 'Mocked scrape',
-      outputDirectory: 'mock/path',
-      filesCount: 10,
+      status: 'pending',
+      message: 'Tarefa de scraping adicionada à fila.',
+      url: 'https://docs.frigate.video',
     }),
   };
 
@@ -40,7 +37,6 @@ describe('DocScraperController (e2e)', () => {
       .expect(201)
       .expect((res) => {
         expect(res.body.status).toEqual('pending');
-
         expect(mockScrapeService.scrapeDocumentation).toHaveBeenCalled();
       });
   });
