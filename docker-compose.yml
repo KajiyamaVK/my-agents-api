@@ -16,6 +16,7 @@ services:
     volumes:
       # Persistência do SQLite (ajuste o caminho se necessário)
       - ./dev.db:/app/dev.db
+      - ./scraped_docs:/app/scraped_docs
     networks:
       - proxy-net
 
