@@ -10,7 +10,7 @@ describe('DocScraperController (e2e)', () => {
 
   const mockScrapeService = {
     scrapeDocumentation: jest.fn().mockResolvedValue({
-      status: 'pending',
+      status: 'pending', // Lembre-se que ajustamos isso no passo anterior
       message: 'Tarefa de scraping adicionada à fila.',
       url: 'https://docs.frigate.video',
     }),
@@ -29,6 +29,14 @@ describe('DocScraperController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
   });
+
+  // --- ADICIONE ESTE BLOCO ---
+  afterEach(async () => {
+    if (app) {
+      await app.close(); // Fecha conexões (Redis, HTTP, etc)
+    }
+  });
+  // ---------------------------
 
   it('/doc-scraper/scrape (POST)', () => {
     return request(app.getHttpServer())
