@@ -1,39 +1,43 @@
 # Stage 1: Build
-FROM node:22-alpine AS builder
+# BEST PRACTICE: Use 'bookworm' (Debian) instead of Alpine for Playwright compatibility
+FROM node:22-bookworm AS builder
 
 WORKDIR /app
 
-# Instala dependências do SO necessárias para alguns pacotes nativos (opcional, mas boa prática)
-RUN apk add --no-cache openssl
+# (Optional) OpenSSL is usually included in bookworm, but keeping if you have specific needs
+RUN apt-get update && apt-get install -y openssl
 
-# Copia arquivos de dependência primeiro (Cache Layering)
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instala dependências e gera o Prisma Client
 RUN npm ci
 RUN npx prisma generate
 
-# Copia o código fonte e faz o build
 COPY . .
 RUN npm run build
 
 # Stage 2: Production Run
-FROM node:22-alpine
+# BEST PRACTICE: Use the same Debian base to ensure glibc compatibility
+FROM node:22-bookworm
 
 WORKDIR /app
 
-RUN apk add --no-cache openssl
+# Install production dependencies only (if needed for clean slate)
+# or rely on the copy from builder. 
+# NOTE: Playwright requires system libraries (libraries, fonts, etc.)
+# We install them using the Playwright CLI in the next step.
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
-# Define a porta e o ambiente
+# KEY FIX: Install Playwright browsers and system dependencies
+# This command installs the OS packages (apt-get) AND the browser binaries
+RUN npx playwright install --with-deps
+
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE 3000
 
-# Comando de inicialização
 CMD ["npm", "run", "start:prod"]
