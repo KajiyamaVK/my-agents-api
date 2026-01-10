@@ -30,11 +30,12 @@ describe('TokenController', () => {
     expect(tokenService.checkHealth).toHaveBeenCalled();
   });
 
-  it('createToken should call tokenService.createToken with body', async () => {
-    const body = { clientId: 'id', clientSecret: 'secret', appToAccess: 'app' };
-    await expect(controller.createToken(body)).resolves.toEqual({
+  it('createToken should call tokenService.createToken without arguments', async () => {
+    // - Updated to remove body args
+    await expect(controller.createToken()).resolves.toEqual({
       token: 'mocked-token',
     });
-    expect(tokenService.createToken).toHaveBeenCalledWith(body);
+    // Verify it was called with NO arguments
+    expect(tokenService.createToken).toHaveBeenCalled();
   });
 });

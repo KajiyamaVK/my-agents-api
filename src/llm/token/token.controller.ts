@@ -11,14 +11,7 @@ export class TokenController {
   }
 
   @Post()
-  async createToken(
-    @Body()
-    body: {
-      clientId?: string;
-      clientSecret?: string;
-      appToAccess?: string;
-    },
-  ) {
-    return await this.tokenService.createToken(body);
+  async createToken() {
+    return await this.tokenService.createToken();
   }
 }

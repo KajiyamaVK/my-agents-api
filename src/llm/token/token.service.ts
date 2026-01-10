@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TokenService {
-  async createToken(body: {
-    clientId?: string;
-    clientSecret?: string;
-    appToAccess?: string;
-  }) {
-    const clientId = body.clientId || process.env.FLOW_CLIENT_ID || '';
+  constructor(private configService: ConfigService) {}
+  async createToken() {
+    const clientId = this.configService.getOrThrow<string>('FLOW_CLIENT_ID');
     const clientSecret =
-      body.clientSecret || process.env.FLOW_CLIENT_SECRET || '';
-    const appToAccess = body.appToAccess || '';
+      this.configService.getOrThrow<string>('FLOW_CLIENT_SECRET');
+    const appToAccess =
+      this.configService.getOrThrow<string>('FLOW_APP_TO_ACCESS');
+    const flowTenant = this.configService.getOrThrow<string>('FLOW_TENANT');
+    const flowAgent = this.configService.getOrThrow<string>('FLOW_AGENT');
 
     const payload = {
       appToAccess: appToAccess,
@@ -19,9 +20,6 @@ export class TokenService {
     };
 
     const url = 'https://flow.ciandt.com/auth-engine-api/v1/api-key/token';
-
-    const flowTenant = process.env.FLOW_TENANT || '';
-    const flowAgent = process.env.FLOW_AGENT || '';
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
