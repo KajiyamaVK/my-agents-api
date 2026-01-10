@@ -5,9 +5,16 @@ import { ChatCompletionModule } from './llm/chat-completion/chat-completion.modu
 import { PrismaModule } from './prisma/prisma.module';
 import { LlmModelsModule } from './llm/models/llm-models.module';
 import { TokenModule } from './llm/token/token.module';
+import { DocScraperModule } from './doc-scraper/doc-scraper.module';
 
 @Module({
-  imports: [PrismaModule, ChatCompletionModule, TokenModule, LlmModelsModule],
+  imports: [
+    PrismaModule,
+    ChatCompletionModule,
+    TokenModule,
+    LlmModelsModule,
+    DocScraperModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
