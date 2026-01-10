@@ -1,0 +1,21 @@
+meta {
+  name: Scrape Docs
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/doc-scraper/scrape
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "url": "https://docs.frigate.video"
+  }
+}
