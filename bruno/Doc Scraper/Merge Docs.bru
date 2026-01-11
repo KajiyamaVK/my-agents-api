@@ -1,0 +1,21 @@
+meta {
+  name: Merge Docs
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}doc-scraper/merge
+  body: json
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "domain": "docs.frigate.video"
+  }
+}

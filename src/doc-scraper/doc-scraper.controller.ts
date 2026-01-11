@@ -5,7 +5,6 @@ import {
   UseGuards,
   UsePipes,
   ValidationPipe,
-  Logger, // <--- Adicione o Logger
 } from '@nestjs/common';
 import { DocScraperService } from './doc-scraper.service';
 import { ScrapeDocsDto } from './dto/scrape-docs.dto';
@@ -20,7 +19,12 @@ export class DocScraperController {
   @Post('scrape')
   @UsePipes(new ValidationPipe())
   async scrapeDocs(@Body() dto: ScrapeDocsDto, @Token() token: string) {
-    // Agora o await é seguro e rápido, pois só enfileira o job
     return await this.scraperService.scrapeDocumentation(dto.url);
+  }
+
+  @Post('merge')
+  async mergeDocs(@Body('domain') domain: string) {
+    // Ex: { "domain": "docs.frigate.video" }
+    return await this.scraperService.mergeDocuments(domain);
   }
 }
