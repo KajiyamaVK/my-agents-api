@@ -23,10 +23,8 @@ FROM node:22-bookworm
 
 WORKDIR /app
 
-# Install production dependencies only (if needed for clean slate)
-# or rely on the copy from builder. 
-# NOTE: Playwright requires system libraries (libraries, fonts, etc.)
-# We install them using the Playwright CLI in the next step.
+RUN apt-get update && apt-get install -y chromium \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./

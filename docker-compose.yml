@@ -3,6 +3,8 @@ services:
     build: .
     container_name: my-agents-api
     restart: unless-stopped
+    ports:
+      - '3000:3000'
     environment:
       - PORT=3000
       - DATABASE_URL=file:../dev.db # Ajuste conforme seu schema.prisma
@@ -11,6 +13,7 @@ services:
       - FLOW_TENANT=${FLOW_TENANT}
       - FLOW_AGENT=${FLOW_AGENT}
       - FLOW_APP_TO_ACCESS=${FLOW_APP_TO_ACCESS}
+      - FRIGATE_URL=http://frigate:5000
       # Standard NestJS prod setting
       - NODE_ENV=production
       - REDIS_HOST=redis
@@ -21,6 +24,7 @@ services:
       # Persistência do SQLite (ajuste o caminho se necessário)
       - ./dev.db:/app/dev.db
       - ./scraped_docs:/app/scraped_docs
+      - ./.wwebjs_auth:/app/.wwebjs_auth
     networks:
       - proxy-net
 

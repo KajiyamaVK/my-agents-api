@@ -11,12 +11,23 @@ export class WhatsappService implements OnModuleInit {
 
   constructor(private configService: ConfigService) {
     this.frigateUrl = this.configService.get<string>('FRIGATE_URL') ?? 'http://localhost:5000';
-
+    const isTest = process.env.NODE_ENV === 'test';
     this.client = new Client({
-      authStrategy: new LocalAuth(), // Saves session locally so you don't scan QR every time
+      authStrategy: new LocalAuth({ 
+        dataPath: isTest ? './.wwebjs_auth_test' : './.wwebjs_auth' 
+      }),
       puppeteer: {
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for some environments (like Docker)
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
+        args: [
+          '--no-sandbox', 
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-accelerated-2d-canvas',
+          '--no-first-run',
+          '--no-zygote',
+          '--disable-gpu'
+        ],
       },
     });
 
