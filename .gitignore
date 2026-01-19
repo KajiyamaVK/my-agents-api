@@ -60,3 +60,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .wwebjs_auth/
 .wwebjs_cache/
 .wwebjs_auth_test/
+dev.db
