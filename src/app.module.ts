@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { LlmModelsModule } from './llm/models/llm-models.module';
 import { TokenModule } from './llm/token/token.module';
 import { DocScraperModule } from './doc-scraper/doc-scraper.module';
+import { WhatsappModule } from './whatsapp/whatsapp.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { DocScraperModule } from './doc-scraper/doc-scraper.module';
         FLOW_CLIENT_SECRET: Joi.string().required(),
         FLOW_TENANT: Joi.string().required(),
         FLOW_AGENT: Joi.string().required(),
-        FLOW_APP_TO_ACCESS: Joi.string().default('llm-api'), // Default if not provided
+        FLOW_APP_TO_ACCESS: Joi.string().default('llm-api'), 
+        FRIGATE_URL: Joi.string().default('http://localhost:5000'),
       }),
     }),
 
@@ -35,6 +37,7 @@ import { DocScraperModule } from './doc-scraper/doc-scraper.module';
     TokenModule,
     LlmModelsModule,
     DocScraperModule,
+    WhatsappModule,
   ],
   controllers: [AppController],
   providers: [AppService],

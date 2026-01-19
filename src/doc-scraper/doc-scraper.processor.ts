@@ -49,12 +49,39 @@ export class DocScraperProcessor extends WorkerHost {
       const crawler = new PlaywrightCrawler({
         maxConcurrency: 2,
         requestHandler: async ({ page, request, log, enqueueLinks }) => {
-          // Lógica original de scraping...
-          const contentSelector = 'main';
+  
+        // [CORREÇÃO 1] Mova isto para o TOPO.
+        // Isso garante que o crawler encontre os próximos links antes de tentar extrair o conteúdo.
+        await enqueueLinks({
+          globs: [`${url}/**`],
+          strategy: 'same-domain',
+        });
+
+        // [CORREÇÃO 2] Lógica para encontrar o seletor correto dinamicamente.
+        // O 'main' falha em sites JSDoc, por isso tentamos outros comuns.
+        const possibleSelectors = ['#jsdoc-content', 'main', '.main-content', 'article', 'body'];
+        let contentSelector = '';
+
+        for (const selector of possibleSelectors) {
+          const element = await page.$(selector);
+          if (element) {
+            contentSelector = selector;
+            break; // Encontrou um, para de procurar
+          }
+        }
+
+        // Se mesmo assim não encontrar nada, loga e sai (mas os links já foram enfileirados acima!)
+        if (!contentSelector) {
+          log.warning(`Nenhum seletor de conteúdo encontrado em: ${request.url}`);
+          return;
+        }
+
+          // Lógica de extração (agora mais segura)
           try {
-            await page.waitForSelector(contentSelector, { timeout: 5000 });
+            // Aumentei o timeout para 10s para garantir
+            await page.waitForSelector(contentSelector, { timeout: 10000 });
           } catch {
-            log.warning(`Selector not found: ${request.url}`);
+            log.warning(`Timeout ao esperar pelo seletor ${contentSelector}: ${request.url}`);
             return;
           }
 
@@ -72,13 +99,9 @@ export class DocScraperProcessor extends WorkerHost {
             path.join(outputDir, `${fileName}.md`),
             finalContent,
           );
-
-          await enqueueLinks({
-            globs: [`${url}/**`],
-            strategy: 'same-domain',
-          });
-        },
+      },
       });
+      
 
       await crawler.run([url]);
 

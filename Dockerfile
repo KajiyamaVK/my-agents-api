@@ -5,7 +5,8 @@ FROM node:22-bookworm AS builder
 WORKDIR /app
 
 # (Optional) OpenSSL is usually included in bookworm, but keeping if you have specific needs
-RUN apt-get update && apt-get install -y openssl
+RUN apt-get update && apt-get install -y openssl && apt-get install -y chromium \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 COPY prisma ./prisma/
