@@ -2,6 +2,8 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import * as qrcode from 'qrcode-terminal';
 import { ConfigService } from '@nestjs/config';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class WhatsappService implements OnModuleInit {
@@ -11,10 +13,16 @@ export class WhatsappService implements OnModuleInit {
 
   constructor(private configService: ConfigService) {
     this.frigateUrl = this.configService.get<string>('FRIGATE_URL') ?? 'http://localhost:5000';
+    
     const isTest = process.env.NODE_ENV === 'test';
+    const dataPath = isTest ? './.wwebjs_auth_test' : './.wwebjs_auth';
+
+    // FIX: Remove SingletonLock before initializing to prevent Chromium crashes in Docker
+    this.removeSessionLocks(dataPath);
+
     this.client = new Client({
       authStrategy: new LocalAuth({ 
-        dataPath: isTest ? './.wwebjs_auth_test' : './.wwebjs_auth' 
+        dataPath: dataPath 
       }),
       puppeteer: {
         headless: true,
@@ -57,6 +65,36 @@ export class WhatsappService implements OnModuleInit {
     });
   }
 
+  /**
+   * Recursively searches for and deletes 'SingletonLock' files 
+   * to ensure Chromium can start fresh after a container restart.
+   */
+  private removeSessionLocks(directory: string) {
+    const resolvedPath = path.resolve(directory);
+    
+    if (!fs.existsSync(resolvedPath)) {
+      return;
+    }
+
+    try {
+      const files = fs.readdirSync(resolvedPath);
+      
+      for (const file of files) {
+        const fullPath = path.join(resolvedPath, file);
+        const stat = fs.lstatSync(fullPath);
+
+        if (stat.isDirectory()) {
+          this.removeSessionLocks(fullPath);
+        } else if (file === 'SingletonLock') {
+          this.logger.warn(`Removing Chromium Lock file at: ${fullPath}`);
+          fs.unlinkSync(fullPath);
+        }
+      }
+    } catch (error) {
+      this.logger.error(`Failed to clean session locks: ${error.message}`);
+    }
+  }
+
   async sendTestMessageToSelf(message: string): Promise<any> {
     if (!this.client.info || !this.client.info.wid) {
       throw new Error('Client is not ready or not authenticated');
@@ -64,7 +102,6 @@ export class WhatsappService implements OnModuleInit {
 
     const myId = this.client.info.wid._serialized;
 
-    // ADD { sendSeen: false } HERE
     return this.client.sendMessage(myId, message, { sendSeen: false }); 
   }
 
@@ -76,19 +113,16 @@ export class WhatsappService implements OnModuleInit {
     const myId = this.client.info.wid._serialized;
 
     // 1. Fetch the media from the URL
-    // MessageMedia.fromUrl downloads the file and converts it to base64 automatically.
     const media = await MessageMedia.fromUrl(imageUrl);
 
     // 2. Send the media
-    // We pass the media object as the content.
-    // 'caption' is part of the options object.
     return this.client.sendMessage(myId, media, { 
       caption: caption, 
-      sendSeen: false // Keep this to avoid the "markedUnread" error
+      sendSeen: false
     });
   }
 
-async sendCameraSnapshotToSelf(cameraName: string, customTitle?: string): Promise<any> {
+  async sendCameraSnapshotToSelf(cameraName: string, customTitle?: string): Promise<any> {
     if (!this.client.info || !this.client.info.wid) {
       throw new Error('Client is not ready or not authenticated');
     }
@@ -152,5 +186,4 @@ async sendCameraSnapshotToSelf(cameraName: string, customTitle?: string): Promis
       throw new Error(`Could not fetch or send snapshot: ${error.message}`);
     }
   }
-  
 }
