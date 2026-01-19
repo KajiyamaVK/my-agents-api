@@ -1,3 +1,2 @@
-2026/01/19-14:56:20.375 33f455 Reusing MANIFEST /home/kajiyamavk/src/my-agents-api/.wwebjs_auth/session/Default/GCM Store/MANIFEST-000001
-2026/01/19-14:56:20.376 33f455 Recovering log #3
-2026/01/19-14:56:20.376 33f455 Reusing old log /home/kajiyamavk/src/my-agents-api/.wwebjs_auth/session/Default/GCM Store/000003.log 
+2026/01/19-20:24:43.310 46 Creating DB /app/.wwebjs_auth/session/Default/GCM Store since it was missing.
+2026/01/19-20:24:43.318 46 Reusing MANIFEST /app/.wwebjs_auth/session/Default/GCM Store/MANIFEST-000001

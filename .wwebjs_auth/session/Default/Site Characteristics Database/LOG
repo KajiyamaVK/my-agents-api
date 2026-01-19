@@ -1,3 +1,2 @@
-2026/01/19-14:56:16.592 33f44d Reusing MANIFEST /home/kajiyamavk/src/my-agents-api/.wwebjs_auth/session/Default/Site Characteristics Database/MANIFEST-000001
-2026/01/19-14:56:16.604 33f44d Recovering log #3
-2026/01/19-14:56:16.604 33f44d Reusing old log /home/kajiyamavk/src/my-agents-api/.wwebjs_auth/session/Default/Site Characteristics Database/000003.log 
+2026/01/19-20:24:34.060 47 Creating DB /app/.wwebjs_auth/session/Default/Site Characteristics Database since it was missing.
+2026/01/19-20:24:34.073 47 Reusing MANIFEST /app/.wwebjs_auth/session/Default/Site Characteristics Database/MANIFEST-000001

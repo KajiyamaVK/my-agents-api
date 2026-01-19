@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+
+import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
+import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
+
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from 'src/common/guards/flow.guard';
@@ -8,7 +12,7 @@ describe('API (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    // Mock global fetch used by services to avoid network calls
+    // --- YOUR EXISTING FETCH MOCK (Unchanged) ---
     const fetchMock = jest.fn((url: string) => {
       if (url.includes('/auth-engine-api')) {
         return Promise.resolve({
@@ -45,6 +49,7 @@ describe('API (e2e)', () => {
 
     (global as any).fetch = fetchMock;
 
+    // --- MODULE SETUP ---
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -52,6 +57,10 @@ describe('API (e2e)', () => {
       .useValue({
         canActivate: jest.fn().mockReturnValue(true),
       })
+      // FIX 2: CHAIN THIS HERE TO STOP BROWSER LAUNCH
+      .overrideProvider(WhatsappService)
+      .useValue(WhatsappServiceMock)
+      // ---------------------------------------------
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -60,10 +69,17 @@ describe('API (e2e)', () => {
 
   afterAll(async () => {
     if (app) await app.close();
-    // cleanup fetch mock
     try {
       delete (global as any).fetch;
     } catch {}
+  });
+
+  // ... (Rest of your tests remain identical)
+  it('/ (GET) should return Hello World!', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
   });
 
   it('/ (GET) should return Hello World!', () => {

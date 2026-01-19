@@ -4,6 +4,8 @@ import request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { DocScraperService } from '../../src/doc-scraper/doc-scraper.service';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
+import { WhatsappService } from '../../src/whatsapp/whatsapp.service'; // Import the real class token
+import { WhatsappServiceMock } from '../fixtures/whatsapp.mock'; //
 
 describe('DocScraperController (e2e)', () => {
   let app: INestApplication;
@@ -21,26 +23,30 @@ describe('DocScraperController (e2e)', () => {
     }),
   };
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
+      // 1. You successfully mocked WhatsApp (Good!)
+      .overrideProvider(WhatsappService)
+      .useValue(WhatsappServiceMock)
+      
+      // 2. MISSING: You must also override the Scraper Service to use your mock
       .overrideProvider(DocScraperService)
-      .useValue(mockScrapeService)
+      .useValue(mockScrapeService) 
+
       .overrideGuard(FlowAuthGuard)
-      .useValue({ canActivate: () => true }) // Bypass Auth for testing
+      .useValue({ canActivate: () => true })
+      
       .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  afterEach(async () => {
-    if (app) {
-      await app.close();
-    }
+  afterAll(async () => {
+    await app.close();
   });
-
   it('/doc-scraper/scrape (POST)', () => {
     return request(app.getHttpServer())
       .post('/doc-scraper/scrape')
