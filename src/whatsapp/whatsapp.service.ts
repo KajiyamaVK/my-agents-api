@@ -46,7 +46,6 @@ export class WhatsappService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    await delay(5000); // Wait for 5 seconds
     this.client.initialize();
   }
 
@@ -69,10 +68,6 @@ export class WhatsappService implements OnModuleInit {
     });
   }
 
-  /**
-   * Recursively searches for and deletes 'SingletonLock' files 
-   * to ensure Chromium can start fresh after a container restart.
-   */
   private removeSessionLocks(directory: string) {
     const resolvedPath = path.resolve(directory);
     
