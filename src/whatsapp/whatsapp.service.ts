@@ -4,6 +4,7 @@ import * as qrcode from 'qrcode-terminal';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
+import { delay } from '../common/utils/delay.util';
 
 @Injectable()
 export class WhatsappService implements OnModuleInit {
@@ -17,9 +18,11 @@ export class WhatsappService implements OnModuleInit {
     const isTest = process.env.NODE_ENV === 'test';
     const dataPath = isTest ? './.wwebjs_auth_test' : './.wwebjs_auth';
 
-    // FIX: Remove SingletonLock before initializing to prevent Chromium crashes in Docker
     this.removeSessionLocks(dataPath);
 
+    // FIX: Add delay to allow for file system to release locks after previous session
+    // This is a temporary fix, and a more robust solution might involve
+    // better process management or a watchdog for the session directory.
     this.client = new Client({
       authStrategy: new LocalAuth({ 
         dataPath: dataPath 
@@ -42,7 +45,8 @@ export class WhatsappService implements OnModuleInit {
     this.initializeClient();
   }
 
-  onModuleInit() {
+  async onModuleInit() {
+    await delay(5000); // Wait for 5 seconds
     this.client.initialize();
   }
 
