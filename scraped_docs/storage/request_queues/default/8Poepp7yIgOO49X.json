@@ -1,0 +1,9 @@
+{
+	"id": "8Poepp7yIgOO49X",
+	"json": "{\"id\":\"8Poepp7yIgOO49X\",\"url\":\"https://jules.google/docs/api/reference/authentication\",\"loadedUrl\":\"https://jules.google/docs/api/reference/authentication\",\"uniqueKey\":\"https://jules.google/docs/api/reference/authentication\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":2,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:48.517Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs/api/reference/authentication",
+	"url": "https://jules.google/docs/api/reference/authentication"
+}

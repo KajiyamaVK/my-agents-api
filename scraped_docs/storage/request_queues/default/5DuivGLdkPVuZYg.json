@@ -1,0 +1,9 @@
+{
+	"id": "5DuivGLdkPVuZYg",
+	"json": "{\"id\":\"5DuivGLdkPVuZYg\",\"url\":\"https://jules.google/docs/review-plan/\",\"loadedUrl\":\"https://jules.google/docs/review-plan/\",\"uniqueKey\":\"https://jules.google/docs/review-plan\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:45.187Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs/review-plan",
+	"url": "https://jules.google/docs/review-plan/"
+}

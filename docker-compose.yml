@@ -5,7 +5,6 @@ services:
     restart: unless-stopped
     ports:
       - '3000:3000'
-    user: "1000:1000"
     environment:
       - PORT=3000
       - DATABASE_URL=file:../dev.db # Ajuste conforme seu schema.prisma
@@ -17,6 +16,7 @@ services:
       - FRIGATE_URL=http://frigate:5000
       # Standard NestJS prod setting
       - NODE_ENV=production
+      - CRAWLEE_STORAGE_DIR=/app/scraped_docs/storage
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:

@@ -1,42 +1,56 @@
 # Stage 1: Build
-# BEST PRACTICE: Use 'bookworm' (Debian) instead of Alpine for Playwright compatibility
 FROM node:22-bookworm AS builder
 
 WORKDIR /app
 
-# (Optional) OpenSSL is usually included in bookworm, but keeping if you have specific needs
-RUN apt-get update && apt-get install -y openssl && apt-get install -y chromium \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Install build dependencies
+RUN apt-get update && apt-get install -y openssl && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY package*.json ./
-COPY prisma ./prisma/
+# [FIX] Ensure /app is owned by node so npm can create node_modules
+RUN chown node:node /app
 
+# Copy package files with correct ownership
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node prisma ./prisma/
+
+# Install dependencies as node user
+USER node
 RUN npm ci
 RUN npx prisma generate
 
-COPY . .
+# Copy source code
+COPY --chown=node:node . .
 RUN npm run build
 
 # Stage 2: Production Run
-# BEST PRACTICE: Use the same Debian base to ensure glibc compatibility
 FROM node:22-bookworm
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y chromium \
+# 1. Install OS dependencies as ROOT (Required for Playwright/Chromium system libs)
+RUN apt-get update && apt-get install -y \
+    openssl \
+    chromium \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+# 2. Set ownership of the working directory to the node user
+RUN chown node:node /app
 
-# KEY FIX: Install Playwright browsers and system dependencies
-# This command installs the OS packages (apt-get) AND the browser binaries
-RUN npx playwright install --with-deps
+# 3. Switch to non-root user for all subsequent commands
+USER node
+
+# 4. Copy built artifacts from builder with correct ownership
+COPY --chown=node:node --from=builder /app/node_modules ./node_modules
+COPY --chown=node:node --from=builder /app/package*.json ./
+COPY --chown=node:node --from=builder /app/dist ./dist
+COPY --chown=node:node --from=builder /app/prisma ./prisma
+
+# 5. Install Playwright Browsers as NODE user
+RUN npx playwright install chromium
 
 ENV NODE_ENV=production
 ENV PORT=3000
+
 EXPOSE 3000
 
 CMD ["npm", "run", "start:prod"]

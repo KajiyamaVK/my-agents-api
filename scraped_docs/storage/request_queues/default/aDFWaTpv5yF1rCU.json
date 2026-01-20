@@ -1,0 +1,9 @@
+{
+	"id": "aDFWaTpv5yF1rCU",
+	"json": "{\"id\":\"aDFWaTpv5yF1rCU\",\"url\":\"https://jules.google/docs/cli/examples\",\"loadedUrl\":\"https://jules.google/docs/cli/examples\",\"uniqueKey\":\"https://jules.google/docs/cli/examples\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":2,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:59.573Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs/cli/examples",
+	"url": "https://jules.google/docs/cli/examples"
+}

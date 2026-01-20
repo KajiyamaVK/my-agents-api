@@ -1,0 +1,9 @@
+{
+	"id": "FdzP7RyqFmtFJvv",
+	"json": "{\"id\":\"FdzP7RyqFmtFJvv\",\"url\":\"https://jules.google/docs/tasks-repos/\",\"loadedUrl\":\"https://jules.google/docs/tasks-repos/\",\"uniqueKey\":\"https://jules.google/docs/tasks-repos\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:45.970Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs/tasks-repos",
+	"url": "https://jules.google/docs/tasks-repos/"
+}

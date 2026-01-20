@@ -1,0 +1,9 @@
+{
+	"id": "Uv8UrhIFVQpcr3n",
+	"json": "{\"id\":\"Uv8UrhIFVQpcr3n\",\"url\":\"https://jules.google/docs/integrations/\",\"loadedUrl\":\"https://jules.google/docs/integrations/\",\"uniqueKey\":\"https://jules.google/docs/integrations\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:43.329Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs/integrations",
+	"url": "https://jules.google/docs/integrations/"
+}

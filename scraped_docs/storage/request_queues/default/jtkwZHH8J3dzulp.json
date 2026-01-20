@@ -1,0 +1,9 @@
+{
+	"id": "jtkwZHH8J3dzulp",
+	"json": "{\"id\":\"jtkwZHH8J3dzulp\",\"url\":\"https://jules.google/docs/\",\"loadedUrl\":\"https://jules.google/docs/\",\"uniqueKey\":\"https://jules.google/docs\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-01-20T23:06:41.597Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs",
+	"url": "https://jules.google/docs/"
+}

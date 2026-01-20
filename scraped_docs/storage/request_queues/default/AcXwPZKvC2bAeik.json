@@ -1,0 +1,9 @@
+{
+	"id": "AcXwPZKvC2bAeik",
+	"json": "{\"id\":\"AcXwPZKvC2bAeik\",\"url\":\"https://jules.google/docs/repo/\",\"loadedUrl\":\"https://jules.google/docs/repo/\",\"uniqueKey\":\"https://jules.google/docs/repo\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:46.396Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://jules.google/docs/repo",
+	"url": "https://jules.google/docs/repo/"
+}

@@ -4,6 +4,7 @@ import * as qrcode from 'qrcode-terminal';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
+import { execSync } from 'child_process';
 import { delay } from '../common/utils/delay.util';
 
 @Injectable()
@@ -80,13 +81,14 @@ export class WhatsappService implements OnModuleInit {
       
       for (const file of files) {
         const fullPath = path.join(resolvedPath, file);
+        console.log('Checking file:', fullPath); // DEBUG
         const stat = fs.lstatSync(fullPath);
 
         if (stat.isDirectory()) {
           this.removeSessionLocks(fullPath);
-        } else if (file === 'SingletonLock') {
-          this.logger.warn(`Removing Chromium Lock file at: ${fullPath}`);
-          fs.unlinkSync(fullPath);
+        } else if (['SingletonLock', 'SingletonCookie', 'SingletonSocket'].includes(file)) {
+          this.logger.warn(`Forcibly removing Chromium Lock file at: ${fullPath}`);
+          execSync(`rm -f "${fullPath}"`);
         }
       }
     } catch (error) {
