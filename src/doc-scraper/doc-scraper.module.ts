@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 import { DocScraperService } from './doc-scraper.service';
 import { DocScraperController } from './doc-scraper.controller';
-import { DocScraperProcessor } from './doc-scraper.processor'; // Importe o processor
+import { DocScraperProcessor } from './doc-scraper.processor'; 
 
 @Module({
   imports: [
@@ -11,6 +11,6 @@ import { DocScraperProcessor } from './doc-scraper.processor'; // Importe o proc
     }),
   ],
   controllers: [DocScraperController],
-  providers: [DocScraperService, DocScraperProcessor], // Adicione o processor aqui
+  providers: [DocScraperService, DocScraperProcessor], 
 })
 export class DocScraperModule {}

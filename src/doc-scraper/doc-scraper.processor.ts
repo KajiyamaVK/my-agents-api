@@ -1,19 +1,19 @@
-import { Processor, WorkerHost } from '@nestjs/bullmq';
+import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq'; 
 import { Job } from 'bullmq';
 import { Logger } from '@nestjs/common';
 import { PlaywrightCrawler } from 'crawlee';
 import TurndownService from 'turndown';
 import * as path from 'path';
 import * as fs from 'fs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
-@Processor('scrape-docs') // Nome da fila
+@Processor('scrape-docs')
 export class DocScraperProcessor extends WorkerHost {
   private readonly logger = new Logger(DocScraperProcessor.name);
   private readonly outputBaseDir = './scraped_docs';
 
-  constructor() {
+  constructor(private eventEmitter: EventEmitter2) {
     super();
-    // Garante que o diretório base existe na inicialização
     if (!fs.existsSync(this.outputBaseDir)) {
       fs.mkdirSync(this.outputBaseDir);
     }
@@ -22,43 +22,31 @@ export class DocScraperProcessor extends WorkerHost {
   async process(job: Job<{ url: string }>): Promise<any> {
     this.logger.log(`Iniciando job ${job.id}: Scraping de ${job.data.url}`);
 
-    try {
-      const { url } = job.data;
-      const domainName = new URL(url).hostname.replace('www.', '');
-      const outputDir = path.join(this.outputBaseDir, domainName);
+    const { url } = job.data;
+    const domainName = new URL(url).hostname.replace('www.', '');
+    const outputDir = path.join(this.outputBaseDir, domainName);
 
-      if (fs.existsSync(outputDir)) {
-        fs.rmSync(outputDir, { recursive: true, force: true });
-      }
-      fs.mkdirSync(outputDir, { recursive: true });
+    // Prepare directory
+    if (fs.existsSync(outputDir)) {
+      fs.rmSync(outputDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(outputDir, { recursive: true });
 
-      const turndownService = new TurndownService({
-        headingStyle: 'atx',
-        codeBlockStyle: 'fenced',
-      });
+    const turndownService = new TurndownService({
+      headingStyle: 'atx',
+      codeBlockStyle: 'fenced',
+    });
 
-      turndownService.remove([
-        'script',
-        'style',
-        'nav',
-        'footer',
-        'header',
-        'iframe',
-      ]);
+    turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe']);
 
-      const crawler = new PlaywrightCrawler({
-        maxConcurrency: 2,
-        requestHandler: async ({ page, request, log, enqueueLinks }) => {
-  
-        // [CORREÇÃO 1] Mova isto para o TOPO.
-        // Isso garante que o crawler encontre os próximos links antes de tentar extrair o conteúdo.
+    const crawler = new PlaywrightCrawler({
+      maxConcurrency: 2,
+      requestHandler: async ({ page, request, log, enqueueLinks }) => {
         await enqueueLinks({
           globs: [`${url}/**`],
           strategy: 'same-domain',
         });
 
-        // [CORREÇÃO 2] Lógica para encontrar o seletor correto dinamicamente.
-        // O 'main' falha em sites JSDoc, por isso tentamos outros comuns.
         const possibleSelectors = ['#jsdoc-content', 'main', '.main-content', 'article', 'body'];
         let contentSelector = '';
 
@@ -66,50 +54,58 @@ export class DocScraperProcessor extends WorkerHost {
           const element = await page.$(selector);
           if (element) {
             contentSelector = selector;
-            break; // Encontrou um, para de procurar
+            break;
           }
         }
 
-        // Se mesmo assim não encontrar nada, loga e sai (mas os links já foram enfileirados acima!)
         if (!contentSelector) {
           log.warning(`Nenhum seletor de conteúdo encontrado em: ${request.url}`);
           return;
         }
 
-          // Lógica de extração (agora mais segura)
-          try {
-            // Aumentei o timeout para 10s para garantir
-            await page.waitForSelector(contentSelector, { timeout: 10000 });
-          } catch {
-            log.warning(`Timeout ao esperar pelo seletor ${contentSelector}: ${request.url}`);
-            return;
-          }
-
+        try {
+          await page.waitForSelector(contentSelector, { timeout: 10000 });
           const html = await page.$eval(contentSelector, (el) => el.innerHTML);
           const markdown = turndownService.turndown(html);
           const finalContent = `Source: ${request.url}\n\n${markdown}`;
 
-          const fileName =
-            request.url
-              .replace(url, '')
-              .replace(/[\/\\?%*:|"<>]/g, '-')
-              .replace(/^-/, '') || 'index';
+          const fileName = request.url
+            .replace(url, '')
+            .replace(/[\/\\?%*:|"<>]/g, '-')
+            .replace(/^-/, '') || 'index';
 
-          fs.writeFileSync(
-            path.join(outputDir, `${fileName}.md`),
-            finalContent,
-          );
+          fs.writeFileSync(path.join(outputDir, `${fileName}.md`), finalContent);
+        } catch (e) {
+          log.warning(`Erro ao processar página ${request.url}: ${e.message}`);
+        }
       },
-      });
-      
+    });
 
-      await crawler.run([url]);
+    await crawler.run([url]);
 
-      this.logger.log(`Job ${job.id} finalizado com sucesso!`);
-      return { success: true, path: outputDir };
-    } catch (error) {
-      this.logger.error(`Job ${job.id} falhou: ${error.message}`);
-      throw error; // O BullMQ tentará novamente se configurado
-    }
+    // Return the result data. BullMQ passes this to @OnWorkerEvent('completed')
+    return { path: outputDir };
+  }
+
+  // --- LIFECYCLE EVENTS ---
+
+  @OnWorkerEvent('completed')
+  onCompleted(job: Job, result: any) {
+    this.logger.log(`Job ${job.id} finalizado com sucesso.`);
+    this.eventEmitter.emit('docScraper.completed', {
+      jobId: job.id,
+      url: job.data.url,
+      outputPath: result.path,
+    });
+  }
+
+  @OnWorkerEvent('failed')
+  onFailed(job: Job, error: Error) {
+    this.logger.error(`Job ${job.id} falhou: ${error.message}`);
+    this.eventEmitter.emit('docScraper.failed', {
+      jobId: job.id,
+      url: job.data?.url,
+      error: error.message,
+    });
   }
 }

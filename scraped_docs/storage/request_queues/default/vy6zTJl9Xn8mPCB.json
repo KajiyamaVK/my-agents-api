@@ -1,9 +1,0 @@
-{
-	"id": "vy6zTJl9Xn8mPCB",
-	"json": "{\"id\":\"vy6zTJl9Xn8mPCB\",\"url\":\"https://jules.google/docs/api/reference/\",\"loadedUrl\":\"https://jules.google/docs/api/reference/\",\"uniqueKey\":\"https://jules.google/docs/api/reference\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:42.359Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://jules.google/docs/api/reference",
-	"url": "https://jules.google/docs/api/reference/"
-}

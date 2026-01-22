@@ -1,9 +1,0 @@
-{
-	"id": "Tgdf7Gh61O9Sl8G",
-	"json": "{\"id\":\"Tgdf7Gh61O9Sl8G\",\"url\":\"https://jules.google/docs/contact/\",\"loadedUrl\":\"https://jules.google/docs/contact/\",\"uniqueKey\":\"https://jules.google/docs/contact\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:47.907Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://jules.google/docs/contact",
-	"url": "https://jules.google/docs/contact/"
-}

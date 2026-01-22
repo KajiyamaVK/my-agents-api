@@ -1,9 +1,0 @@
-{
-	"id": "eOhWPsvlyrXnbPC",
-	"json": "{\"id\":\"eOhWPsvlyrXnbPC\",\"url\":\"https://jules.google/docs/changelog/2025-10-01\",\"loadedUrl\":\"https://jules.google/docs/changelog/2025-10-01\",\"uniqueKey\":\"https://jules.google/docs/changelog/2025-10-01\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":2,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:51.644Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://jules.google/docs/changelog/2025-10-01",
-	"url": "https://jules.google/docs/changelog/2025-10-01"
-}

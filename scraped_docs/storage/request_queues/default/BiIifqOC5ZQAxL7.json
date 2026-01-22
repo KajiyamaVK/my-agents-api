@@ -1,9 +1,0 @@
-{
-	"id": "BiIifqOC5ZQAxL7",
-	"json": "{\"id\":\"BiIifqOC5ZQAxL7\",\"url\":\"https://jules.google/docs/usage-limits/\",\"loadedUrl\":\"https://jules.google/docs/usage-limits/\",\"uniqueKey\":\"https://jules.google/docs/usage-limits\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-01-20T23:06:47.246Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://jules.google/docs/usage-limits",
-	"url": "https://jules.google/docs/usage-limits/"
-}

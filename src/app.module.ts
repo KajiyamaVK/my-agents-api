@@ -10,6 +10,8 @@ import { LlmModelsModule } from './llm/models/llm-models.module';
 import { TokenModule } from './llm/token/token.module';
 import { DocScraperModule } from './doc-scraper/doc-scraper.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
         port: Number(process.env.REDIS_PORT) || 6379,
       },
     }),
+    EventEmitterModule.forRoot(),
 
     PrismaModule,
     ChatCompletionModule,
@@ -38,6 +41,7 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
     LlmModelsModule,
     DocScraperModule,
     WhatsappModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
