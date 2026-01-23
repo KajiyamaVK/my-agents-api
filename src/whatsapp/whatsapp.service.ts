@@ -134,6 +134,34 @@ export class WhatsappService implements OnModuleInit {
     }
   }
 
+  async sendImageToSelf(imageUrl: string, caption?: string): Promise<string> {
+    if (!this.client?.info?.wid) {
+      throw new Error('WhatsApp client is not ready or authenticated');
+    }
+
+    const myId = this.client.info.wid._serialized;
+    
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error(`Status: ${response.status} ${response.statusText}`);
+
+      const arrayBuffer = await response.arrayBuffer();
+      const contentType = response.headers.get('content-type') || 'image/jpeg';
+      const media = new MessageMedia(
+        contentType, 
+        Buffer.from(arrayBuffer).toString('base64'), 
+        'image.jpg'
+      );
+
+      await this.client.sendMessage(myId, media, { caption, sendSeen: false });
+      return `Imagem enviada com sucesso.`;
+
+    } catch (error) {
+      this.logger.error(`Failed to send image to self from URL: ${imageUrl}`, error);
+      throw new Error(`Could not fetch or send image: ${error.message}`);
+    }
+  }
+
   @AiTool({
     name: 'get_frigate_snapshot',
     description: 'Captura uma foto de uma câmera do Frigate pelo nome cadastrado (ex: portao, garagem) e envia para o meu WhatsApp.',
