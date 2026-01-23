@@ -7,13 +7,14 @@ services:
       - '3000:3000'
     environment:
       - PORT=3000
-      - DATABASE_URL=file:../dev.db
+      - DATABASE_URL=file:../dev.db # Ajuste conforme seu schema.prisma
       - FLOW_CLIENT_ID=${FLOW_CLIENT_ID}
       - FLOW_CLIENT_SECRET=${FLOW_CLIENT_SECRET}
       - FLOW_TENANT=${FLOW_TENANT}
       - FLOW_AGENT=${FLOW_AGENT}
       - FLOW_APP_TO_ACCESS=${FLOW_APP_TO_ACCESS}
       - FRIGATE_URL=http://frigate:5000
+      # Standard NestJS prod setting
       - NODE_ENV=production
       - CRAWLEE_STORAGE_DIR=/app/scraped_docs/storage
       - REDIS_HOST=redis
@@ -21,10 +22,11 @@ services:
     depends_on:
       - redis
     volumes:
+      # Persistência do SQLite
       - ./dev.db:/app/dev.db
       - ./scraped_docs:/app/scraped_docs
       - ./.wwebjs_auth:/app/.wwebjs_auth
-      # BEST PRACTICE: Mapear a pasta de configuração para persistência e sincronização
+      # BEST PRACTICE: Mapear a pasta .config para que o RegistryService encontre o YAML
       - ./.config:/app/.config
     networks:
       - proxy-net
