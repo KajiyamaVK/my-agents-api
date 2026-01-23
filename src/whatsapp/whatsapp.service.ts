@@ -13,6 +13,7 @@ export class WhatsappService implements OnModuleInit {
   private client: Client;
   private readonly logger = new Logger(WhatsappService.name);
   private frigateUrl: string;
+  private isReady = false;
 
   constructor(
     private readonly configService: ConfigService,
@@ -22,7 +23,6 @@ export class WhatsappService implements OnModuleInit {
     
     const isTest = process.env.NODE_ENV === 'test';
     
-    // BEST PRACTICE: Não inicializar o Puppeteer em modo de teste para evitar leaks de processo
     if (isTest) {
       this.logger.warn('WhatsappService inicializado em modo TESTE. O Puppeteer não será iniciado.');
       return;
@@ -66,6 +66,7 @@ export class WhatsappService implements OnModuleInit {
     });
 
     this.client.on('ready', () => {
+      this.isReady = true;
       this.logger.log('WhatsApp Client is ready!');
     });
 
@@ -74,7 +75,13 @@ export class WhatsappService implements OnModuleInit {
     });
 
     this.client.on('auth_failure', (msg) => {
+      this.isReady = false;
       this.logger.error('Authentication failure', msg);
+    });
+
+    this.client.on('disconnected', (reason) => {
+      this.isReady = false;
+      this.logger.warn('WhatsApp Client was disconnected', reason);
     });
   }
 
@@ -113,29 +120,38 @@ export class WhatsappService implements OnModuleInit {
     },
   })
   async sendMessage({ to, message }: { to: string; message: string }) {
+    // Bloqueia tentativas de envio antes do cliente estar 100% pronto
+    if (!this.isReady || !this.client?.info) {
+      throw new Error('O cliente WhatsApp ainda não está pronto. Aguarde alguns segundos.');
+    }
+
     try {
       let contactId: string;
 
-      // 1. Tentar resolver pelo Registry (Banco de Dados / Config)
       const registeredContact = await this.registryService.resolveContact(to);
       
       if (registeredContact) {
         contactId = registeredContact.whatsappId;
+      } else if (['me', 'mim', 'self', 'meu', 'mim mesmo'].includes(to.toLowerCase())) {
+        // Fallback: Usa o ID da própria sessão caso o banco/YAML ainda não tenha sincronizado
+        contactId = this.client.info.wid._serialized;
       } else {
-        // 2. Se não estiver no registro, tratar como número puro
-        contactId = to.includes('@c.us') ? to : `${to.replace(/\D/g, '')}@c.us`;
+        const cleanNumber = to.replace(/\D/g, '');
+        if (!cleanNumber) throw new Error(`Destinatário "${to}" não reconhecido.`);
+        contactId = to.includes('@c.us') ? to : `${cleanNumber}@c.us`;
       }
 
       await this.client.sendMessage(contactId, message);
       return `Mensagem enviada com sucesso para ${to}`;
     } catch (error) {
-      this.logger.error(`Erro ao enviar mensagem para ${to}: ${error.message}`);
-      throw new Error(`Falha no WhatsApp: ${error.message}`);
+      const msg = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Erro ao enviar mensagem para ${to}: ${msg}`);
+      throw new Error(`Falha no WhatsApp: ${msg}`);
     }
   }
 
   async sendImageToSelf(imageUrl: string, caption?: string): Promise<string> {
-    if (!this.client?.info?.wid) {
+    if (!this.isReady || !this.client?.info?.wid) {
       throw new Error('WhatsApp client is not ready or authenticated');
     }
 
@@ -175,11 +191,10 @@ export class WhatsappService implements OnModuleInit {
     },
   })
   async sendCameraSnapshotToSelf(cameraAlias: string, customTitle?: string): Promise<string> {
-    if (!this.client?.info?.wid) {
+    if (!this.isReady || !this.client?.info?.wid) {
       throw new Error('WhatsApp client is not ready or authenticated');
     }
 
-    // 1. Resolve a câmera pelo alias cadastrado no banco
     const camera = await this.registryService.resolveCamera(cameraAlias);
     if (!camera) {
       throw new Error(`Câmera "${cameraAlias}" não encontrada no cadastro.`);
@@ -219,9 +234,8 @@ export class WhatsappService implements OnModuleInit {
     }
   }
 
-  // Métodos auxiliares permanecem para uso interno se necessário
   async sendTestMessageToSelf(message: string): Promise<any> {
-    if (!this.client?.info?.wid) throw new Error('Client not ready');
+    if (!this.isReady || !this.client?.info?.wid) throw new Error('Client not ready');
     return this.client.sendMessage(this.client.info.wid._serialized, message, { sendSeen: false }); 
   }
 }
