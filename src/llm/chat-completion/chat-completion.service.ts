@@ -10,58 +10,46 @@ export class ChatCompletionService {
    * Creates a completion for the chat message using the Flow API.
    * Now accepts an array of messages to support conversation history and agent orchestration.
    */
-  async createChatCompletion(messages: any[], token: string, functionDefinitions?: any[]) {
-    const flowTenant = this.configService.get<string>('FLOW_TENANT');
-    const flowAgent = this.configService.get<string>('FLOW_AGENT');
 
-    // Prepare the request body according to Flow API documentation
+  async createChatCompletion(messages: any[], token: string, functions?: any[]) {
+    const flowTenant = this.configService.getOrThrow<string>('FLOW_TENANT');
+    const flowAgent = this.configService.getOrThrow<string>('FLOW_AGENT');
+
     const body: any = {
       model: 'gpt-4o-mini',
-      messages: messages, // Receives the full history for agentic loops
+      messages,
       temperature: 0.7,
       max_tokens: 4096,
       stream: false,
     };
 
-    // Use legacy 'functions' property instead of 'tools' per Flow documentation
-    if (functionDefinitions && functionDefinitions.length > 0) {
-      body.functions = functionDefinitions.map(f => ({
-        name: f.name,
-        description: f.description,
-        parameters: f.parameters,
-      }));
-      body.function_call = 'auto'; // Model determines when to use a tool
+    if (functions && functions.length > 0) {
+      body.functions = functions;
+      body.function_call = 'auto';
     }
-
-    const url = 'https://flow.ciandt.com/ai-orchestration-api/v1/openai/chat/completions';
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      'FlowTenant': flowTenant || '',
-      'FlowAgent': flowAgent || '',
-    };
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch('https://flow.ciandt.com/ai-orchestration-api/v1/openai/chat/completions', {
         method: 'POST',
-        headers: headers,
-        body: JSON.stringify(body), // Stringify only when sending the request
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'FlowTenant': flowTenant,
+          'FlowAgent': flowAgent,
+        },
+        body: JSON.stringify(body),
       });
 
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const errorText = await response.text();
-        return {
-          status: 'error',
-          details: `Status code: ${response.status} - ${errorText}`,
-        };
+      if (!response.ok) {
+        const error = await response.text();
+        return { status: 'error', details: `Status ${response.status}: ${error}` };
       }
+
+      return await response.json();
     } catch (error) {
       return { status: 'error', details: error.message };
-    }
-  }
+    }}
 
   async checkHealth() {
     const url = 'https://flow.ciandt.com/ai-orchestration-api/v1/health';

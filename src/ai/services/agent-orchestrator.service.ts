@@ -9,7 +9,7 @@ export class AgentOrchestratorService {
 
   constructor(
     private readonly toolDiscovery: ToolDiscoveryService,
-    private readonly chatCompletion: ChatCompletionService,
+    private readonly chatCompletion: ChatCompletionService, 
   ) {}
 
   async chat(userPrompt: string, token: string) {
@@ -17,29 +17,32 @@ export class AgentOrchestratorService {
     const messages: any[] = [{ role: 'user', content: userPrompt }];
 
     let response = await this.chatCompletion.createChatCompletion(messages, token, functions);
+    
+    // Check for Flow API error response
+    if (response.status === 'error') throw new Error(response.details);
+
     let choice = response.choices[0];
 
-    // Orchestration loop using the 'function_call' legacy pattern
+    // Orchestration loop: as long as the model wants to call a function
     while (choice.message.function_call) {
       const { name, arguments: argsString } = choice.message.function_call;
       const args = JSON.parse(argsString);
 
-      this.logger.log(`Triggering Flow Tool: ${name}`);
+      this.logger.log(`Executing tool: ${name}`);
 
-      // Add the assistant's function call to history
+      // Add the model's call to history
       messages.push(choice.message);
 
       try {
         const output = await this.toolDiscovery.execute(name, args);
         
-        // Add the result using the 'function' role
+        // Add function result to history with role 'function'
         messages.push({
           role: 'function',
           name: name,
           content: typeof output === 'string' ? output : JSON.stringify(output),
         });
       } catch (error) {
-        this.logger.error(`Tool error: ${name}`, error.message);
         messages.push({
           role: 'function',
           name: name,
@@ -47,7 +50,7 @@ export class AgentOrchestratorService {
         });
       }
 
-      // Get the final or next step from the Flow API
+      // Re-trigger completion with the new history
       response = await this.chatCompletion.createChatCompletion(messages, token, functions);
       choice = response.choices[0];
     }
