@@ -11,8 +11,8 @@ import { QueueMonitorController } from './queue-monitor.controller';
     BullModule.registerQueue({
       name: 'scrape-docs',
     }),
-    QueueMonitorController
   ],
+  controllers: [QueueMonitorController],
   providers: [DocScraperListener, QueueMonitorService],
   exports: [QueueMonitorService],
 })

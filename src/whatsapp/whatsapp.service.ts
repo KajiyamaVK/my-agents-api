@@ -5,10 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
-import { delay } from '../common/utils/delay.util';
+import { AiTool } from 'src/common/decorators/ai-tool.decorator';
 
 @Injectable()
 export class WhatsappService implements OnModuleInit {
+
   private client: Client;
   private readonly logger = new Logger(WhatsappService.name);
   private frigateUrl: string;
@@ -96,6 +97,26 @@ export class WhatsappService implements OnModuleInit {
     }
   }
 
+  @AiTool({
+    name: 'send_whatsapp_message',
+    description: 'Envia uma mensagem para um contato ou número específico.',
+    parameters: {
+      type: 'object',
+      properties: {
+        to: { type: 'string', description: 'Número com DDD ou nome do contato' },
+        message: { type: 'string', description: 'Texto da mensagem' },
+      },
+      required: ['to', 'message'],
+    },
+  })
+  async sendMessage({ to, message }: { to: string; message: string }) {
+    // Se o 'to' não for um ID formatado, você precisará de uma lógica 
+    // para buscar o ID pelo nome ou formatar o número.
+    const contactId = to.includes('@c.us') ? to : `${to}@c.us`;
+    
+    return this.client.sendMessage(contactId, message);
+  }
+
   async sendTestMessageToSelf(message: string): Promise<any> {
     if (!this.client.info || !this.client.info.wid) {
       throw new Error('Client is not ready or not authenticated');
@@ -122,6 +143,19 @@ export class WhatsappService implements OnModuleInit {
       sendSeen: false
     });
   }
+
+  @AiTool({
+    name: 'get_frigate_snapshot',
+    description: 'Captura uma foto em tempo real de uma câmera do Frigate (portao, garagem, etc) e envia para o meu WhatsApp.',
+    parameters: {
+      type: 'object',
+      properties: {
+        cameraName: { type: 'string', description: 'O nome da câmera conforme configurado no Frigate.' },
+        customTitle: { type: 'string', description: 'Um título opcional para a imagem.' },
+      },
+      required: ['cameraName'],
+    },
+  })
 
   async sendCameraSnapshotToSelf(cameraName: string, customTitle?: string): Promise<any> {
     if (!this.client.info || !this.client.info.wid) {
