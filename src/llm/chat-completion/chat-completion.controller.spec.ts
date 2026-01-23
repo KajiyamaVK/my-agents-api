@@ -2,10 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChatCompletionController } from './chat-completion.controller';
 import { ChatCompletionService } from './chat-completion.service';
 import { FlowAuthGuard } from 'src/common/guards/flow.guard';
+import { AgentOrchestratorService } from '../../ai/services/agent-orchestrator.service'; // Importe o serviço
 
 describe('ChatCompletionController', () => {
   let controller: ChatCompletionController;
   let chatService: any;
+
+  const mockOrchestratorService = {
+      chat: jest.fn().mockResolvedValue('hi'),
+  };
 
   beforeEach(async () => {
     const mockChatService = {
@@ -13,10 +18,13 @@ describe('ChatCompletionController', () => {
       createChatCompletion: jest.fn().mockResolvedValue({ reply: 'hi' }),
     };
 
+
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ChatCompletionController],
       providers: [
         { provide: ChatCompletionService, useValue: mockChatService },
+        { provide: AgentOrchestratorService, useValue: mockOrchestratorService }
       ],
     })
       .overrideGuard(FlowAuthGuard)
@@ -40,14 +48,9 @@ describe('ChatCompletionController', () => {
 
   it('createChatCompletion should call service with message and token', async () => {
     const mockToken = 'test-token';
-    await expect(
-      controller.createChatCompletion('hello', mockToken),
-    ).resolves.toEqual({
-      reply: 'hi',
-    });
-    expect(chatService.createChatCompletion).toHaveBeenCalledWith(
-      'hello',
-      mockToken,
-    );
+    const result = await controller.createChatCompletion('hello', mockToken);
+
+    expect(result).toEqual({ reply: 'hi' });
+    expect(mockOrchestratorService.chat).toHaveBeenCalledWith('hello', mockToken);
   });
 });

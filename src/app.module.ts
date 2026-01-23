@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as Joi from 'joi';
-import { ChatCompletionModule } from './llm/chat-completion/chat-completion.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LlmModelsModule } from './llm/models/llm-models.module';
 import { TokenModule } from './llm/token/token.module';
@@ -37,7 +36,6 @@ import { AiModule } from './ai/ai.module';
     EventEmitterModule.forRoot(),
 
     PrismaModule,
-    ChatCompletionModule,
     TokenModule,
     LlmModelsModule,
     DocScraperModule,

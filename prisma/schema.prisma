@@ -16,3 +16,18 @@ model LlmModels {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Contact {
+  id         Int      @id @default(autoincrement())
+  alias      String   @unique // Ex: "thiago", "esposa"
+  whatsappId String   @unique // Ex: "5511999999999@c.us"
+  isMe       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Camera {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // Ex: "portao"
+  frigateName String   // Nome técnico no Frigate
+  description String?
+}
