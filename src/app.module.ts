@@ -12,6 +12,7 @@ import { DocScraperModule } from './doc-scraper/doc-scraper.module';
 import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationsModule } from './notifications/notifications.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     DocScraperModule,
     WhatsappModule,
     NotificationsModule,
+    AiModule
   ],
   controllers: [AppController],
   providers: [AppService],

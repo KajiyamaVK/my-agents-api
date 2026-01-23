@@ -41,7 +41,7 @@ export class ToolDiscoveryService implements OnModuleInit {
     });
   }
 
-  // Retorna o catálogo para enviar ao Gemini/OpenAI
+  // Retorna o catálogo para enviar ao Flow/OpenAI
   getToolDefinitions() {
     return Array.from(this.tools.values()).map(t => t.options);
   }
