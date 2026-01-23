@@ -4,29 +4,23 @@ import { DiscoveryModule } from '@nestjs/core';
 import { AgentOrchestratorService } from './services/agent-orchestrator.service';
 import { ToolDiscoveryService } from './services/tool-discovery.service';
 import { ChatCompletionModule } from '../llm/chat-completion/chat-completion.module';
-import { ChatCompletionController } from 'src/llm/chat-completion/chat-completion.controller';
-import { Prisma } from '@prisma/client';
-import { PrismaModule } from 'src/prisma/prisma.module';
-import { RegistryService } from './services/registry.service';
+import { RegistryService } from './services/registry.service'; // Importe o serviço
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [
-    // O DiscoveryModule é essencial para que o ToolDiscoveryService consiga 
-    // escanear os providers e encontrar os métodos decorados com @AiTool
     DiscoveryModule,
-    // Importamos o ChatCompletionModule para que o AgentOrchestratorService 
-    // possa injetar o ChatCompletionService
     ChatCompletionModule,
-    PrismaModule
+    PrismaModule,
   ],
-  controllers: [ChatCompletionController],
   providers: [
     AgentOrchestratorService,
     ToolDiscoveryService,
+    RegistryService, 
+  ],
+  exports: [
+    AgentOrchestratorService, 
     RegistryService
   ],
-  // Exportamos o AgentOrchestratorService para que ele possa ser utilizado 
-  // em controllers ou outros módulos da aplicação
-  exports: [AgentOrchestratorService, RegistryService],
 })
-export class  AiModule {}
+export class AiModule {}
