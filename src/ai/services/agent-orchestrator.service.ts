@@ -1,12 +1,7 @@
 // src/ai/services/agent-orchestrator.service.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { ToolDiscoveryService } from './tool-discovery.service';
-import { GeminiService } from './gemini.service';
-
-export interface ToolExecutionResult {
-  name: string;
-  output: any;
-}
+import { ChatCompletionService } from '../../llm/chat-completion/chat-completion.service';
 
 @Injectable()
 export class AgentOrchestratorService {
@@ -14,48 +9,49 @@ export class AgentOrchestratorService {
 
   constructor(
     private readonly toolDiscovery: ToolDiscoveryService,
-    private readonly gemini: GeminiService,
+    private readonly chatCompletion: ChatCompletionService,
   ) {}
 
-  async chat(userPrompt: string) {
-    const tools = this.toolDiscovery.getToolDefinitions();
+  async chat(userPrompt: string, token: string) {
+    const functions = this.toolDiscovery.getToolDefinitions();
+    const messages: any[] = [{ role: 'user', content: userPrompt }];
 
-    // 1. Chamada inicial para o Gemini
-    let { text, toolCalls, chatInstance } = await this.gemini.generateResponse(userPrompt, tools);
+    let response = await this.chatCompletion.createChatCompletion(messages, token, functions);
+    let choice = response.choices[0];
 
-    // O "LISTENER" de chamadas de função
-    while (toolCalls && toolCalls.length > 0) {
-      const results: ToolExecutionResult[] = [];
+    // Orchestration loop using the 'function_call' legacy pattern
+    while (choice.message.function_call) {
+      const { name, arguments: argsString } = choice.message.function_call;
+      const args = JSON.parse(argsString);
 
-      for (const call of toolCalls) {
-        this.logger.log(`Executando tool: ${call.name} com args: ${JSON.stringify(call.args)}`);
+      this.logger.log(`Triggering Flow Tool: ${name}`);
+
+      // Add the assistant's function call to history
+      messages.push(choice.message);
+
+      try {
+        const output = await this.toolDiscovery.execute(name, args);
         
-        try {
-          // 2. Executa a função real no service decorado
-          const output = await this.toolDiscovery.execute(call.name, call.args);
-          
-          results.push({
-            name: call.name,
-            output: output, // O GeminiService tratará o stringify se necessário
-          });
-        } catch (error) {
-          this.logger.error(`Erro ao executar tool ${call.name}:`, error.message);
-          results.push({
-            name: call.name,
-            output: { error: error.message }, // Informa o erro à IA para ela tentar corrigir
-          });
-        }
+        // Add the result using the 'function' role
+        messages.push({
+          role: 'function',
+          name: name,
+          content: typeof output === 'string' ? output : JSON.stringify(output),
+        });
+      } catch (error) {
+        this.logger.error(`Tool error: ${name}`, error.message);
+        messages.push({
+          role: 'function',
+          name: name,
+          content: JSON.stringify({ error: error.message }),
+        });
       }
 
-      // 3. ATUALIZAÇÃO CRÍTICA: Envia os resultados e pega o próximo estado da IA
-      const nextStep = await this.gemini.continueWithToolResults(chatInstance, results);
-      
-      text = nextStep.text;
-      toolCalls = nextStep.toolCalls;
-      // chatInstance continua o mesmo objeto, mas o histórico interno dele foi atualizado
+      // Get the final or next step from the Flow API
+      response = await this.chatCompletion.createChatCompletion(messages, token, functions);
+      choice = response.choices[0];
     }
 
-    // 4. Retorna a resposta final em linguagem natural
-    return text;
+    return choice.message.content;
   }
 }
