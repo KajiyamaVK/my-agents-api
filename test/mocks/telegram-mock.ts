@@ -1,11 +1,16 @@
 import { getBotToken } from 'nestjs-telegraf';
 
-// This mock replaces the real Telegraf instance
-export const mockTelegraf = {
+const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
   },
+  // These are the missing methods causing the "bot.use" error
+  use: jest.fn().mockReturnThis(),
+  on: jest.fn().mockReturnThis(),
+  command: jest.fn().mockReturnThis(),
+  start: jest.fn().mockReturnThis(),
+  help: jest.fn().mockReturnThis(),
   launch: jest.fn().mockResolvedValue({}),
   stop: jest.fn().mockResolvedValue({}),
 };
