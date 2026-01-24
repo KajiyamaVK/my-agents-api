@@ -18,11 +18,14 @@ model LlmModels {
 }
 
 model Contact {
-  id         Int      @id @default(autoincrement())
-  alias      String   @unique // Ex: "thiago", "esposa"
-  whatsappId String   @unique // Ex: "5511999999999@c.us"
-  isMe       Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  alias          String?  @unique // Tornado opcional para preenchimento posterior
+  whatsappId     String   @unique // No Telegram, guardamos o Chat ID aqui
+  age            Int?
+  isApproved     Boolean  @default(false)
+  onboardingStep String   @default("NONE") // NONE, AWAITING_NAME, AWAITING_AGE
+  isMe           Boolean  @default(false)
+  createdAt      DateTime @default(now())
 }
 
 model Camera {
