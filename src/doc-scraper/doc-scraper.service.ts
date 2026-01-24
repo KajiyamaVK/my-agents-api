@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import * as fs from 'fs';
@@ -7,9 +7,15 @@ import * as path from 'path';
 @Injectable()
 export class DocScraperService {
   private readonly logger = new Logger(DocScraperService.name);
-  private readonly outputBaseDir = './scraped_docs';
+  // Using path.resolve to ensure the base directory is consistently found
+  private readonly outputBaseDir = path.resolve(process.cwd(), 'scraped_docs');
 
-  constructor(@InjectQueue('scrape-docs') private docQueue: Queue) {}
+  constructor(@InjectQueue('scrape-docs') private docQueue: Queue) {
+    // Ensure the base directory exists on startup
+    if (!fs.existsSync(this.outputBaseDir)) {
+      fs.mkdirSync(this.outputBaseDir, { recursive: true });
+    }
+  }
 
   async scrapeDocumentation(url: string) {
     this.logger.log(`Adicionando tarefa de scraping para: ${url}`);
@@ -35,6 +41,12 @@ export class DocScraperService {
    * Reads all .md files from the domain folder and merges them into one file.
    */
   async mergeDocuments(domain: string): Promise<{ path: string | null; totalFiles: number }> {
+    // SAFETY CHECK: Prevent path.join(..., undefined) which causes the E2E crash
+    if (!domain) {
+      this.logger.error('Merge failed: domain argument is undefined or null');
+      throw new BadRequestException('Domain is required for merging documents.');
+    }
+
     const sourceDir = path.join(this.outputBaseDir, domain);
     const outputFile = path.join(sourceDir, `_FULL_DOCUMENTATION.md`);
 
@@ -65,9 +77,10 @@ export class DocScraperService {
       const filePath = path.join(sourceDir, file);
       const content = fs.readFileSync(filePath, 'utf-8');
 
-      writeStream.write(`\n\n--- END OF FILE: ${file} ---\n`);
-      writeStream.write(`--- START OF FILE: ${file} ---\n\n`);
+      // Best practice: Clearly delineate file boundaries
+      writeStream.write(`\n\n--- START OF FILE: ${file} ---\n\n`);
       writeStream.write(content);
+      writeStream.write(`\n\n--- END OF FILE: ${file} ---\n`);
     }
 
     writeStream.end();
@@ -77,7 +90,10 @@ export class DocScraperService {
         this.logger.log(`Merge complete: ${outputFile}`);
         resolve({ path: outputFile, totalFiles: files.length });
       });
-      writeStream.on('error', (err) => reject(err));
+      writeStream.on('error', (err) => {
+        this.logger.error(`Write stream error: ${err.message}`);
+        reject(err);
+      });
     });
   }
 }
