@@ -1,11 +1,27 @@
-// test/e2e/api.e2e-spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
+import { getBotToken } from 'nestjs-telegraf'; // Added this
+import { TelegramService } from '../../src/telegram/telegram.service'; // Added this
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
+
+// Define the mock to satisfy TelegrafModule and avoid shutdown errors
+const mockTelegraf = {
+  telegram: {
+    sendMessage: jest.fn().mockResolvedValue({}),
+    sendPhoto: jest.fn().mockResolvedValue({}),
+  },
+  launch: jest.fn().mockResolvedValue({}),
+  stop: jest.fn().mockResolvedValue({}), // Prevents "Bot is not running!"
+};
+
+const TelegramServiceMock = {
+  sendMessage: jest.fn().mockResolvedValue({}),
+  sendCameraSnapshot: jest.fn().mockResolvedValue({}),
+};
 
 describe('API (e2e)', () => {
   let app: INestApplication;
@@ -39,6 +55,13 @@ describe('API (e2e)', () => {
     })
       .overrideGuard(FlowAuthGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
+      // 1. Mock the internal Telegraf Bot instance
+      .overrideProvider(getBotToken())
+      .useValue(mockTelegraf)
+      // 2. Mock your custom Telegram Service
+      .overrideProvider(TelegramService)
+      .useValue(TelegramServiceMock)
+      // 3. Keep your existing WhatsApp mock
       .overrideProvider(WhatsappService)
       .useValue(WhatsappServiceMock)
       .compile();
@@ -52,7 +75,7 @@ describe('API (e2e)', () => {
     delete (global as any).fetch;
   });
 
-  // BEST PRACTICE: Reset mocks between tests to ensure call counts are accurate
+  // BEST PRACTICE: Reset all mocks to avoid cross-test pollution
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -72,7 +95,7 @@ describe('API (e2e)', () => {
     it('POST /llm/chat-completion should return mocked reply', async () => {
       const res = await request(app.getHttpServer())
         .post('/llm/chat-completion')
-        .set('Authorization', 'Bearer mock-token') // For @Token() decorator
+        .set('Authorization', 'Bearer mock-token') 
         .send({ message: 'hello' })
         .expect(201);
 
@@ -92,7 +115,6 @@ describe('API (e2e)', () => {
 
       expect(res.body.status).toContain('unified service');
       
-      // BEST PRACTICE: Verify that the controller correctly resolved "me"
       expect(WhatsappServiceMock.sendMessage).toHaveBeenCalledWith({
         to: 'me',
         message: message

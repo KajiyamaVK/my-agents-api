@@ -1,10 +1,21 @@
-// test/app.e2e-spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
+import { getBotToken } from 'nestjs-telegraf';
 import { INestApplication } from '@nestjs/common';
 const request = require('supertest');
 import { AppModule } from './../src/app.module';
 import { WhatsappService } from '../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from './fixtures/whatsapp.mock';
+
+// Define the mock for Telegram to prevent network calls and shutdown errors
+const mockTelegraf = {
+  telegram: {
+    sendMessage: jest.fn().mockResolvedValue({}),
+    sendPhoto: jest.fn().mockResolvedValue({}),
+  },
+  launch: jest.fn().mockResolvedValue({}),
+  // Essential: prevents the "Bot is not running!" error during teardown
+  stop: jest.fn().mockResolvedValue({}), 
+};
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -13,8 +24,13 @@ describe('AppController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      // BEST PRACTICE: Substitua o serviço real pelo Mock em testes E2E
-      // para evitar o lançamento do browser Puppeteer.
+      /**
+       * BEST PRACTICE: Replace real services with Mocks in E2E tests.
+       * - getBotToken() avoids real Telegram API connections and teardown crashes.
+       * - WhatsappServiceMock avoids launching Puppeteer/Chromium.
+       */
+      .overrideProvider(getBotToken())
+      .useValue(mockTelegraf)
       .overrideProvider(WhatsappService)
       .useValue(WhatsappServiceMock)
       .compile();
