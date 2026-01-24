@@ -21,7 +21,8 @@ import { TelegramModule } from './telegram/telegram.module';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        TELEGRAM_BOT_TOKEN: Joi.string().required(), // Added this
+        TELEGRAM_BOT_TOKEN: Joi.string().required(),
+        MY_TELEGRAM_CHAT_ID: Joi.string().required(), // Obrigatoriedade definida aqui
         FLOW_CLIENT_ID: Joi.string().required(),
         FLOW_CLIENT_SECRET: Joi.string().required(),
         FLOW_TENANT: Joi.string().required(),
@@ -39,7 +40,6 @@ import { TelegramModule } from './telegram/telegram.module';
       global: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        // Use the '!' operator because Joi guarantees this exists
         secret: configService.get<string>('FLOW_CLIENT_SECRET')!,
         signOptions: { expiresIn: '1h' },
         verifyOptions: {
