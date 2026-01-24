@@ -5,12 +5,14 @@ import { ToolDiscoveryService } from './services/tool-discovery.service';
 import { ChatCompletionModule } from '../llm/chat-completion/chat-completion.module';
 import { RegistryService } from './services/registry.service';
 import { PrismaModule } from '../prisma/prisma.module';
+import { TokenModule } from '../llm/token/token.module';
 
 @Module({
   imports: [
     DiscoveryModule,
     PrismaModule,
-    forwardRef(() => ChatCompletionModule), // Permite injeção mútua sem erro de circularidade
+    forwardRef(() => ChatCompletionModule), 
+    TokenModule,
   ],
   providers: [
     AgentOrchestratorService,
