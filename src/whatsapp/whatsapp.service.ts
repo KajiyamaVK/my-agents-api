@@ -1,3 +1,4 @@
+// src/whatsapp/whatsapp.service.ts
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import * as qrcode from 'qrcode-terminal';
@@ -139,14 +140,19 @@ export class WhatsappService implements OnModuleInit {
         contactId = to.includes('@c.us') ? to : `${cleanNumber}@c.us`;
       }
 
+      // BEST PRACTICE: Added detailed resolution logging to confirm the target ID
+      this.logger.log(`Resolving recipient "${to}" to ID: ${contactId}`);
+
       try {
-        await this.client.sendMessage(contactId, message);
+        // BEST PRACTICE: When sending to self, sendSeen must be false to avoid the 'markedUnread' error.
+        const isSelf = contactId === this.client.info.wid._serialized;
+        await this.client.sendMessage(contactId, message, isSelf ? { sendSeen: false } : {});
       } catch (innerError) {
-        // WORKAROUND: O erro 'markedUnread' é um bug conhecido do whatsapp-web.js ao enviar para si mesmo.
-        // A mensagem costuma ser enviada com sucesso apesar do erro.
+        // WORKAROUND: The 'markedUnread' error is a known bug. 
+        // We log it as a warning but return success if the message likely left the client.
         if (innerError.message?.includes('markedUnread')) {
-          this.logger.warn(`Aviso: Detectado erro de processamento 'markedUnread', mas a mensagem provavelmente foi enviada.`);
-          return `Mensagem enviada com sucesso para ${to} (com aviso de estado).`;
+          this.logger.warn(`Aviso: Erro 'markedUnread' ao enviar para ${to}. A entrega depende da sincronização do cliente.`);
+          return `Mensagem enviada para ${to} (com aviso de estado).`;
         }
         throw innerError;
       }

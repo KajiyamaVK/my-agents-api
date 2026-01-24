@@ -101,10 +101,15 @@ export class AgentOrchestratorService {
   private async executeTool(name: string, argsString: string, messages: any[], toolId: string | null) {
     try {
       const args = JSON.parse(argsString);
-      this.logger.log(`Executing tool: ${name}`);
+      
+      // BEST PRACTICE: Enhanced logging for tool execution and input observability
+      this.logger.log(`Executing tool: ${name} | Args: ${argsString}`);
       
       const output = await this.toolDiscovery.execute(name, args);
       const content = typeof output === 'string' ? output : JSON.stringify(output);
+
+      // Log the result to see what the tool returned to the orchestrator
+      this.logger.log(`Tool [${name}] output: ${content.substring(0, 100)}${content.length > 100 ? '...' : ''}`);
 
       // Add result with proper role: 'tool' for tool_calls, 'function' for legacy
       messages.push({
