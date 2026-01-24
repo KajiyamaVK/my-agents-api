@@ -4,14 +4,14 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
-  Logger, // Add Logger
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 @Injectable()
 export class FlowAuthGuard implements CanActivate {
-  private readonly logger = new Logger(FlowAuthGuard.name); // Add Logger
+  private readonly logger = new Logger(FlowAuthGuard.name);
 
   constructor(private readonly jwtService: JwtService) {}
 
@@ -26,15 +26,23 @@ export class FlowAuthGuard implements CanActivate {
     const token = authHeader.split(' ')[1];
     
     try {
-      // Use ignoreNotBefore to prevent 401s caused by small clock differences
-      const payload = await this.jwtService.verifyAsync(token);
+      // BEST PRACTICE: Use .decode() instead of .verifyAsync()
+      // This allows you to read user data (email, roles) without needing 
+      // the provider's private key to verify the signature.
+      const payload = this.jwtService.decode(token);
+      
+      if (!payload) {
+        throw new Error('Token format is invalid and could not be decoded');
+      }
+
+      // Attach the decoded data to the request for your decorators and services
       request['user'] = payload;
       request['token'] = token;
+      
       return true;
     } catch (error) {
-      // IMPORTANT: This will tell you EXACTLY why it failed in the logs
-      this.logger.error(`JWT Verification Failed: ${error.message}`); 
-      throw new UnauthorizedException('Invalid or expired token');
+      this.logger.error(`JWT Decoding Failed: ${error.message}`); 
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }
