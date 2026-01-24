@@ -15,12 +15,15 @@ const mockTelegraf = {
   // We use mockReturnThis() because the library often chains these calls
   use: jest.fn().mockReturnThis(),
   on: jest.fn().mockReturnThis(),
+  action: jest.fn().mockReturnThis(), // Critical: Prevents crash when discovering @Action
+  hears: jest.fn().mockReturnThis(),  // Critical: Prevents crash when discovering @Hears
   command: jest.fn().mockReturnThis(),
   start: jest.fn().mockReturnThis(),
   help: jest.fn().mockReturnThis(),
   launch: jest.fn().mockResolvedValue({}),
   stop: jest.fn().mockResolvedValue({}),
 };
+
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 

@@ -40,6 +40,7 @@ export class TelegramService {
   async onStart(ctx: Context) {
     const id = ctx.chat?.id;
     this.logger.log(`New user started bot: ${id}`);
+    
     await ctx.reply(`Agent System Online. Your Chat ID is: ${id}`);
     await ctx.reply(`Add this to your .env as MY_TELEGRAM_CHAT_ID to secure the bot.`);
   }
@@ -90,6 +91,7 @@ export class TelegramService {
 
       await ctx.reply("Obrigado! Seus dados foram enviados para aprovação do administrador.");
       
+      // Notificar o admin (você) para aprovação
       return this.bot.telegram.sendMessage(
         this.myChatId,
         `🔔 Novo acesso solicitado:\nNome: ${contact.alias || text}\nIdade: ${age}\nID: ${chatId}`,
@@ -105,24 +107,28 @@ export class TelegramService {
       return ctx.reply("Seu acesso ainda está pendente de aprovação.");
     }
 
-    // 5. Fluxo Normal para usuários aprovados (AI Orchestration)
+    // 5. Fluxo Normal para usuários aprovados
     this.logger.log(`Processing message from ${contact.alias}: ${text}`);
     
     try {
       await ctx.reply('🤖 Agente está processando seu pedido...');
 
+      // 5.1 Get fresh token
       const tokenResponse = await this.tokenService.createToken();
       if (!tokenResponse || tokenResponse.status === 'error') {
-        throw new Error(`Token refresh failed: ${tokenResponse?.details || 'N/A'}`);
+        throw new Error(`Falha na autenticação: ${tokenResponse?.details || 'Erro desconhecido'}`);
       }
 
+      // 5.2 Execute AI Orchestration
       const aiReply = await this.agentOrchestrator.chat(text, tokenResponse.access_token);
-      const finalMessage = typeof aiReply === 'string' ? aiReply : JSON.stringify(aiReply);
-      await ctx.reply(finalMessage);
+
+      // 5.3 SAFETY: Ensure string output to prevent [object Object] errors
+      const finalReply = typeof aiReply === 'string' ? aiReply : JSON.stringify(aiReply, null, 2);
+      await ctx.reply(finalReply);
 
     } catch (error) {
       this.logger.error(`Telegram AI Error: ${error.message}`);
-      await ctx.reply(`❌ Erro no processamento: ${error.message}`);
+      await ctx.reply(`❌ Ocorreu um erro no processamento: ${error.message}`);
     }
   }
 
@@ -159,6 +165,7 @@ export class TelegramService {
    */
   async sendMessage(message: any, chatId: string = this.myChatId) {
     try {
+      // Ensure string output for all triggers to prevent [object Object] errors
       const text = typeof message === 'string' ? message : JSON.stringify(message, null, 2);
       await this.bot.telegram.sendMessage(chatId, text);
     } catch (error) {

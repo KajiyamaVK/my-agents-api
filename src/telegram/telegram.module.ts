@@ -20,5 +20,6 @@ import { TokenModule } from '../llm/token/token.module';
     TokenModule,
   ],
   providers: [TelegramService],
+  exports: [TelegramService],
 })
 export class TelegramModule {}
