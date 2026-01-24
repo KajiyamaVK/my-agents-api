@@ -1,24 +1,11 @@
 import { Update, On, Message, InjectBot, Action, Ctx, Start } from 'nestjs-telegraf';
 import { Context, Telegraf, Markup } from 'telegraf';
-import { Injectable, Logger, UseGuards } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { AiTool } from '../common/decorators/ai-tool.decorator';
 import { AgentOrchestratorService } from '../ai/services/agent-orchestrator.service';
 import { TokenService } from '../llm/token/token.service';
-
-/**
- * BEST PRACTICE: Custom Guard to ensure only YOU can talk to the bot.
- */
-@Injectable()
-class TelegramGuard {
-  constructor(private configService: ConfigService) {}
-  canActivate(context: any): boolean {
-    const ctx = context.getArgByIndex(0) as Context;
-    const allowedId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID');
-    return ctx.chat?.id.toString() === allowedId?.toString();
-  }
-}
 
 @Update()
 @Injectable()
@@ -107,28 +94,30 @@ export class TelegramService {
       return ctx.reply("Seu acesso ainda está pendente de aprovação.");
     }
 
-    // 5. Fluxo Normal para usuários aprovados
+    // 5. Fluxo Normal para usuários aprovados (IA Orchestration)
     this.logger.log(`Processing message from ${contact.alias}: ${text}`);
     
     try {
       await ctx.reply('🤖 Agente está processando seu pedido...');
 
-      // 5.1 Get fresh token
+      // 5.1 Obter token fresco
       const tokenResponse = await this.tokenService.createToken();
       if (!tokenResponse || tokenResponse.status === 'error') {
         throw new Error(`Falha na autenticação: ${tokenResponse?.details || 'Erro desconhecido'}`);
       }
 
-      // 5.2 Execute AI Orchestration
+      // 5.2 Executar Orquestração
       const aiReply = await this.agentOrchestrator.chat(text, tokenResponse.access_token);
 
-      // 5.3 SAFETY: Ensure string output to prevent [object Object] errors
-      const finalReply = typeof aiReply === 'string' ? aiReply : JSON.stringify(aiReply, null, 2);
-      await ctx.reply(finalReply);
+      // 5.3 Blindagem anti-Object: Garante que a resposta seja SEMPRE string
+      const finalReply = (typeof aiReply === 'string') ? aiReply : JSON.stringify(aiReply, null, 2);
+      await ctx.reply(finalReply || 'O agente processou o pedido, mas não retornou conteúdo.');
 
     } catch (error) {
       this.logger.error(`Telegram AI Error: ${error.message}`);
-      await ctx.reply(`❌ Ocorreu um erro no processamento: ${error.message}`);
+      // Blindagem no erro também
+      const errorMsg = error.message || 'Erro desconhecido no processamento.';
+      await ctx.reply(`❌ Erro: ${errorMsg}`);
     }
   }
 
@@ -162,11 +151,11 @@ export class TelegramService {
 
   /**
    * Unified sendMessage for external notifications.
+   * FIX: Blindagem anti-Object para chamadas externas (ex: BullMQ)
    */
   async sendMessage(message: any, chatId: string = this.myChatId) {
     try {
-      // Ensure string output for all triggers to prevent [object Object] errors
-      const text = typeof message === 'string' ? message : JSON.stringify(message, null, 2);
+      const text = (typeof message === 'string') ? message : JSON.stringify(message, null, 2);
       await this.bot.telegram.sendMessage(chatId, text);
     } catch (error) {
       this.logger.error(`Failed to send Telegram message: ${error.message}`);

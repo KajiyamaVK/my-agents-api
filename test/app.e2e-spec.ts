@@ -6,17 +6,15 @@ import { AppModule } from './../src/app.module';
 import { WhatsappService } from '../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from './fixtures/whatsapp.mock';
 
-// Define the mock for Telegram to prevent network calls and shutdown errors
 const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
   },
-  // We use mockReturnThis() because the library often chains these calls
   use: jest.fn().mockReturnThis(),
   on: jest.fn().mockReturnThis(),
-  action: jest.fn().mockReturnThis(), // Critical: Prevents crash when discovering @Action
-  hears: jest.fn().mockReturnThis(),  // Critical: Prevents crash when discovering @Hears
+  action: jest.fn().mockReturnThis(), 
+  hears: jest.fn().mockReturnThis(),  
   command: jest.fn().mockReturnThis(),
   start: jest.fn().mockReturnThis(),
   help: jest.fn().mockReturnThis(),
@@ -31,11 +29,6 @@ describe('AppController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      /**
-       * BEST PRACTICE: Replace real services with Mocks in E2E tests.
-       * - getBotToken() avoids real Telegram API connections and teardown crashes.
-       * - WhatsappServiceMock avoids launching Puppeteer/Chromium.
-       */
       .overrideProvider(getBotToken())
       .useValue(mockTelegraf)
       .overrideProvider(WhatsappService)
