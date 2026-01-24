@@ -1,15 +1,21 @@
+// test/fixtures/whatsapp.mock.ts
 export const WhatsappServiceMock = {
-  // Mock the startup logic (so it doesn't launch Chromium)
+  // Mock the startup logic
   onModuleInit: jest.fn(), 
   
-  // Mock the specific methods your controllers use
-  sendCameraSnapshotToSelf: jest.fn().mockResolvedValue({ status: 'sent', timestamp: Date.now() }),
-  sendMessage: jest.fn().mockResolvedValue(true),
-  isReady: jest.fn().mockReturnValue(true),
+  // BEST PRACTICE: Mock the consolidated interface
+  sendMessage: jest.fn().mockResolvedValue('Mensagem enviada com sucesso'),
+  sendImageToSelf: jest.fn().mockResolvedValue('Imagem enviada com sucesso'),
+  sendCameraSnapshotToSelf: jest.fn().mockResolvedValue('Snapshot enviado com sucesso'),
   
-  // If you use the client directly somewhere, mock it too
+  // Status check used by guards/controllers
+  isReady: true,
+  
   client: {
     initialize: jest.fn(),
     destroy: jest.fn(),
+    info: {
+      wid: { _serialized: 'me@c.us' }
+    }
   },
 };

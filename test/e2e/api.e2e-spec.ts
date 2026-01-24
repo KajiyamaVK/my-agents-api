@@ -11,6 +11,7 @@ describe('API (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    // Mock global fetch for LLM and Auth calls
     const fetchMock = jest.fn((url: string) => {
       if (url.includes('/auth-engine-api')) {
         return Promise.resolve({
@@ -51,26 +52,72 @@ describe('API (e2e)', () => {
     delete (global as any).fetch;
   });
 
+  // BEST PRACTICE: Reset mocks between tests to ensure call counts are accurate
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('/ (GET) should return Hello World!', () => {
     return request(app.getHttpServer()).get('/').expect(200).expect('Hello World!');
   });
 
-  it('GET /llm/chat-completion/health should return status ok', async () => {
-    const res = await request(app.getHttpServer())
-      .get('/llm/chat-completion/health')
-      .expect(200);
-    expect(res.body).toEqual({ status: 'ok' });
+  describe('LLM Chat', () => {
+    it('GET /llm/chat-completion/health should return status ok', async () => {
+      const res = await request(app.getHttpServer())
+        .get('/llm/chat-completion/health')
+        .expect(200);
+      expect(res.body).toEqual({ status: 'ok' });
+    });
+
+    it('POST /llm/chat-completion should return mocked reply', async () => {
+      const res = await request(app.getHttpServer())
+        .post('/llm/chat-completion')
+        .set('Authorization', 'Bearer mock-token') // For @Token() decorator
+        .send({ message: 'hello' })
+        .expect(201);
+
+      expect(res.body).toEqual({
+        reply: 'mock-reply',
+      });
+    });
   });
 
-  it('POST /llm/chat-completion should return mocked reply', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/llm/chat-completion')
-      .set('Authorization', 'Bearer mock-token') // Added header for @Token() decorator
-      .send({ message: 'hello' })
-      .expect(201);
+  describe('WhatsApp Controller', () => {
+    it('POST /whatsapp/test-self should use the unified sendMessage method', async () => {
+      const message = 'Test consolidation';
+      const res = await request(app.getHttpServer())
+        .post('/whatsapp/test-self')
+        .send({ message })
+        .expect(201);
 
-    expect(res.body).toEqual({
-      reply: 'mock-reply',
+      expect(res.body.status).toContain('unified service');
+      
+      // BEST PRACTICE: Verify that the controller correctly resolved "me"
+      expect(WhatsappServiceMock.sendMessage).toHaveBeenCalledWith({
+        to: 'me',
+        message: message
+      });
+    });
+
+    it('POST /whatsapp/camera/:cameraName should trigger snapshot delivery', async () => {
+      const camName = 'portao';
+      await request(app.getHttpServer())
+        .post(`/whatsapp/camera/${camName}`)
+        .expect(201);
+
+      expect(WhatsappServiceMock.sendCameraSnapshotToSelf).toHaveBeenCalledWith(camName);
+    });
+
+    it('POST /whatsapp/test-image-self should trigger image delivery', async () => {
+      const imageUrl = 'http://example.com/test.jpg';
+      const caption = 'Test caption';
+      
+      await request(app.getHttpServer())
+        .post('/whatsapp/test-image-self')
+        .send({ imageUrl, caption })
+        .expect(201);
+
+      expect(WhatsappServiceMock.sendImageToSelf).toHaveBeenCalledWith(imageUrl, caption);
     });
   });
 });

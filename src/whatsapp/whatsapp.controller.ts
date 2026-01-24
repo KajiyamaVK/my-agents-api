@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
+// src/whatsapp/whatsapp.controller.ts
+import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { WhatsappService } from './whatsapp.service';
 import { LocalNetworkGuard } from '../common/guards/local-network.guard';
-import { UseGuards } from '@nestjs/common';
 
 @Controller('whatsapp')
 export class WhatsappController {
@@ -10,8 +10,9 @@ export class WhatsappController {
   @Post('test-self')
   async sendTestMessage(@Body('message') message: string) {
     const msg = message || 'Hello from my-agents-api! This is a test automation.';
-    await this.whatsappService.sendTestMessageToSelf(msg);
-    return { status: 'Message sent to self', content: msg };
+    // Standardizing on sendMessage for consistency
+    await this.whatsappService.sendMessage({ to: 'me', message: msg });
+    return { status: 'Message sent to self via unified service', content: msg };
   }
 
   @Post('test-image-self')
@@ -22,7 +23,6 @@ export class WhatsappController {
     if (!imageUrl) {
       return { status: 'Error', message: 'imageUrl is required' };
     }
-
     await this.whatsappService.sendImageToSelf(imageUrl, caption);
     return { status: 'Image sent to self', imageUrl };
   }
@@ -36,15 +36,11 @@ export class WhatsappController {
   @Post('doorbell')
   @UseGuards(LocalNetworkGuard)
   async notifyDoorbell(@Body('camera') cameraName: string) {
-    // Define um padrão caso o HA não envie o nome (ex: cam_13)
     const targetCamera = cameraName || 'cam_13'; 
-    
     await this.whatsappService.sendCameraSnapshotToSelf(
       targetCamera, 
-      'Ding Dong! Campainha tocou!' // Título personalizado
+      'Ding Dong! Campainha tocou!'
     );
-    
     return { status: 'Doorbell notification sent', camera: targetCamera };
   }
-  
 }

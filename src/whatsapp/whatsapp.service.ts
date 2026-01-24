@@ -127,7 +127,6 @@ export class WhatsappService implements OnModuleInit {
 
     try {
       let contactId: string;
-
       const registeredContact = await this.registryService.resolveContact(to);
       
       if (registeredContact) {
@@ -140,18 +139,15 @@ export class WhatsappService implements OnModuleInit {
         contactId = to.includes('@c.us') ? to : `${cleanNumber}@c.us`;
       }
 
-      // BEST PRACTICE: Added detailed resolution logging to confirm the target ID
       this.logger.log(`Resolving recipient "${to}" to ID: ${contactId}`);
 
       try {
-        // BEST PRACTICE: When sending to self, sendSeen must be false to avoid the 'markedUnread' error.
         const isSelf = contactId === this.client.info.wid._serialized;
+        // Logic consolidated: if it's me, use sendSeen: false
         await this.client.sendMessage(contactId, message, isSelf ? { sendSeen: false } : {});
       } catch (innerError) {
-        // WORKAROUND: The 'markedUnread' error is a known bug. 
-        // We log it as a warning but return success if the message likely left the client.
         if (innerError.message?.includes('markedUnread')) {
-          this.logger.warn(`Aviso: Erro 'markedUnread' ao enviar para ${to}. A entrega depende da sincronização do cliente.`);
+          this.logger.warn(`Aviso: Erro 'markedUnread' ao enviar para ${to}. Entrega provável.`);
           return `Mensagem enviada para ${to} (com aviso de estado).`;
         }
         throw innerError;
@@ -174,46 +170,42 @@ export class WhatsappService implements OnModuleInit {
     
     try {
       const response = await fetch(imageUrl);
-      if (!response.ok) throw new Error(`Status: ${response.status} ${response.statusText}`);
+      if (!response.ok) throw new Error(`Status: ${response.status}`);
 
       const arrayBuffer = await response.arrayBuffer();
-      const contentType = response.headers.get('content-type') || 'image/jpeg';
       const media = new MessageMedia(
-        contentType, 
+        response.headers.get('content-type') || 'image/jpeg', 
         Buffer.from(arrayBuffer).toString('base64'), 
         'image.jpg'
       );
 
       await this.client.sendMessage(myId, media, { caption, sendSeen: false });
       return `Imagem enviada com sucesso.`;
-
     } catch (error) {
-      this.logger.error(`Failed to send image to self from URL: ${imageUrl}`, error);
-      throw new Error(`Could not fetch or send image: ${error.message}`);
+      this.logger.error(`Failed to send image to self: ${error.message}`);
+      throw new Error(`Could not send image: ${error.message}`);
     }
   }
 
   @AiTool({
     name: 'get_frigate_snapshot',
-    description: 'Captura uma foto de uma câmera do Frigate pelo nome cadastrado (ex: portao, garagem) e envia para o meu WhatsApp.',
+    description: 'Captura uma foto de uma câmera do Frigate e envia para o meu WhatsApp.',
     parameters: {
       type: 'object',
       properties: {
         cameraAlias: { type: 'string', description: 'O apelido da câmera (ex: portao, garagem).' },
-        customTitle: { type: 'string', description: 'Um título opcional para a imagem.' },
+        customTitle: { type: 'string', description: 'Um título opcional.' },
       },
       required: ['cameraAlias'],
     },
   })
   async sendCameraSnapshotToSelf(cameraAlias: string, customTitle?: string): Promise<string> {
     if (!this.isReady || !this.client?.info?.wid) {
-      throw new Error('WhatsApp client is not ready or authenticated');
+      throw new Error('WhatsApp client not ready');
     }
 
     const camera = await this.registryService.resolveCamera(cameraAlias);
-    if (!camera) {
-      throw new Error(`Câmera "${cameraAlias}" não encontrada no cadastro.`);
-    }
+    if (!camera) throw new Error(`Câmera "${cameraAlias}" não encontrada.`);
 
     const myId = this.client.info.wid._serialized;
     const snapshotUrl = `${this.frigateUrl}/api/${camera.frigateName}/latest.jpg`;
@@ -222,35 +214,17 @@ export class WhatsappService implements OnModuleInit {
       const response = await fetch(snapshotUrl);
       if (!response.ok) throw new Error(`Frigate status: ${response.status}`);
 
-      const serverDate = new Date();
-      const lastModified = response.headers.get('last-modified');
-      const frigateDate = lastModified ? new Date(lastModified) : serverDate;
-      const latencySec = ((serverDate.getTime() - frigateDate.getTime()) / 1000).toFixed(1);
-
       const arrayBuffer = await response.arrayBuffer();
       const media = new MessageMedia('image/jpeg', Buffer.from(arrayBuffer).toString('base64'), 'snapshot.jpg');
 
-      const fmt: Intl.DateTimeFormatOptions = { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-      const frigateTime = new Intl.DateTimeFormat('pt-BR', fmt).format(frigateDate);
-      const serverTime = new Intl.DateTimeFormat('pt-BR', fmt).format(serverDate);
-
-      const caption = 
-        `${customTitle ? `🔔 *${customTitle}*` : `📸 *${camera.name.toUpperCase()}*`}\n` +
-        `📹 Frame: ${frigateTime}\n` +
-        `🤖 Server: ${serverTime}\n` +
-        `⏱️ Latency: ${latencySec}s`;
-
-      await this.client.sendMessage(myId, media, { caption, sendSeen: false });
+      await this.client.sendMessage(myId, media, { 
+        caption: customTitle ? `🔔 *${customTitle}*` : `📸 *${camera.name.toUpperCase()}*`,
+        sendSeen: false 
+      });
       return `Snapshot da câmera ${cameraAlias} enviado com sucesso.`;
-
     } catch (error) {
       this.logger.error(`Failed to send snapshot for ${cameraAlias}`, error);
-      throw new Error(`Could not fetch or send snapshot: ${error.message}`);
+      throw new Error(`Could not send snapshot: ${error.message}`);
     }
-  }
-
-  async sendTestMessageToSelf(message: string): Promise<any> {
-    if (!this.isReady || !this.client?.info?.wid) throw new Error('Client not ready');
-    return this.client.sendMessage(this.client.info.wid._serialized, message, { sendSeen: false }); 
   }
 }
