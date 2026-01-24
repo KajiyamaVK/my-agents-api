@@ -20,7 +20,6 @@ export class TelegramService implements OnModuleInit {
     private readonly agentOrchestrator: AgentOrchestratorService,
     private readonly tokenService: TokenService,
   ) {
-    // Trim para evitar que espaços no .env quebrem a comparação
     this.myChatId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID')?.toString().trim() || '';
   }
 
@@ -33,27 +32,28 @@ export class TelegramService implements OnModuleInit {
         { command: 'approved', description: 'Gerenciar usuários ativos' },
         { command: 'rejected', description: 'Lista de usuários recusados' },
       ]);
-      this.logger.log('Commands registered.');
+      this.logger.log('Telegram commands registered.');
     } catch (e) {
-      this.logger.error(`Failed to set commands: ${e.message}`);
+      this.logger.error(`Failed to register commands: ${e.message}`);
     }
   }
 
   private isAdmin(chatId: string | number): boolean {
-    return chatId.toString().trim() === this.myChatId;
+    const inbound = chatId.toString().trim();
+    return inbound === this.myChatId;
   }
 
   private async replySafe(ctx: Context, content: any) {
     const text = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
-    await ctx.reply(text || 'Sem resposta.');
+    await ctx.reply(text || 'Sem resposta do agente.');
   }
 
   @Start()
   async onStart(ctx: Context) {
     const id = ctx.chat?.id;
-    await ctx.reply(`Online. Seu ID: ${id}`);
+    await ctx.reply(`Sistema Online. Seu Chat ID: ${id}`);
     if (this.isAdmin(id!)) {
-      await ctx.reply('👑 Você é o administrador reconhecido.');
+      await ctx.reply('👑 Admin reconhecido com sucesso.');
     }
   }
 
@@ -72,15 +72,13 @@ export class TelegramService implements OnModuleInit {
   @Command('pending')
   async listPending(@Ctx() ctx: Context) {
     const chatId = ctx.chat?.id.toString();
-    this.logger.debug(`Command /pending by ${chatId}`);
-
     if (!this.isAdmin(chatId!)) return ctx.reply("Acesso negado.");
 
     const users = await this.prisma.contact.findMany({
       where: { isApproved: false, onboardingStep: 'NONE' },
     });
 
-    if (users.length === 0) return ctx.reply("Nenhuma solicitação pendente no momento.");
+    if (users.length === 0) return ctx.reply("Não há solicitações pendentes.");
 
     await ctx.reply("⏳ *Solicitações Pendentes:*", { parse_mode: 'Markdown' });
     for (const user of users) {
@@ -97,21 +95,20 @@ export class TelegramService implements OnModuleInit {
   @Command('approved')
   async listApproved(@Ctx() ctx: Context) {
     const chatId = ctx.chat?.id.toString();
-    this.logger.debug(`Command /approved by ${chatId}`);
-
     if (!this.isAdmin(chatId!)) return ctx.reply("Acesso negado.");
 
     const users = await this.prisma.contact.findMany({
       where: { isApproved: true },
     });
 
-    if (users.length === 0) return ctx.reply("Nenhum usuário aprovado no sistema.");
+    if (users.length === 0) return ctx.reply("Nenhum usuário aprovado.");
 
     await ctx.reply("✅ *Usuários Ativos:*", { parse_mode: 'Markdown' });
-    let count = 0;
+    let otherUsers = false;
+
     for (const user of users) {
       if (user.whatsappId === this.myChatId) continue;
-      count++;
+      otherUsers = true;
       await ctx.reply(
         `🟢 ${user.alias || 'User'} (ID: ${user.whatsappId})`,
         Markup.inlineKeyboard([
@@ -120,7 +117,7 @@ export class TelegramService implements OnModuleInit {
       );
     }
 
-    if (count === 0) await ctx.reply("Apenas você (Admin) está aprovado no momento.");
+    if (!otherUsers) await ctx.reply("Apenas você (Admin) está aprovado.");
   }
 
   @Command('rejected')
@@ -132,7 +129,7 @@ export class TelegramService implements OnModuleInit {
       where: { onboardingStep: 'REJECTED' },
     });
 
-    if (users.length === 0) return ctx.reply("Não há usuários na lista de recusados.");
+    if (users.length === 0) return ctx.reply("Lista de recusados vazia.");
 
     await ctx.reply("❌ *Usuários Recusados:*", { parse_mode: 'Markdown' });
     for (const user of users) {
@@ -147,7 +144,6 @@ export class TelegramService implements OnModuleInit {
 
   @On('text')
   async onMessage(@Message('text') text: string, @Ctx() ctx: Context) {
-    // Ignorar se for um comando para não duplicar processamento
     if (text.startsWith('/')) return;
 
     const chatId = ctx.chat?.id.toString();
@@ -168,21 +164,18 @@ export class TelegramService implements OnModuleInit {
       if (!isMe) return ctx.reply("Olá! Qual o seu nome?");
     }
 
-    // Bloqueio de segurança
     if (!isMe && !contact.isApproved) {
-      if (contact.onboardingStep === 'REJECTED') return ctx.reply("Seu acesso foi recusado pelo administrador.");
+      if (contact.onboardingStep === 'REJECTED') return ctx.reply("Acesso recusado.");
       if (contact.onboardingStep !== 'NONE') return this.handleOnboarding(text, contact, ctx);
-      return ctx.reply("Aguardando aprovação do administrador.");
+      return ctx.reply("Aguardando aprovação.");
     }
 
-    // Fluxo de IA
     try {
-      await ctx.reply('🤖 Agente processando...');
+      await ctx.reply('🤖 Processando...');
       const token = await this.tokenService.createToken();
       const response = await this.agentOrchestrator.chat(text, token.access_token);
       await this.replySafe(ctx, response);
     } catch (e) {
-      this.logger.error(`AI Error: ${e.message}`);
       await ctx.reply(`❌ Erro: ${e.message}`);
     }
   }
@@ -190,46 +183,39 @@ export class TelegramService implements OnModuleInit {
   private async handleOnboarding(text: string, contact: any, ctx: Context) {
     if (contact.onboardingStep === 'AWAITING_NAME') {
       await this.prisma.contact.update({ where: { id: contact.id }, data: { alias: text, onboardingStep: 'AWAITING_AGE' } });
-      return ctx.reply("Entendido. E sua idade?");
+      return ctx.reply("Qual sua idade?");
     }
     if (contact.onboardingStep === 'AWAITING_AGE') {
       const age = parseInt(text);
-      if (isNaN(age)) return ctx.reply("Mande apenas números.");
+      if (isNaN(age)) return ctx.reply("Envie apenas números.");
       await this.prisma.contact.update({ where: { id: contact.id }, data: { age, onboardingStep: 'NONE' } });
-      await ctx.reply("Obrigado! Solicitação enviada.");
-      await this.bot.telegram.sendMessage(this.myChatId, `🔔 Novo acesso: ${contact.alias || text} (ID: ${contact.whatsappId})`);
+      await ctx.reply("Cadastro enviado.");
+      await this.bot.telegram.sendMessage(this.myChatId, `🔔 Novo acesso solicitado: ${contact.alias || text}`);
     }
   }
 
   @Action(/approve_(.+)/)
   async onApprove(@Ctx() ctx: Context) {
     const userId = (ctx as any).match[1];
-    await this.prisma.contact.update({
-      where: { whatsappId: userId },
-      data: { isApproved: true, onboardingStep: 'NONE' }
-    });
+    await this.prisma.contact.update({ where: { whatsappId: userId }, data: { isApproved: true, onboardingStep: 'NONE' } });
     await ctx.answerCbQuery("Aprovado!");
     await ctx.editMessageText(`✅ Usuário ${userId} aprovado.`);
-    await this.bot.telegram.sendMessage(userId, "🎉 Seu acesso foi aprovado!");
+    await this.bot.telegram.sendMessage(userId, "🎉 Seu acesso foi liberado!");
   }
 
   @Action(/reject_(.+)/)
   async onReject(@Ctx() ctx: Context) {
     const userId = (ctx as any).match[1];
-    await this.prisma.contact.update({
-      where: { whatsappId: userId },
-      data: { isApproved: false, onboardingStep: 'REJECTED' }
-    });
+    await this.prisma.contact.update({ where: { whatsappId: userId }, data: { isApproved: false, onboardingStep: 'REJECTED' } });
     await ctx.answerCbQuery("Recusado.");
     await ctx.editMessageText(`❌ Usuário ${userId} recusado.`);
-    await this.bot.telegram.sendMessage(userId, "Sinto muito, seu acesso não foi autorizado.");
   }
 
   @Action(/revoke_(.+)/)
   async onRevoke(@Ctx() ctx: Context) {
     const userId = (ctx as any).match[1];
     await this.prisma.contact.update({ where: { whatsappId: userId }, data: { isApproved: false } });
-    await ctx.answerCbQuery("Acesso revogado!");
+    await ctx.answerCbQuery("Revogado!");
     await ctx.editMessageText(`🚫 Acesso de ${userId} revogado.`);
   }
 
@@ -239,13 +225,13 @@ export class TelegramService implements OnModuleInit {
   }
 
   @AiTool({ 
-    name: 'send_camera_snapshot', 
-    description: 'Envia foto da câmera Frigate.',
+    name: 'send_camera_snapshot_telegram', 
+    description: 'Envia foto da câmera Frigate especificamente para o chat do Telegram.',
     parameters: { type: 'object', properties: { cameraName: { type: 'string' } }, required: ['cameraName'] },
   })
-  async sendCameraSnapshot(cameraName: string) {
+  async sendCameraSnapshot({ cameraName }: { cameraName: string }) {
     const url = `${this.configService.get('FRIGATE_URL')}/api/${cameraName}/latest.jpg`;
     await this.bot.telegram.sendPhoto(this.myChatId, { url });
-    return `Snapshot enviado: ${cameraName}`;
+    return `Snapshot enviado via Telegram: ${cameraName}`;
   }
 }

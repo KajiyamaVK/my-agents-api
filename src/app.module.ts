@@ -22,7 +22,7 @@ import { TelegramModule } from './telegram/telegram.module';
       isGlobal: true,
       validationSchema: Joi.object({
         TELEGRAM_BOT_TOKEN: Joi.string().required(),
-        MY_TELEGRAM_CHAT_ID: Joi.string().required(), // Obrigatoriedade definida aqui
+        MY_TELEGRAM_CHAT_ID: Joi.string().required(),
         FLOW_CLIENT_ID: Joi.string().required(),
         FLOW_CLIENT_SECRET: Joi.string().required(),
         FLOW_TENANT: Joi.string().required(),

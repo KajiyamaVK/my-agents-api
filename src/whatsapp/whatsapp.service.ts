@@ -1,4 +1,3 @@
-// src/whatsapp/whatsapp.service.ts
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import * as qrcode from 'qrcode-terminal';
@@ -22,32 +21,17 @@ export class WhatsappService implements OnModuleInit {
   ) {
     this.frigateUrl = this.configService.get<string>('FRIGATE_URL') ?? 'http://localhost:5000';
     
-    const isTest = process.env.NODE_ENV === 'test';
-    
-    if (isTest) {
-      this.logger.warn('WhatsappService inicializado em modo TESTE. O Puppeteer não será iniciado.');
-      return;
-    }
+    if (process.env.NODE_ENV === 'test') return;
 
     const dataPath = './.wwebjs_auth';
     this.removeSessionLocks(dataPath);
 
     this.client = new Client({
-      authStrategy: new LocalAuth({ 
-        dataPath: dataPath 
-      }),
+      authStrategy: new LocalAuth({ dataPath }),
       puppeteer: {
         headless: true,
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
-        args: [
-          '--no-sandbox', 
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu'
-        ],
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
       },
     });
 
@@ -55,176 +39,64 @@ export class WhatsappService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    if (this.client) {
-      this.client.initialize();
-    }
+    if (this.client) this.client.initialize();
   }
 
   private initializeClient() {
-    this.client.on('qr', (qr) => {
-      this.logger.log('QR RECEIVED. Scan this with your WhatsApp:');
-      qrcode.generate(qr, { small: true });
-    });
-
-    this.client.on('ready', () => {
-      this.isReady = true;
-      this.logger.log('WhatsApp Client is ready!');
-    });
-
-    this.client.on('authenticated', () => {
-      this.logger.log('WhatsApp Client authenticated');
-    });
-
-    this.client.on('auth_failure', (msg) => {
-      this.isReady = false;
-      this.logger.error('Authentication failure', msg);
-    });
-
-    this.client.on('disconnected', (reason) => {
-      this.isReady = false;
-      this.logger.warn('WhatsApp Client was disconnected', reason);
-    });
+    this.client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
+    this.client.on('ready', () => { this.isReady = true; this.logger.log('WhatsApp Client is ready!'); });
   }
 
   private removeSessionLocks(directory: string) {
     const resolvedPath = path.resolve(directory);
     if (!fs.existsSync(resolvedPath)) return;
-
     try {
-      const files = fs.readdirSync(resolvedPath);
-      for (const file of files) {
-        const fullPath = path.join(resolvedPath, file);
-        const stat = fs.lstatSync(fullPath);
-
-        if (stat.isDirectory()) {
-          this.removeSessionLocks(fullPath);
-        } else if (['SingletonLock', 'SingletonCookie', 'SingletonSocket'].includes(file)) {
-          this.logger.warn(`Forcibly removing Chromium Lock file at: ${fullPath}`);
-          execSync(`rm -f "${fullPath}"`);
-        }
-      }
-    } catch (error) {
-      this.logger.error(`Failed to clean session locks: ${error.message}`);
-    }
+      execSync(`find "${resolvedPath}" -name "Singleton*" -delete`);
+    } catch (e) { this.logger.error(`Cleanup failed: ${e.message}`); }
   }
 
   @AiTool({
     name: 'send_whatsapp_message',
-    description: 'Envia uma mensagem para um contato cadastrado (ex: thiago, esposa), um número específico ou "me" para mim mesmo.',
+    description: 'Envia uma mensagem de texto via WhatsApp para um contato ou número.',
     parameters: {
       type: 'object',
-      properties: {
-        to: { type: 'string', description: 'Nome do contato no cadastro, número com DDD ou "me" para enviar para mim' },
-        message: { type: 'string', description: 'Texto da mensagem' },
-      },
+      properties: { to: { type: 'string' }, message: { type: 'string' } },
       required: ['to', 'message'],
     },
   })
   async sendMessage({ to, message }: { to: string; message: string }) {
-    if (!this.isReady || !this.client?.info) {
-      throw new Error('O cliente WhatsApp ainda não está pronto. Aguarde alguns segundos.');
-    }
-
+    if (!this.isReady) throw new Error('WhatsApp não está pronto.');
     try {
-      let contactId: string;
-      const registeredContact = await this.registryService.resolveContact(to);
-      
-      if (registeredContact) {
-        contactId = registeredContact.whatsappId;
-      } else if (['me', 'mim', 'self', 'meu', 'mim mesmo'].includes(to.toLowerCase())) {
-        contactId = this.client.info.wid._serialized;
-      } else {
-        const cleanNumber = to.replace(/\D/g, '');
-        if (!cleanNumber) throw new Error(`Destinatário "${to}" não reconhecido.`);
-        contactId = to.includes('@c.us') ? to : `${cleanNumber}@c.us`;
-      }
-
-      this.logger.log(`Resolving recipient "${to}" to ID: ${contactId}`);
-
-      try {
-        const isSelf = contactId === this.client.info.wid._serialized;
-        // Logic consolidated: if it's me, use sendSeen: false
-        await this.client.sendMessage(contactId, message, isSelf ? { sendSeen: false } : {});
-      } catch (innerError) {
-        if (innerError.message?.includes('markedUnread')) {
-          this.logger.warn(`Aviso: Erro 'markedUnread' ao enviar para ${to}. Entrega provável.`);
-          return `Mensagem enviada para ${to} (com aviso de estado).`;
-        }
-        throw innerError;
-      }
-      
-      return `Mensagem enviada com sucesso para ${to}`;
-    } catch (error) {
-      const msg = error instanceof Error ? error.message : String(error);
-      this.logger.error(`Erro ao enviar mensagem para ${to}: ${msg}`);
-      throw new Error(`Falha no WhatsApp: ${msg}`);
-    }
-  }
-
-  async sendImageToSelf(imageUrl: string, caption?: string): Promise<string> {
-    if (!this.isReady || !this.client?.info?.wid) {
-      throw new Error('WhatsApp client is not ready or authenticated');
-    }
-
-    const myId = this.client.info.wid._serialized;
-    
-    try {
-      const response = await fetch(imageUrl);
-      if (!response.ok) throw new Error(`Status: ${response.status}`);
-
-      const arrayBuffer = await response.arrayBuffer();
-      const media = new MessageMedia(
-        response.headers.get('content-type') || 'image/jpeg', 
-        Buffer.from(arrayBuffer).toString('base64'), 
-        'image.jpg'
-      );
-
-      await this.client.sendMessage(myId, media, { caption, sendSeen: false });
-      return `Imagem enviada com sucesso.`;
-    } catch (error) {
-      this.logger.error(`Failed to send image to self: ${error.message}`);
-      throw new Error(`Could not send image: ${error.message}`);
-    }
+      const contact = await this.registryService.resolveContact(to);
+      const contactId = contact ? contact.whatsappId : `${to.replace(/\D/g, '')}@c.us`;
+      await this.client.sendMessage(contactId, message);
+      return `Mensagem enviada via WhatsApp para ${to}`;
+    } catch (e) { throw new Error(`Falha no WhatsApp: ${e.message}`); }
   }
 
   @AiTool({
-    name: 'get_frigate_snapshot',
-    description: 'Captura uma foto de uma câmera do Frigate e envia para o meu WhatsApp.',
+    name: 'get_frigate_snapshot_whatsapp',
+    description: 'Captura uma foto da câmera Frigate e envia especificamente para o seu WhatsApp.',
     parameters: {
       type: 'object',
-      properties: {
-        cameraAlias: { type: 'string', description: 'O apelido da câmera (ex: portao, garagem).' },
-        customTitle: { type: 'string', description: 'Um título opcional.' },
-      },
+      properties: { cameraAlias: { type: 'string' }, customTitle: { type: 'string' } },
       required: ['cameraAlias'],
     },
   })
-  async sendCameraSnapshotToSelf(cameraAlias: string, customTitle?: string): Promise<string> {
-    if (!this.isReady || !this.client?.info?.wid) {
-      throw new Error('WhatsApp client not ready');
-    }
+  async sendCameraSnapshotToSelf({ cameraAlias, customTitle }: { cameraAlias: string, customTitle?: string }): Promise<string> {
+    if (!this.isReady) throw new Error('WhatsApp client not ready');
 
     const camera = await this.registryService.resolveCamera(cameraAlias);
     if (!camera) throw new Error(`Câmera "${cameraAlias}" não encontrada.`);
 
     const myId = this.client.info.wid._serialized;
-    const snapshotUrl = `${this.frigateUrl}/api/${camera.frigateName}/latest.jpg`;
+    const url = `${this.frigateUrl}/api/${camera.frigateName}/latest.jpg`;
     
     try {
-      const response = await fetch(snapshotUrl);
-      if (!response.ok) throw new Error(`Frigate status: ${response.status}`);
-
-      const arrayBuffer = await response.arrayBuffer();
-      const media = new MessageMedia('image/jpeg', Buffer.from(arrayBuffer).toString('base64'), 'snapshot.jpg');
-
-      await this.client.sendMessage(myId, media, { 
-        caption: customTitle ? `🔔 *${customTitle}*` : `📸 *${camera.name.toUpperCase()}*`,
-        sendSeen: false 
-      });
-      return `Snapshot da câmera ${cameraAlias} enviado com sucesso.`;
-    } catch (error) {
-      this.logger.error(`Failed to send snapshot for ${cameraAlias}`, error);
-      throw new Error(`Could not send snapshot: ${error.message}`);
-    }
+      const response = await fetch(url);
+      const media = new MessageMedia('image/jpeg', Buffer.from(await response.arrayBuffer()).toString('base64'), 'snap.jpg');
+      await this.client.sendMessage(myId, media, { caption: customTitle || `📸 *${camera.name.toUpperCase()}*` });
+      return `Snapshot de ${cameraAlias} enviado via WhatsApp.`;
+    } catch (e) { throw new Error(`Erro no snapshot WhatsApp: ${e.message}`); }
   }
 }
