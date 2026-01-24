@@ -36,6 +36,9 @@ import { ChatCompletionModule } from './llm/chat-completion/chat-completion.modu
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('FLOW_CLIENT_SECRET'),
         signOptions: { expiresIn: '1h' },
+        verifyOptions: {
+          ignoreNotBefore: true, // Fixes 401s for tokens generated a few seconds in the future
+        },
       }),
       inject: [ConfigService],
     }),
