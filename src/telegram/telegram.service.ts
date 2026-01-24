@@ -23,22 +23,38 @@ export class TelegramService {
     this.myChatId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID')!;
   }
 
+  /**
+   * Helper centralizado para garantir que mensagens enviadas ao Telegram sejam SEMPRE strings.
+   * Isso evita o erro [object Object] caso a IA ou uma ferramenta retorne um objeto.
+   */
+  private async replySafe(ctx: Context, content: any) {
+    const text = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
+    try {
+      await ctx.reply(text || 'Processamento concluído, mas sem resposta textual.');
+    } catch (e) {
+      this.logger.error(`Failed to reply to Telegram: ${e.message}`);
+    }
+  }
+
   @Start()
   async onStart(ctx: Context) {
     const id = ctx.chat?.id;
     this.logger.log(`New user started bot: ${id}`);
     
-    await ctx.reply(`Agent System Online. Your Chat ID is: ${id}`);
-    await ctx.reply(`Add this to your .env as MY_TELEGRAM_CHAT_ID to secure the bot.`);
+    await ctx.reply(`Agent System Online. Chat ID: ${id}`);
+    await ctx.reply(`Certifique-se de que este ID está no seu .env como MY_TELEGRAM_CHAT_ID.`);
   }
 
   /**
-   * Main AI Processing Loop with Onboarding logic
+   * Loop principal de processamento.
+   * Agora ignora o onboarding para o administrador para evitar travamentos.
    */
   @On('text')
   async onMessage(@Message('text') text: string, @Ctx() ctx: Context) {
     const chatId = ctx.chat?.id.toString();
     if (!chatId) return;
+
+    const isMe = chatId === this.myChatId;
 
     // 1. Verificar se o usuário já existe
     let contact = await this.prisma.contact.findUnique({
@@ -47,82 +63,90 @@ export class TelegramService {
 
     // 2. Fluxo para Novo Usuário
     if (!contact) {
-      await this.prisma.contact.create({
+      contact = await this.prisma.contact.create({
         data: {
           whatsappId: chatId,
-          onboardingStep: 'AWAITING_NAME',
-          isMe: chatId === this.myChatId,
-          isApproved: chatId === this.myChatId, // Auto-aprova você mesmo
+          // Se for o Admin, pula o onboarding (onboardingStep: 'NONE')
+          onboardingStep: isMe ? 'NONE' : 'AWAITING_NAME',
+          isMe: isMe,
+          isApproved: isMe, 
+          alias: isMe ? 'Admin' : null,
         },
       });
-      return ctx.reply("Olá! Pelo que vejo, hoje é a primeira vez que falo com você. Preciso confirmar alguns dados. Qual o seu nome?");
+
+      // Se não for o dono, inicia o fluxo de perguntas
+      if (!isMe) {
+        return ctx.reply("Olá! É a primeira vez que nos falamos. Como você se chama?");
+      }
     }
 
-    // 3. Gerenciar Onboarding (Cadastro)
-    if (contact.onboardingStep === 'AWAITING_NAME') {
-      await this.prisma.contact.update({
-        where: { whatsappId: chatId },
-        data: { alias: text, onboardingStep: 'AWAITING_AGE' },
-      });
-      return ctx.reply(`Prazer, ${text}! E qual a sua idade?`);
+    // 3. Gerenciar Onboarding (Cadastro) - Ignorado se for o Admin
+    if (!isMe && contact.onboardingStep !== 'NONE') {
+      if (contact.onboardingStep === 'AWAITING_NAME') {
+        contact = await this.prisma.contact.update({
+          where: { whatsappId: chatId },
+          data: { alias: text, onboardingStep: 'AWAITING_AGE' },
+        });
+        return ctx.reply(`Prazer, ${text}! Qual a sua idade?`);
+      }
+
+      if (contact.onboardingStep === 'AWAITING_AGE') {
+        const age = parseInt(text);
+        if (isNaN(age)) {
+          return ctx.reply("Por favor, envie apenas números para a idade.");
+        }
+
+        await this.prisma.contact.update({
+          where: { whatsappId: chatId },
+          data: { age, onboardingStep: 'NONE' },
+        });
+
+        await ctx.reply("Obrigado! Seus dados foram enviados para aprovação.");
+        
+        // Notifica o dono sobre o novo usuário
+        await this.bot.telegram.sendMessage(
+          this.myChatId,
+          `🔔 Novo acesso solicitado:\nNome: ${contact.alias || text}\nIdade: ${age}\nID: ${chatId}`,
+          Markup.inlineKeyboard([
+            Markup.button.callback('Aprovar ✅', `approve_${chatId}`),
+            Markup.button.callback('Recusar ❌', `reject_${chatId}`),
+          ])
+        );
+        return;
+      }
     }
 
-    if (contact.onboardingStep === 'AWAITING_AGE') {
-      const age = parseInt(text);
-      if (isNaN(age)) return ctx.reply("Por favor, digite apenas números para a idade.");
-
-      await this.prisma.contact.update({
-        where: { whatsappId: chatId },
-        data: { age, onboardingStep: 'NONE' },
-      });
-
-      await ctx.reply("Obrigado! Seus dados foram enviados para aprovação do administrador.");
-      
-      // Notificar o admin (você) para aprovação
-      return this.bot.telegram.sendMessage(
-        this.myChatId,
-        `🔔 Novo acesso solicitado:\nNome: ${contact.alias || text}\nIdade: ${age}\nID: ${chatId}`,
-        Markup.inlineKeyboard([
-          Markup.button.callback('Aprovar ✅', `approve_${chatId}`),
-          Markup.button.callback('Recusar ❌', `reject_${chatId}`),
-        ])
-      );
-    }
-
-    // 4. Verificar Aprovação
-    if (!contact.isApproved) {
+    // 4. Verificar Aprovação (Bloqueia apenas usuários externos não aprovados)
+    if (!isMe && !contact.isApproved) {
       return ctx.reply("Seu acesso ainda está pendente de aprovação.");
     }
 
-    // 5. Fluxo Normal para usuários aprovados (IA Orchestration)
-    this.logger.log(`Processing message from ${contact.alias}: ${text}`);
+    // 5. Fluxo de Orquestração de IA (Admin e Usuários Aprovados)
+    this.logger.log(`Processing message from ${contact.alias || 'Admin'}: ${text}`);
     
     try {
-      await ctx.reply('🤖 Agente está processando seu pedido...');
+      await ctx.reply('🤖 Agente está processando...');
 
-      // 5.1 Obter token fresco
+      // 5.1 Autenticação Flow
       const tokenResponse = await this.tokenService.createToken();
       if (!tokenResponse || tokenResponse.status === 'error') {
-        throw new Error(`Falha na autenticação: ${tokenResponse?.details || 'Erro desconhecido'}`);
+        throw new Error(`Falha no token: ${tokenResponse?.details || 'N/A'}`);
       }
 
-      // 5.2 Executar Orquestração
+      // 5.2 Chamada ao Orquestrador
       const aiReply = await this.agentOrchestrator.chat(text, tokenResponse.access_token);
 
-      // 5.3 Blindagem anti-Object: Garante que a resposta seja SEMPRE string
-      const finalReply = (typeof aiReply === 'string') ? aiReply : JSON.stringify(aiReply, null, 2);
-      await ctx.reply(finalReply || 'O agente processou o pedido, mas não retornou conteúdo.');
+      // 5.3 Envio seguro da resposta (Stringified)
+      await this.replySafe(ctx, aiReply);
 
     } catch (error) {
       this.logger.error(`Telegram AI Error: ${error.message}`);
-      // Blindagem no erro também
-      const errorMsg = error.message || 'Erro desconhecido no processamento.';
-      await ctx.reply(`❌ Erro: ${errorMsg}`);
+      await ctx.reply(`❌ Erro no processamento: ${error.message}`);
     }
   }
 
   /**
-   * Handler para aprovação via botões Inline
+   * Handlers de Aprovação via Botões
    */
   @Action(/approve_(.+)/)
   async onApprove(@Ctx() ctx: Context) {
@@ -150,12 +174,11 @@ export class TelegramService {
   }
 
   /**
-   * Unified sendMessage for external notifications.
-   * FIX: Blindagem anti-Object para chamadas externas (ex: BullMQ)
+   * Método público para notificações externas (ex: BullMQ)
    */
   async sendMessage(message: any, chatId: string = this.myChatId) {
     try {
-      const text = (typeof message === 'string') ? message : JSON.stringify(message, null, 2);
+      const text = typeof message === 'string' ? message : JSON.stringify(message, null, 2);
       await this.bot.telegram.sendMessage(chatId, text);
     } catch (error) {
       this.logger.error(`Failed to send Telegram message: ${error.message}`);
@@ -163,18 +186,15 @@ export class TelegramService {
   }
 
   /**
-   * AI Tool: Send Camera Snapshots
+   * AI Tool: Captura do Frigate
    */
   @AiTool({ 
     name: 'send_camera_snapshot', 
-    description: 'Sends a snapshot from a specific home camera (e.g., doorbell, gate)',
+    description: 'Envia uma foto de uma câmera residencial (ex: portao, garagem) para o Telegram.',
     parameters: {
       type: 'object',
       properties: {
-        cameraName: {
-          type: 'string',
-          description: 'The name of the camera to capture',
-        },
+        cameraName: { type: 'string', description: 'O apelido da câmera no Frigate.' },
       },
       required: ['cameraName'],
     },
@@ -187,10 +207,10 @@ export class TelegramService {
       await this.bot.telegram.sendPhoto(this.myChatId, { url: imageUrl }, {
         caption: `📸 Snapshot: ${cameraName}\n🕒 ${new Date().toLocaleTimeString('pt-BR')}`
       });
-      return `Snapshot sent for ${cameraName}`;
+      return `Snapshot enviado com sucesso para a câmera ${cameraName}`;
     } catch (error) {
       this.logger.error(`Frigate error: ${error.message}`);
-      return `Failed to fetch/send snapshot: ${error.message}`;
+      return `Falha ao obter snapshot: ${error.message}`;
     }
   }
 }
