@@ -38,7 +38,6 @@ export class AgentOrchestratorService {
           res = await this.chatCompletion.createChatCompletion(messages, activeToken, functions);
         } else {
           this.logger.error(`Token refresh failed: ${tokenResponse?.details || 'Unknown error'}`);
-          // If refresh fails, the original 401 error will be handled by the logic below
         }
       }
       return res;
@@ -91,7 +90,10 @@ export class AgentOrchestratorService {
 
     // Return the final text content, or a default message if the model finished without content
     const finalReply = choice.message.content || 'Processamento concluído com sucesso.';
-    this.logger.log(`Orchestration finished. Final token used: ...${activeToken.slice(-10)}`);
+    
+    // BEST PRACTICE: Added safety check for null/undefined token before logging slice
+    const tokenPreview = activeToken ? `...${activeToken.slice(-10)}` : 'None';
+    this.logger.log(`Orchestration finished. Final token used: ${tokenPreview}`);
     
     return finalReply;
   }

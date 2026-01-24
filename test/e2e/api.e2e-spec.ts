@@ -1,10 +1,11 @@
+// test/e2e/api.e2e-spec.ts
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
-import { FlowAuthGuard } from 'src/common/guards/flow.guard';
+import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
 
 describe('API (e2e)', () => {
   let app: INestApplication;
@@ -64,6 +65,7 @@ describe('API (e2e)', () => {
   it('POST /llm/chat-completion should return mocked reply', async () => {
     const res = await request(app.getHttpServer())
       .post('/llm/chat-completion')
+      .set('Authorization', 'Bearer mock-token') // Added header for @Token() decorator
       .send({ message: 'hello' })
       .expect(201);
 
@@ -71,4 +73,4 @@ describe('API (e2e)', () => {
       reply: 'mock-reply',
     });
   });
-}); 
+});
