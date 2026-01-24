@@ -1,4 +1,4 @@
-import { Update, Start, On, Message } from 'nestjs-telegraf';
+import { Update, Start, On, Message, InjectBot } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { Injectable, Logger, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -13,7 +13,6 @@ class TelegramGuard {
   canActivate(context: any): boolean {
     const ctx = context.getArgByIndex(0) as Context;
     const allowedId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID');
-    // Using loose equality or toString() to ensure matching between string/number
     return ctx.chat?.id.toString() === allowedId?.toString();
   }
 }
@@ -25,10 +24,9 @@ export class TelegramService {
   private readonly myChatId: string;
 
   constructor(
-    private readonly bot: Telegraf<Context>,
+    @InjectBot() private readonly bot: Telegraf<Context>, // Added @InjectBot() to fix dependency resolution
     private readonly configService: ConfigService,
   ) {
-    // Non-null assertion (!) because Joi validates this at startup
     this.myChatId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID')!;
   }
 
@@ -54,7 +52,6 @@ export class TelegramService {
 
   /**
    * AI Tool: Send Camera Snapshots
-   * Added the 'parameters' property to satisfy the AiToolOptions type.
    */
   @AiTool({ 
     name: 'send_camera_snapshot', 
@@ -89,11 +86,9 @@ export class TelegramService {
    * Main AI Processing Loop
    */
   @On('text')
-  // @UseGuards(TelegramGuard) // Uncomment this once you have the ID in .env
+  // @UseGuards(TelegramGuard) 
   async onMessage(@Message('text') text: string, ctx: Context) {
     this.logger.log(`Processing message: ${text}`);
-    
-    // As a Senior Dev, you'll likely inject your AgentOrchestrator here
     await ctx.reply('🤖 Agente está processando seu pedido...');
   }
 }
