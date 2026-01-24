@@ -1,4 +1,4 @@
-import { Update, On, Message, InjectBot, Action, Ctx, Start } from 'nestjs-telegraf';
+import { Update, On, Message, InjectBot, Action, Ctx, Start, Command } from 'nestjs-telegraf';
 import { Context, Telegraf, Markup } from 'telegraf';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -46,8 +46,99 @@ export class TelegramService {
   }
 
   /**
-   * Loop principal de processamento.
-   * Agora ignora o onboarding para o administrador para evitar travamentos.
+   * Lista todos os comandos disponíveis baseados no nível de acesso do usuário.
+   */
+  @Command('help')
+  async listHelp(@Ctx() ctx: Context) {
+    const chatId = ctx.chat?.id.toString();
+    const isMe = chatId === this.myChatId;
+
+    let helpMessage = `🤖 *Central de Ajuda - My Agents API*\n\n`;
+    helpMessage += `*Comandos Gerais:*\n`;
+    helpMessage += `[/start] - Inicia o bot e exibe seu ID\n`;
+    helpMessage += `[/help] - Exibe esta lista de comandos\n\n`;
+
+    if (isMe) {
+      helpMessage += `*Comandos Administrativos (Apenas você):*\n`;
+      helpMessage += `[/pending] - Lista solicitações de acesso pendentes\n`;
+      helpMessage += `[/approved] - Lista usuários aprovados (permite revogar)\n`;
+      helpMessage += `[/rejected] - Lista usuários recusados (permite reavaliar)\n\n`;
+      helpMessage += `*Dica:* Como admin, você pode enviar qualquer texto para interagir diretamente com a IA.`;
+    } else {
+      helpMessage += `*Status do Acesso:*\n`;
+      helpMessage += `Seu acesso deve ser aprovado pelo administrador para habilitar a interação com a IA.`;
+    }
+
+    await ctx.reply(helpMessage, { parse_mode: 'Markdown' });
+  }
+
+  /**
+   * Lista usuários pendentes ou que foram recusados (isApproved: false).
+   */
+  @Command('pending')
+  @Command('rejected')
+  async listPending(@Ctx() ctx: Context) {
+    const chatId = ctx.chat?.id.toString();
+    if (chatId !== this.myChatId) return ctx.reply("Acesso negado.");
+
+    const users = await this.prisma.contact.findMany({
+      where: {
+        isApproved: false,
+        onboardingStep: 'NONE',
+      },
+    });
+
+    if (users.length === 0) {
+      return ctx.reply("Não há solicitações pendentes ou usuários recusados.");
+    }
+
+    await ctx.reply(`📋 *Usuários não autorizados:*`, { parse_mode: 'Markdown' });
+
+    for (const user of users) {
+      await ctx.reply(
+        `👤 *Nome:* ${user.alias || 'N/A'}\n🎂 *Idade:* ${user.age || 'N/A'}\n🆔 *ID:* ${user.whatsappId}`,
+        Markup.inlineKeyboard([
+          Markup.button.callback('Aprovar ✅', `approve_${user.whatsappId}`),
+          Markup.button.callback('Recusar ❌', `reject_${user.whatsappId}`),
+        ])
+      );
+    }
+  }
+
+  /**
+   * Lista usuários aprovados e permite revogar o acesso.
+   */
+  @Command('approved')
+  async listApproved(@Ctx() ctx: Context) {
+    const chatId = ctx.chat?.id.toString();
+    if (chatId !== this.myChatId) return ctx.reply("Acesso negado.");
+
+    const users = await this.prisma.contact.findMany({
+      where: { isApproved: true },
+    });
+
+    if (users.length === 0 || (users.length === 1 && users[0].whatsappId === this.myChatId)) {
+      return ctx.reply("Não há outros usuários aprovados além de você.");
+    }
+
+    await ctx.reply(`✅ *Usuários Autorizados:*`, { parse_mode: 'Markdown' });
+
+    for (const user of users) {
+      // Não listar o próprio admin para evitar revogação acidental do próprio acesso
+      if (user.whatsappId === this.myChatId) continue;
+
+      await ctx.reply(
+        `👤 *Nome:* ${user.alias || 'Admin'}\n🆔 *ID:* ${user.whatsappId}`,
+        Markup.inlineKeyboard([
+          Markup.button.callback('Revogar Acesso 🚫', `revoke_${user.whatsappId}`),
+        ])
+      );
+    }
+  }
+
+  /**
+   * Loop principal de processamento de texto.
+   * Gerencia onboarding para novos usuários e orquestração de IA para aprovados.
    */
   @On('text')
   async onMessage(@Message('text') text: string, @Ctx() ctx: Context) {
@@ -146,7 +237,7 @@ export class TelegramService {
   }
 
   /**
-   * Handlers de Aprovação via Botões
+   * Handlers de Aprovação via Botões Inline
    */
   @Action(/approve_(.+)/)
   async onApprove(@Ctx() ctx: Context) {
@@ -174,7 +265,26 @@ export class TelegramService {
   }
 
   /**
-   * Método público para notificações externas (ex: BullMQ)
+   * Revoga o acesso de um usuário anteriormente aprovado.
+   */
+  @Action(/revoke_(.+)/)
+  async onRevoke(@Ctx() ctx: Context) {
+    const match = (ctx as any).match;
+    const userId = match[1];
+
+    await this.prisma.contact.update({
+      where: { whatsappId: userId },
+      data: { isApproved: false },
+    });
+    
+    await ctx.answerCbQuery("Acesso revogado!");
+    await ctx.editMessageText(`🚫 Acesso de ${userId} revogado.`);
+    await this.bot.telegram.sendMessage(userId, "Seu acesso foi revogado pelo administrador.");
+  }
+
+  /**
+   * Método público para notificações externas (ex: BullMQ Processors)
+   * Garante que o payload enviado não resulte em [object Object]
    */
   async sendMessage(message: any, chatId: string = this.myChatId) {
     try {
