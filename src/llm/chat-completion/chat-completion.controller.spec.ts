@@ -2,14 +2,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ChatCompletionController } from './chat-completion.controller';
 import { ChatCompletionService } from './chat-completion.service';
 import { FlowAuthGuard } from 'src/common/guards/flow.guard';
-import { AgentOrchestratorService } from '../../ai/services/agent-orchestrator.service'; // Importe o serviço
+import { AgentOrchestratorService } from '../../ai/services/agent-orchestrator.service';
+import { JwtService } from '@nestjs/jwt'; // Added
 
 describe('ChatCompletionController', () => {
   let controller: ChatCompletionController;
   let chatService: any;
 
   const mockOrchestratorService = {
-      chat: jest.fn().mockResolvedValue('hi'),
+    chat: jest.fn().mockResolvedValue('hi'),
+  };
+
+  const mockJwtService = {
+    verifyAsync: jest.fn().mockResolvedValue({ sub: 'user-id' }),
   };
 
   beforeEach(async () => {
@@ -18,13 +23,12 @@ describe('ChatCompletionController', () => {
       createChatCompletion: jest.fn().mockResolvedValue({ reply: 'hi' }),
     };
 
-
-
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ChatCompletionController],
       providers: [
         { provide: ChatCompletionService, useValue: mockChatService },
-        { provide: AgentOrchestratorService, useValue: mockOrchestratorService }
+        { provide: AgentOrchestratorService, useValue: mockOrchestratorService },
+        { provide: JwtService, useValue: mockJwtService }, // Added mock
       ],
     })
       .overrideGuard(FlowAuthGuard)

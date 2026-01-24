@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config'; // Added ConfigService
+import { JwtModule } from '@nestjs/jwt'; // Added JwtModule
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as Joi from 'joi';
@@ -12,19 +13,31 @@ import { WhatsappModule } from './whatsapp/whatsapp.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AiModule } from './ai/ai.module';
+import { ChatCompletionModule } from './llm/chat-completion/chat-completion.module'; // Added missing import
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Makes ConfigService available everywhere
+      isGlobal: true,
       validationSchema: Joi.object({
         FLOW_CLIENT_ID: Joi.string().required(),
         FLOW_CLIENT_SECRET: Joi.string().required(),
         FLOW_TENANT: Joi.string().required(),
         FLOW_AGENT: Joi.string().required(),
-        FLOW_APP_TO_ACCESS: Joi.string().default('llm-api'), 
+        FLOW_APP_TO_ACCESS: Joi.string().default('llm-api'),
         FRIGATE_URL: Joi.string().default('http://localhost:5000'),
       }),
+    }),
+
+    // Configure JWT globally
+    JwtModule.registerAsync({
+      global: true,
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('FLOW_CLIENT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
+      inject: [ConfigService],
     }),
 
     BullModule.forRoot({
@@ -41,7 +54,8 @@ import { AiModule } from './ai/ai.module';
     DocScraperModule,
     WhatsappModule,
     NotificationsModule,
-    AiModule
+    AiModule,
+    ChatCompletionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
