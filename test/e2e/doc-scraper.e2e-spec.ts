@@ -8,6 +8,7 @@ const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
 
+// Mock do Telegraf com métodos de discovery
 const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
@@ -61,9 +62,10 @@ describe('DocScraperController (e2e)', () => {
   });
 
   it('/doc-scraper/merge (POST)', () => {
+    // FIX: Alinhando o payload com o esperado pelo DocScraperService (domain)
     return request(app.getHttpServer())
       .post('/doc-scraper/merge')
-      .send({ ids: [1, 2] })
+      .send({ domain: 'nestjs.com' }) // Antes era { ids: [1, 2] }
       .expect(201);
   });
 });
