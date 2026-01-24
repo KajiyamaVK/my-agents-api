@@ -8,13 +8,18 @@ const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
 
-// Mock do Telegraf para evitar erros de conexão e teardown
 const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
+    sendPhoto: jest.fn().mockResolvedValue({}),
   },
+  use: jest.fn().mockReturnThis(),
+  on: jest.fn().mockReturnThis(),
+  command: jest.fn().mockReturnThis(),
+  start: jest.fn().mockReturnThis(),
+  help: jest.fn().mockReturnThis(),
   launch: jest.fn().mockResolvedValue({}),
-  stop: jest.fn().mockResolvedValue({}), // Previne o erro "Bot is not running!"
+  stop: jest.fn().mockResolvedValue({}),
 };
 
 const TelegramServiceMock = {
@@ -30,12 +35,10 @@ describe('DocScraperController (e2e)', () => {
     })
       .overrideGuard(FlowAuthGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
-      // Mocks necessários para o Telegram
       .overrideProvider(getBotToken())
       .useValue(mockTelegraf)
       .overrideProvider(TelegramService)
       .useValue(TelegramServiceMock)
-      // Mock do WhatsApp
       .overrideProvider(WhatsappService)
       .useValue(WhatsappServiceMock)
       .compile();
@@ -46,7 +49,7 @@ describe('DocScraperController (e2e)', () => {
 
   afterAll(async () => {
     if (app) {
-      await app.close(); // Agora o Telegraf mockado fechará sem erros
+      await app.close();
     }
   });
 

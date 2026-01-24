@@ -12,11 +12,15 @@ const mockTelegraf = {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
   },
+  // We use mockReturnThis() because the library often chains these calls
+  use: jest.fn().mockReturnThis(),
+  on: jest.fn().mockReturnThis(),
+  command: jest.fn().mockReturnThis(),
+  start: jest.fn().mockReturnThis(),
+  help: jest.fn().mockReturnThis(),
   launch: jest.fn().mockResolvedValue({}),
-  // Essential: prevents the "Bot is not running!" error during teardown
-  stop: jest.fn().mockResolvedValue({}), 
+  stop: jest.fn().mockResolvedValue({}),
 };
-
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
