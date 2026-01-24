@@ -2,20 +2,27 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
-import { getBotToken } from 'nestjs-telegraf'; // Added this
-import { TelegramService } from '../../src/telegram/telegram.service'; // Added this
+import { getBotToken } from 'nestjs-telegraf';
+import { TelegramService } from '../../src/telegram/telegram.service';
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
 
-// Define the mock to satisfy TelegrafModule and avoid shutdown errors
+// Updated mock to satisfy the nestjs-telegraf discovery service
 const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
   },
+  // Essential: These methods are called during nestjs-telegraf's onModuleInit
+  use: jest.fn().mockReturnThis(),
+  on: jest.fn().mockReturnThis(),
+  command: jest.fn().mockReturnThis(),
+  start: jest.fn().mockReturnThis(),
+  help: jest.fn().mockReturnThis(),
+  // Lifecycle methods
   launch: jest.fn().mockResolvedValue({}),
-  stop: jest.fn().mockResolvedValue({}), // Prevents "Bot is not running!"
+  stop: jest.fn().mockResolvedValue({}),
 };
 
 const TelegramServiceMock = {
@@ -55,7 +62,7 @@ describe('API (e2e)', () => {
     })
       .overrideGuard(FlowAuthGuard)
       .useValue({ canActivate: jest.fn().mockReturnValue(true) })
-      // 1. Mock the internal Telegraf Bot instance
+      // 1. Mock the internal Telegraf Bot instance with full listener support
       .overrideProvider(getBotToken())
       .useValue(mockTelegraf)
       // 2. Mock your custom Telegram Service
@@ -67,7 +74,7 @@ describe('API (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    await app.init();
+    await app.init(); // Now discovery will pass because .use() exists
   });
 
   afterAll(async () => {
@@ -75,7 +82,6 @@ describe('API (e2e)', () => {
     delete (global as any).fetch;
   });
 
-  // BEST PRACTICE: Reset all mocks to avoid cross-test pollution
   beforeEach(() => {
     jest.clearAllMocks();
   });

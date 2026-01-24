@@ -5,12 +5,13 @@ const mockTelegraf = {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
   },
-  // These are the missing methods causing the "bot.use" error
+  // Essential: satisfies nestjs-telegraf's internal listener discovery
   use: jest.fn().mockReturnThis(),
   on: jest.fn().mockReturnThis(),
   command: jest.fn().mockReturnThis(),
   start: jest.fn().mockReturnThis(),
   help: jest.fn().mockReturnThis(),
+  // Lifecycle methods
   launch: jest.fn().mockResolvedValue({}),
   stop: jest.fn().mockResolvedValue({}),
 };
