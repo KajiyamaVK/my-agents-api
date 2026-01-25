@@ -23,7 +23,10 @@ export class DocScraperProcessor extends WorkerHost {
     this.logger.log(`Iniciando job ${job.id}: Scraping de ${job.data.url}`);
 
     const { url } = job.data;
-    const domainName = new URL(url).hostname.replace('www.', '');
+    // Extract origin to correctly name files relative to the domain root
+    const urlObj = new URL(url);
+    const origin = urlObj.origin; 
+    const domainName = urlObj.hostname.replace('www.', '');
     const outputDir = path.join(this.outputBaseDir, domainName);
 
     // Prepare directory
@@ -42,8 +45,9 @@ export class DocScraperProcessor extends WorkerHost {
     const crawler = new PlaywrightCrawler({
       maxConcurrency: 2,
       requestHandler: async ({ page, request, log, enqueueLinks }) => {
+        // CHANGED: Removed 'globs' to allow crawling links outside the initial path (e.g. /language from /docs)
+        // STRICT: 'same-domain' ensures we stay on the same site.
         await enqueueLinks({
-          globs: [`${url}/**`],
           strategy: 'same-domain',
         });
 
@@ -69,8 +73,10 @@ export class DocScraperProcessor extends WorkerHost {
           const markdown = turndownService.turndown(html);
           const finalContent = `Source: ${request.url}\n\n${markdown}`;
 
+          // CHANGED: Use 'origin' as base for replacement to handle sibling paths gracefully
+          // Example: https://dart.dev/language -> /language -> -language.md
           const fileName = request.url
-            .replace(url, '')
+            .replace(origin, '')
             .replace(/[\/\\?%*:|"<>]/g, '-')
             .replace(/^-/, '') || 'index';
 
