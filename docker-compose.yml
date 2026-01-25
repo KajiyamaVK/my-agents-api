@@ -26,8 +26,7 @@ services:
       - ./dev.db:/app/dev.db
       - ./scraped_docs:/app/scraped_docs
       - ./.wwebjs_auth:/app/.wwebjs_auth
-      # FIX: Points to the sibling ".config" project folder (one level up)
-      - ../.config:/app/.config
+      - ../../.config:/app/.config
     networks:
       - proxy-net
 

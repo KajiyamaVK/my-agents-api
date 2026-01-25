@@ -14,22 +14,36 @@ interface ResourceConfig {
 @Injectable()
 export class RegistryService implements OnModuleInit {
   private readonly logger = new Logger(RegistryService.name);
-  // Adjusted path: We are now in src/registry, so .config is still in project root
   private readonly configPath = path.resolve('.config/resources.private.yaml');
 
   constructor(private readonly prisma: PrismaService) {}
 
   async onModuleInit() {
+    this.debugConfigAccess(); // Run debug check first
     await this.syncFromLocalFile();
   }
 
-  /**
-   * Sincroniza o YAML com o Banco de Dados (Upsert).
-   * Se o ficheiro estiver corrompido, o sistema mantém os dados atuais do BD.
-   */
+  private debugConfigAccess() {
+    this.logger.warn(`[DEBUG] Checking configuration...`);
+    this.logger.log(`[DEBUG] CWD: ${process.cwd()}`);
+    this.logger.log(`[DEBUG] Target Path: ${this.configPath}`);
+
+    const dir = path.dirname(this.configPath);
+    if (fs.existsSync(dir)) {
+      try {
+        const files = fs.readdirSync(dir);
+        this.logger.log(`[DEBUG] Files found in ${dir}: [${files.join(', ')}]`);
+      } catch (e) {
+        this.logger.error(`[DEBUG] Cannot read directory ${dir}: ${e.message}`);
+      }
+    } else {
+      this.logger.error(`[DEBUG] Directory ${dir} does NOT exist inside the container!`);
+    }
+  }
+
   private async syncFromLocalFile() {
     if (!fs.existsSync(this.configPath)) {
-      this.logger.warn(`Ficheiro de configuração não encontrado em: ${this.configPath}. Usando apenas dados do banco.`);
+      this.logger.warn(`FAILED: Config file not found at ${this.configPath}. Skipping sync.`);
       return;
     }
 
@@ -37,11 +51,14 @@ export class RegistryService implements OnModuleInit {
       const fileContent = fs.readFileSync(this.configPath, 'utf8');
       const config = yaml.load(fileContent) as ResourceConfig;
 
-      if (!config) return;
+      if (!config) {
+        this.logger.warn('YAML file is empty or invalid.');
+        return;
+      }
 
-      this.logger.log('A iniciar sincronização de recursos...');
+      this.logger.log(`Starting sync... Found ${config.cameras?.length || 0} cameras and ${config.contacts?.length || 0} contacts in YAML.`);
 
-      // Sincronizar Contatos
+      // Sync Contacts
       if (config.contacts) {
         for (const contact of config.contacts) {
           await this.prisma.contact.upsert({
@@ -52,7 +69,7 @@ export class RegistryService implements OnModuleInit {
         }
       }
 
-      // Sincronizar Câmeras
+      // Sync Cameras
       if (config.cameras) {
         for (const cam of config.cameras) {
           await this.prisma.camera.upsert({
@@ -63,42 +80,26 @@ export class RegistryService implements OnModuleInit {
         }
       }
 
-      this.logger.log('Sincronização concluída com sucesso.');
+      this.logger.log('Sync completed successfully.');
     } catch (error) {
-      this.logger.error(`Erro ao processar ficheiro YAML: ${error.message}`);
-      this.logger.warn('A sincronização foi abortada. O sistema operará com os dados persistidos anteriormente.');
+      this.logger.error(`Sync failed: ${error.message}`);
     }
   }
 
-  // Métodos de Resolução para a IA
+  // ... (Keep existing resolveContact, resolveCamera, getAllCameras, getDebugResources methods as they were)
+  
   async resolveContact(term: string) {
-    // SECURITY: Validate input to prevent "toLowerCase" crashes if IA/Tool sends an object
-    if (!term || typeof term !== 'string') {
-      this.logger.warn(`[resolveContact] Invalid term received: ${JSON.stringify(term)}`);
-      return null;
-    }
-
+    if (!term || typeof term !== 'string') return null;
     const lowerTerm = term.toLowerCase();
-    
     if (['me', 'mim', 'self', 'meu'].includes(lowerTerm)) {
       return this.prisma.contact.findFirst({ where: { isMe: true } });
     }
-
-    return this.prisma.contact.findUnique({
-      where: { alias: lowerTerm }
-    });
+    return this.prisma.contact.findUnique({ where: { alias: lowerTerm } });
   }
 
   async resolveCamera(name: string) {
-    // SECURITY: Validate input to prevent "toLowerCase" crashes if IA/Tool sends an object
-    if (!name || typeof name !== 'string') {
-      this.logger.warn(`[resolveCamera] Invalid name received: ${JSON.stringify(name)}`);
-      return null;
-    }
-
-    return this.prisma.camera.findUnique({
-      where: { name: name.toLowerCase() }
-    });
+    if (!name || typeof name !== 'string') return null;
+    return this.prisma.camera.findUnique({ where: { name: name.toLowerCase() } });
   }
 
   async getAllCameras() {
@@ -107,18 +108,12 @@ export class RegistryService implements OnModuleInit {
 
   @AiTool({
     name: 'get_database_resources',
-    description: 'Retorna uma lista completa de todas as câmeras e contatos registrados no banco de dados. Útil para verificar nomes disponíveis.',
-    // FIX: Added required parameters schema (even though empty)
-    parameters: {
-      type: 'object',
-      properties: {},
-      required: [],
-    },
+    description: 'Retorna uma lista completa de todas as câmeras e contatos registrados no banco de dados.',
+    parameters: { type: 'object', properties: {}, required: [] },
   })
   async getDebugResources() {
     const cameras = await this.prisma.camera.findMany();
     const contacts = await this.prisma.contact.findMany();
-    
     return {
       total_cameras: cameras.length,
       total_contacts: contacts.length,

@@ -5,13 +5,27 @@ meta {
 }
 
 post {
-  url: http://localhost:3000/llm/chat-completion
+  url: {{baseUrl}}/llm/chat-completion
   body: json
-  auth: inherit
+  auth: bearer
 }
 
-headers {
-  Authorization: Bearer {{token}}
+auth:bearer {
+  token: meta {
+    name: Get Debug Resources
+    type: http
+    seq: 1
+  }
+  
+  get {
+    url: {{baseUrl}}/registry/debug
+    body: none
+    auth: bearer
+  }
+  
+  auth:bearer {
+    token: {{accessToken}}
+  {{token}}
 }
 
 body:json {
