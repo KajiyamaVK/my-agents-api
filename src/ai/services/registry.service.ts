@@ -70,6 +70,12 @@ export class RegistryService implements OnModuleInit {
 
   // Métodos de Resolução para a IA
   async resolveContact(term: string) {
+    // BEST PRACTICE: Defensive programming to prevent crashes if IA sends objects/null
+    if (!term || typeof term !== 'string') {
+      this.logger.warn(`[resolveContact] Invalid term received: ${JSON.stringify(term)}`);
+      return null;
+    }
+
     const lowerTerm = term.toLowerCase();
     
     if (['me', 'mim', 'self', 'meu'].includes(lowerTerm)) {
@@ -82,6 +88,12 @@ export class RegistryService implements OnModuleInit {
   }
 
   async resolveCamera(name: string) {
+    // BEST PRACTICE: Defensive programming to prevent "name.toLowerCase is not a function"
+    if (!name || typeof name !== 'string') {
+      this.logger.warn(`[resolveCamera] Invalid name received: ${JSON.stringify(name)}`);
+      return null;
+    }
+
     return this.prisma.camera.findUnique({
       where: { name: name.toLowerCase() }
     });
