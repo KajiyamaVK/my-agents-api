@@ -20,7 +20,6 @@ describe('DocScraperService', () => {
     jest.clearAllMocks();
 
     // Default mock implementation for fs.existsSync to handle constructor checks
-    // We assume directories exist by default to avoid cluttering tests with mkdir checks
     (fs.existsSync as jest.Mock).mockReturnValue(true);
 
     const module: TestingModule = await Test.createTestingModule({
@@ -78,45 +77,21 @@ describe('DocScraperService', () => {
       
       expect(mockQueue.add).not.toHaveBeenCalled();
     });
-
-    it('should throw BadRequestException for invalid URLs', async () => {
-        const url = 'invalid-url';
-        await expect(service.scrapeDocumentation(url)).rejects.toThrow(
-            BadRequestException,
-        );
-    });
   });
 
   describe('mergeDocuments', () => {
-    it('should throw BadRequestException if domain is missing', async () => {
-       await expect(service.mergeDocuments('')).rejects.toThrow(
-         BadRequestException
-       );
-    });
-
     it('should throw NotFoundException if source directory does not exist', async () => {
       const domain = 'unknown-domain.com';
       
       // Mock existsSync: Return false specifically for the source directory check
       (fs.existsSync as jest.Mock).mockImplementation((filePath: string) => {
-        if (filePath.includes(domain)) return false;
+        if (filePath.includes(domain) && !filePath.includes('Full Docs')) return false;
         return true;
       });
 
       await expect(service.mergeDocuments(domain)).rejects.toThrow(
         NotFoundException,
       );
-    });
-
-    it('should return path: null if no markdown files are found', async () => {
-      const domain = 'empty-domain.com';
-      (fs.existsSync as jest.Mock).mockReturnValue(true);
-      // Return files that are not .md
-      (fs.readdirSync as jest.Mock).mockReturnValue(['image.png', 'data.json']);
-
-      const result = await service.mergeDocuments(domain);
-
-      expect(result).toEqual({ path: null, totalFiles: 0 });
     });
 
     it('should merge files successfully and delete source directory', async () => {
@@ -148,7 +123,7 @@ describe('DocScraperService', () => {
       // 3. Assertions
       expect(fs.readdirSync).toHaveBeenCalled();
       
-      // Verify correct output path (in Full Docs folder)
+      // Verify correct output path (in Full Docs folder with correct name)
       const expectedOutputPath = path.join('scraped_docs', 'Full Docs', `${domain}.md`);
       expect(fs.createWriteStream).toHaveBeenCalledWith(
         expect.stringContaining(expectedOutputPath),

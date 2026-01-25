@@ -9,6 +9,7 @@ export class DocScraperService {
   private readonly logger = new Logger(DocScraperService.name);
   // Using path.resolve to ensure the base directory is consistently found
   private readonly outputBaseDir = path.resolve(process.cwd(), 'scraped_docs');
+  // Define the Full Docs directory
   private readonly fullDocsDir = path.join(this.outputBaseDir, 'Full Docs');
 
   constructor(@InjectQueue('scrape-docs') private docQueue: Queue) {
@@ -34,9 +35,9 @@ export class DocScraperService {
 
     const existingFullDocPath = path.join(this.fullDocsDir, `${domain}.md`);
 
-    // Check if the full version already exists
+    // Check if the full version already exists in the Full Docs folder
     if (fs.existsSync(existingFullDocPath)) {
-      this.logger.warn(`Scrape aborted: Full documentation for ${domain} already exists.`);
+      this.logger.warn(`Scrape aborted: Full documentation for ${domain} already exists at ${existingFullDocPath}.`);
       throw new BadRequestException(
         `Documentation for ${domain} already exists. Please delete the full version before scraping again.`,
       );
@@ -72,7 +73,7 @@ export class DocScraperService {
     }
 
     const sourceDir = path.join(this.outputBaseDir, domain);
-    // The full documentation should be placed within the new folder "Full Docs"
+    // The full documentation should be placed within the new folder "Full Docs" with the name <domain>.md
     const outputFile = path.join(this.fullDocsDir, `${domain}.md`);
 
     if (!fs.existsSync(sourceDir)) {
@@ -116,11 +117,14 @@ export class DocScraperService {
 
         // Cleanup: Delete the folder containing the parts
         try {
-          fs.rmSync(sourceDir, { recursive: true, force: true });
-          this.logger.log(`Deleted source directory: ${sourceDir}`);
+          if (fs.existsSync(sourceDir)) {
+            fs.rmSync(sourceDir, { recursive: true, force: true });
+            this.logger.log(`Deleted source directory: ${sourceDir}`);
+          }
         } catch (err) {
           this.logger.error(`Failed to delete source directory ${sourceDir}: ${err.message}`);
-          // We don't reject here because the merge itself was successful
+          // We don't reject here because the merge itself was successful, 
+          // though we might want to alert the user in a real scenario.
         }
 
         resolve({ path: outputFile, totalFiles: files.length });
