@@ -6,12 +6,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AiTool } from '../common/decorators/ai-tool.decorator';
 import { AgentOrchestratorService } from '../ai/services/agent-orchestrator.service';
 import { TokenService } from '../llm/token/token.service';
+import { RegistryService } from '../ai/services/registry.service'; // Added Import
 
 @Update()
 @Injectable()
 export class TelegramService implements OnModuleInit {
   private readonly logger = new Logger(TelegramService.name);
   private readonly myChatId: string;
+  private readonly frigateUrl: string;
 
   constructor(
     @InjectBot() private readonly bot: Telegraf<Context>,
@@ -19,8 +21,10 @@ export class TelegramService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly agentOrchestrator: AgentOrchestratorService,
     private readonly tokenService: TokenService,
+    private readonly registryService: RegistryService, // Injected Registry
   ) {
     this.myChatId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID')?.toString().trim() || '';
+    this.frigateUrl = this.configService.get<string>('FRIGATE_URL') || 'http://localhost:5000';
   }
 
   async onModuleInit() {
@@ -230,8 +234,29 @@ export class TelegramService implements OnModuleInit {
     parameters: { type: 'object', properties: { cameraName: { type: 'string' } }, required: ['cameraName'] },
   })
   async sendCameraSnapshot({ cameraName }: { cameraName: string }) {
-    const url = `${this.configService.get('FRIGATE_URL')}/api/${cameraName}/latest.jpg`;
-    await this.bot.telegram.sendPhoto(this.myChatId, { url });
-    return `Snapshot enviado via Telegram: ${cameraName}`;
+    // 1. Resolve camera using Registry (safely)
+    const camera = await this.registryService.resolveCamera(cameraName);
+    if (!camera) throw new Error(`Camera ${cameraName} não encontrada.`);
+
+    const url = `${this.frigateUrl}/api/${camera.frigateName}/latest.jpg`;
+    
+    try {
+      // 2. Fetch the image BUFFER from local network
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Falha ao baixar imagem: ${response.statusText}`);
+      
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      // 3. Send BUFFER to Telegram (Telegram servers cannot reach localhost)
+      await this.bot.telegram.sendPhoto(this.myChatId, { source: buffer }, { 
+        caption: `📸 Snapshot: ${camera.name}` 
+      });
+      
+      return `Snapshot de ${cameraName} enviado com sucesso via Telegram.`;
+    } catch (e) {
+      this.logger.error(`Failed to send snapshot: ${e.message}`);
+      throw new Error(`Erro ao enviar foto: ${e.message}`);
+    }
   }
 }
