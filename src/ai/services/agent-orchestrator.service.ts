@@ -14,9 +14,18 @@ export class AgentOrchestratorService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async chat(userPrompt: string, token: string) {
+  async chat(userPrompt: string, token: string, meta?: { source?: 'whatsapp' | 'telegram', userId?: string }) {
     const functions = this.toolDiscovery.getToolDefinitions();
-    const messages: any[] = [{ role: 'user', content: userPrompt }];
+    
+    // Injeta contexto da plataforma para guiar a escolha da ferramenta correta
+    const systemContext = meta?.source 
+      ? `Você é um assistente virtual respondendo via ${meta.source.toUpperCase()}. Priorize o uso de ferramentas compatíveis com ${meta.source}.` 
+      : 'Você é um assistente virtual.';
+
+    const messages: any[] = [
+      { role: 'system', content: systemContext },
+      { role: 'user', content: userPrompt }
+    ];
 
     // Use activeToken so it can be updated if a refresh happens mid-orchestration
     let activeToken = token;

@@ -178,7 +178,14 @@ export class TelegramService implements OnModuleInit {
     try {
       await ctx.reply('🤖 Processando...');
       const token = await this.tokenService.createToken();
-      const response = await this.agentOrchestrator.chat(text, token.access_token);
+      
+      // FIX: Inject context so LLM knows this is Telegram
+      const response = await this.agentOrchestrator.chat(
+        text, 
+        token.access_token, 
+        { source: 'telegram', userId: chatId }
+      );
+      
       await this.replySafe(ctx, response);
     } catch (e) {
       await ctx.reply(`❌ Erro: ${e.message}`);
