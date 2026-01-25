@@ -1,3 +1,4 @@
+// src/whatsapp/whatsapp.service.ts
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import * as qrcode from 'qrcode-terminal';
@@ -5,8 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
-import { AiTool } from 'src/common/decorators/ai-tool.decorator';
-import { RegistryService } from 'src/ai/services/registry.service';
+import { AiTool } from '../common/decorators/ai-tool.decorator';
+import { RegistryService } from '../ai/services/registry.service';
 
 @Injectable()
 export class WhatsappService implements OnModuleInit {
@@ -72,6 +73,26 @@ export class WhatsappService implements OnModuleInit {
       await this.client.sendMessage(contactId, message);
       return `Mensagem enviada via WhatsApp para ${to}`;
     } catch (e) { throw new Error(`Falha no WhatsApp: ${e.message}`); }
+  }
+
+  // Helper method specifically for the Controller (not an AI Tool)
+  async sendImageToSelf(imageUrl: string, caption?: string) {
+    if (!this.isReady) throw new Error('WhatsApp client not ready');
+    const myId = this.client.info.wid._serialized;
+
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+      
+      const buffer = Buffer.from(await response.arrayBuffer());
+      const media = new MessageMedia('image/jpeg', buffer.toString('base64'), 'image.jpg');
+      
+      await this.client.sendMessage(myId, media, { caption });
+      return `Image sent to self`;
+    } catch (e) {
+      this.logger.error(`Failed to send image to self: ${e.message}`);
+      throw new Error(`Failed to send image: ${e.message}`);
+    }
   }
 
   @AiTool({

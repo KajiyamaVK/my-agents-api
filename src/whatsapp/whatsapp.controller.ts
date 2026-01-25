@@ -29,7 +29,8 @@ export class WhatsappController {
 
   @Post('camera/:cameraName')
   async sendCameraSnapshot(@Param('cameraName') cameraName: string) {
-    await this.whatsappService.sendCameraSnapshotToSelf(cameraName);
+    // FIX: Pass object to match service signature
+    await this.whatsappService.sendCameraSnapshotToSelf({ cameraAlias: cameraName });
     return { status: 'Snapshot sent', camera: cameraName };
   }
 
@@ -37,10 +38,11 @@ export class WhatsappController {
   @UseGuards(LocalNetworkGuard)
   async notifyDoorbell(@Body('camera') cameraName: string) {
     const targetCamera = cameraName || 'cam_13'; 
-    await this.whatsappService.sendCameraSnapshotToSelf(
-      targetCamera, 
-      'Ding Dong! Campainha tocou!'
-    );
+    // FIX: Pass object to match service signature
+    await this.whatsappService.sendCameraSnapshotToSelf({
+      cameraAlias: targetCamera, 
+      customTitle: 'Ding Dong! Campainha tocou!'
+    });
     return { status: 'Doorbell notification sent', camera: targetCamera };
   }
 }
