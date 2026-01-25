@@ -9,15 +9,39 @@ export class DocScraperService {
   private readonly logger = new Logger(DocScraperService.name);
   // Using path.resolve to ensure the base directory is consistently found
   private readonly outputBaseDir = path.resolve(process.cwd(), 'scraped_docs');
+  private readonly fullDocsDir = path.join(this.outputBaseDir, 'Full Docs');
 
   constructor(@InjectQueue('scrape-docs') private docQueue: Queue) {
     // Ensure the base directory exists on startup
     if (!fs.existsSync(this.outputBaseDir)) {
       fs.mkdirSync(this.outputBaseDir, { recursive: true });
     }
+    // Ensure the Full Docs directory exists on startup
+    if (!fs.existsSync(this.fullDocsDir)) {
+      fs.mkdirSync(this.fullDocsDir, { recursive: true });
+    }
   }
 
   async scrapeDocumentation(url: string) {
+    // Extract hostname to serve as contextName (e.g., docs.frigate.video)
+    let domain: string;
+    try {
+      const parsedUrl = new URL(url);
+      domain = parsedUrl.hostname;
+    } catch (error) {
+      throw new BadRequestException(`Invalid URL provided: ${url}`);
+    }
+
+    const existingFullDocPath = path.join(this.fullDocsDir, `${domain}.md`);
+
+    // Check if the full version already exists
+    if (fs.existsSync(existingFullDocPath)) {
+      this.logger.warn(`Scrape aborted: Full documentation for ${domain} already exists.`);
+      throw new BadRequestException(
+        `Documentation for ${domain} already exists. Please delete the full version before scraping again.`,
+      );
+    }
+
     this.logger.log(`Adicionando tarefa de scraping para: ${url}`);
 
     await this.docQueue.add(
@@ -48,16 +72,17 @@ export class DocScraperService {
     }
 
     const sourceDir = path.join(this.outputBaseDir, domain);
-    const outputFile = path.join(sourceDir, `_FULL_DOCUMENTATION.md`);
+    // The full documentation should be placed within the new folder "Full Docs"
+    const outputFile = path.join(this.fullDocsDir, `${domain}.md`);
 
     if (!fs.existsSync(sourceDir)) {
       throw new NotFoundException(`Directory for domain ${domain} not found at ${sourceDir}`);
     }
 
-    // Get all MD files (excluding any previous full merge file)
+    // Get all MD files
     const files = fs
       .readdirSync(sourceDir)
-      .filter((file) => file.endsWith('.md') && !file.startsWith('_FULL_'));
+      .filter((file) => file.endsWith('.md'));
 
     if (files.length === 0) {
       this.logger.warn(`No markdown files found in ${sourceDir}`);
@@ -88,6 +113,16 @@ export class DocScraperService {
     return new Promise((resolve, reject) => {
       writeStream.on('finish', () => {
         this.logger.log(`Merge complete: ${outputFile}`);
+
+        // Cleanup: Delete the folder containing the parts
+        try {
+          fs.rmSync(sourceDir, { recursive: true, force: true });
+          this.logger.log(`Deleted source directory: ${sourceDir}`);
+        } catch (err) {
+          this.logger.error(`Failed to delete source directory ${sourceDir}: ${err.message}`);
+          // We don't reject here because the merge itself was successful
+        }
+
         resolve({ path: outputFile, totalFiles: files.length });
       });
       writeStream.on('error', (err) => {

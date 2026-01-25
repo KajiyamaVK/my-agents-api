@@ -4,7 +4,7 @@ import { getBotToken } from 'nestjs-telegraf';
 import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
 import { TelegramService } from '../../src/telegram/telegram.service';
-import { DocScraperService } from '../../src/doc-scraper/doc-scraper.service'; // Adicionado
+import { DocScraperService } from '../../src/doc-scraper/doc-scraper.service';
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
@@ -24,8 +24,9 @@ const mockTelegraf = {
 // Mock do serviço de Scraping para não depender de pastas reais no Linux
 const DocScraperServiceMock = {
   scrapeDocumentation: jest.fn().mockResolvedValue({ status: 'pending' }),
+  // Updated mock to reflect the new path structure (inside Full Docs)
   mergeDocuments: jest.fn().mockResolvedValue({ 
-    path: '/tmp/merged.md', 
+    path: '/app/scraped_docs/Full Docs/nestjs.com.md', 
     totalFiles: 5 
   }),
 };
