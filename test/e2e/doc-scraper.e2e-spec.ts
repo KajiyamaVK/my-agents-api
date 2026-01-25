@@ -24,7 +24,7 @@ const mockTelegraf = {
 // Mock do serviço de Scraping
 const DocScraperServiceMock = {
   scrapeDocumentation: jest.fn().mockResolvedValue({ status: 'pending' }),
-  // Updated mock to reflect the new path structure (inside Full Docs with domain name)
+  // UPDATED: Path now reflects the "Full Docs" folder structure
   mergeDocuments: jest.fn().mockResolvedValue({ 
     path: '/app/scraped_docs/Full Docs/nestjs.com.md', 
     totalFiles: 5 
