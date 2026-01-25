@@ -13,6 +13,8 @@ const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
+    // FIX 1: Added setMyCommands to prevent the initialization error log
+    setMyCommands: jest.fn().mockResolvedValue({}),
   },
   // Essential: These methods are called during nestjs-telegraf's onModuleInit
   use: jest.fn().mockReturnThis(),
@@ -20,6 +22,7 @@ const mockTelegraf = {
   command: jest.fn().mockReturnThis(),
   start: jest.fn().mockReturnThis(),
   help: jest.fn().mockReturnThis(),
+  action: jest.fn().mockReturnThis(), // Often used with inline keyboards
   // Lifecycle methods
   launch: jest.fn().mockResolvedValue({}),
   stop: jest.fn().mockResolvedValue({}),
@@ -133,7 +136,8 @@ describe('API (e2e)', () => {
         .post(`/whatsapp/camera/${camName}`)
         .expect(201);
 
-      expect(WhatsappServiceMock.sendCameraSnapshotToSelf).toHaveBeenCalledWith(camName);
+      // FIX 2: Updated expectation to match the new Object signature in the Service
+      expect(WhatsappServiceMock.sendCameraSnapshotToSelf).toHaveBeenCalledWith({ cameraAlias: camName });
     });
 
     it('POST /whatsapp/test-image-self should trigger image delivery', async () => {
