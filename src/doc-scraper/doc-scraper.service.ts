@@ -9,7 +9,7 @@ export class DocScraperService {
   private readonly logger = new Logger(DocScraperService.name);
   // Using path.resolve to ensure the base directory is consistently found
   private readonly outputBaseDir = path.resolve(process.cwd(), 'scraped_docs');
-  // Define the Full Docs directory
+  // Explicitly define the Full Docs directory
   private readonly fullDocsDir = path.join(this.outputBaseDir, 'Full Docs');
 
   constructor(@InjectQueue('scrape-docs') private docQueue: Queue) {
@@ -33,9 +33,9 @@ export class DocScraperService {
       throw new BadRequestException(`Invalid URL provided: ${url}`);
     }
 
+    // Check if the full version already exists in the "Full Docs" folder
     const existingFullDocPath = path.join(this.fullDocsDir, `${domain}.md`);
 
-    // Check if the full version already exists in the Full Docs folder
     if (fs.existsSync(existingFullDocPath)) {
       this.logger.warn(`Scrape aborted: Full documentation for ${domain} already exists at ${existingFullDocPath}.`);
       throw new BadRequestException(
@@ -66,14 +66,15 @@ export class DocScraperService {
    * Reads all .md files from the domain folder and merges them into one file.
    */
   async mergeDocuments(domain: string): Promise<{ path: string | null; totalFiles: number }> {
-    // SAFETY CHECK: Prevent path.join(..., undefined) which causes the E2E crash
+    // SAFETY CHECK: Prevent path.join(..., undefined)
     if (!domain) {
       this.logger.error('Merge failed: domain argument is undefined or null');
       throw new BadRequestException('Domain is required for merging documents.');
     }
 
     const sourceDir = path.join(this.outputBaseDir, domain);
-    // The full documentation should be placed within the new folder "Full Docs" with the name <domain>.md
+    
+    // CRITICAL FIX: Output file is now inside "Full Docs" and named <domain>.md
     const outputFile = path.join(this.fullDocsDir, `${domain}.md`);
 
     if (!fs.existsSync(sourceDir)) {
@@ -90,7 +91,7 @@ export class DocScraperService {
       return { path: null, totalFiles: 0 };
     }
 
-    this.logger.log(`Merging ${files.length} files for ${domain}...`);
+    this.logger.log(`Merging ${files.length} files for ${domain} into ${outputFile}...`);
 
     const writeStream = fs.createWriteStream(outputFile);
 
@@ -123,8 +124,6 @@ export class DocScraperService {
           }
         } catch (err) {
           this.logger.error(`Failed to delete source directory ${sourceDir}: ${err.message}`);
-          // We don't reject here because the merge itself was successful, 
-          // though we might want to alert the user in a real scenario.
         }
 
         resolve({ path: outputFile, totalFiles: files.length });

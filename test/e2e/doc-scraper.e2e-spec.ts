@@ -21,7 +21,7 @@ const mockTelegraf = {
   stop: jest.fn().mockResolvedValue({}),
 };
 
-// Mock do serviço de Scraping para não depender de pastas reais no Linux
+// Mock do serviço de Scraping
 const DocScraperServiceMock = {
   scrapeDocumentation: jest.fn().mockResolvedValue({ status: 'pending' }),
   // Updated mock to reflect the new path structure (inside Full Docs with domain name)

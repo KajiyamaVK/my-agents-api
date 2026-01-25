@@ -85,6 +85,7 @@ describe('DocScraperService', () => {
       
       // Mock existsSync: Return false specifically for the source directory check
       (fs.existsSync as jest.Mock).mockImplementation((filePath: string) => {
+        // We simulate that 'Full Docs' exists, but the domain folder 'unknown-domain.com' does NOT
         if (filePath.includes(domain) && !filePath.includes('Full Docs')) return false;
         return true;
       });
@@ -124,22 +125,24 @@ describe('DocScraperService', () => {
       expect(fs.readdirSync).toHaveBeenCalled();
       
       // Verify correct output path (in Full Docs folder with correct name)
-      const expectedOutputPath = path.join('scraped_docs', 'Full Docs', `${domain}.md`);
+      // We expect the path to end with "Full Docs/docs.frigate.video.md"
+      const expectedOutputPathSuffix = path.join('Full Docs', `${domain}.md`);
       expect(fs.createWriteStream).toHaveBeenCalledWith(
-        expect.stringContaining(expectedOutputPath),
+        expect.stringContaining(expectedOutputPathSuffix),
       );
 
       // Expect 2 header writes + 2 files * (3 writes each: sep start, sep end, content)
       expect(mockWrite).toHaveBeenCalled();
       
       // 4. Verify Cleanup: Ensure source directory was deleted
+      // We verify it called rmSync with the domain folder (NOT the full docs folder)
       expect(fs.rmSync).toHaveBeenCalledWith(
-          expect.stringContaining(domain), 
+          expect.not.stringContaining('Full Docs'), 
           { recursive: true, force: true }
       );
 
       expect(result).toEqual({
-        path: expect.stringContaining(expectedOutputPath),
+        path: expect.stringContaining(expectedOutputPathSuffix),
         totalFiles: 2,
       });
     });
