@@ -2,4 +2,3 @@
 
 # Run full end-to-end tests before pushing
 npm run test:e2e --silent
-npm run deploy
