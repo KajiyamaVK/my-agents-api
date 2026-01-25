@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 import { AiTool } from '../common/decorators/ai-tool.decorator';
-import { RegistryService } from '../ai/services/registry.service';
+import { RegistryService } from '../registry/registry.service'; // UPDATED IMPORT
 
 @Injectable()
 export class WhatsappService implements OnModuleInit {
@@ -75,7 +75,6 @@ export class WhatsappService implements OnModuleInit {
     } catch (e) { throw new Error(`Falha no WhatsApp: ${e.message}`); }
   }
 
-  // Helper method specifically for the Controller (not an AI Tool)
   async sendImageToSelf(imageUrl: string, caption?: string) {
     if (!this.isReady) throw new Error('WhatsApp client not ready');
     const myId = this.client.info.wid._serialized;

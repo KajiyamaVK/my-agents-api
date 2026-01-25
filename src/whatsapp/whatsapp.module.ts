@@ -1,12 +1,14 @@
+// src/whatsapp/whatsapp.module.ts
 import { Module } from '@nestjs/common';
 import { WhatsappService } from './whatsapp.service';
 import { WhatsappController } from './whatsapp.controller';
-import { AiModule } from '../ai/ai.module';
+import { RegistryModule } from '../registry/registry.module'; // Changed
+import { AiModule } from '../ai/ai.module'; // Keep for other AI features if needed
 
 @Module({
-  imports: [AiModule],
+  imports: [RegistryModule, AiModule],
   providers: [WhatsappService],
   controllers: [WhatsappController],
-  exports: [WhatsappService], // Export if you want other modules (like Agents) to use it later
+  exports: [WhatsappService],
 })
 export class WhatsappModule {}

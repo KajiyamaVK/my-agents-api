@@ -1,9 +1,10 @@
-// src/ai/services/registry.service.ts
+// src/registry/registry.service.ts
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import * as yaml from 'js-yaml';
 import * as fs from 'fs';
 import * as path from 'path';
+import { AiTool } from '../common/decorators/ai-tool.decorator';
 
 interface ResourceConfig {
   contacts?: Array<{ alias: string; whatsappId: string; isMe?: boolean }>;
@@ -13,6 +14,7 @@ interface ResourceConfig {
 @Injectable()
 export class RegistryService implements OnModuleInit {
   private readonly logger = new Logger(RegistryService.name);
+  // Adjusted path: We are now in src/registry, so .config is still in project root
   private readonly configPath = path.resolve('.config/resources.private.yaml');
 
   constructor(private readonly prisma: PrismaService) {}
@@ -70,7 +72,7 @@ export class RegistryService implements OnModuleInit {
 
   // Métodos de Resolução para a IA
   async resolveContact(term: string) {
-    // BEST PRACTICE: Defensive programming to prevent crashes if IA sends objects/null
+    // SECURITY: Validate input to prevent "toLowerCase" crashes if IA/Tool sends an object
     if (!term || typeof term !== 'string') {
       this.logger.warn(`[resolveContact] Invalid term received: ${JSON.stringify(term)}`);
       return null;
@@ -88,7 +90,7 @@ export class RegistryService implements OnModuleInit {
   }
 
   async resolveCamera(name: string) {
-    // BEST PRACTICE: Defensive programming to prevent "name.toLowerCase is not a function"
+    // SECURITY: Validate input to prevent "toLowerCase" crashes if IA/Tool sends an object
     if (!name || typeof name !== 'string') {
       this.logger.warn(`[resolveCamera] Invalid name received: ${JSON.stringify(name)}`);
       return null;
@@ -101,5 +103,27 @@ export class RegistryService implements OnModuleInit {
 
   async getAllCameras() {
     return this.prisma.camera.findMany();
+  }
+
+  @AiTool({
+    name: 'get_database_resources',
+    description: 'Retorna uma lista completa de todas as câmeras e contatos registrados no banco de dados. Útil para verificar nomes disponíveis.',
+    // FIX: Added required parameters schema (even though empty)
+    parameters: {
+      type: 'object',
+      properties: {},
+      required: [],
+    },
+  })
+  async getDebugResources() {
+    const cameras = await this.prisma.camera.findMany();
+    const contacts = await this.prisma.contact.findMany();
+    
+    return {
+      total_cameras: cameras.length,
+      total_contacts: contacts.length,
+      cameras: cameras.map(c => ({ name: c.name, frigate_id: c.frigateName })),
+      contacts: contacts.map(c => ({ alias: c.alias, is_me: c.isMe }))
+    };
   }
 }

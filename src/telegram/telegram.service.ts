@@ -1,3 +1,4 @@
+// src/telegram/telegram.service.ts
 import { Update, On, Message, InjectBot, Action, Ctx, Start, Command } from 'nestjs-telegraf';
 import { Context, Telegraf, Markup } from 'telegraf';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
@@ -6,7 +7,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AiTool } from '../common/decorators/ai-tool.decorator';
 import { AgentOrchestratorService } from '../ai/services/agent-orchestrator.service';
 import { TokenService } from '../llm/token/token.service';
-import { RegistryService } from '../ai/services/registry.service'; // Added Import
+import { RegistryService } from '../registry/registry.service'; // UPDATED IMPORT
 
 @Update()
 @Injectable()
@@ -21,7 +22,7 @@ export class TelegramService implements OnModuleInit {
     private readonly prisma: PrismaService,
     private readonly agentOrchestrator: AgentOrchestratorService,
     private readonly tokenService: TokenService,
-    private readonly registryService: RegistryService, // Injected Registry
+    private readonly registryService: RegistryService,
   ) {
     this.myChatId = this.configService.get<string>('MY_TELEGRAM_CHAT_ID')?.toString().trim() || '';
     this.frigateUrl = this.configService.get<string>('FRIGATE_URL') || 'http://localhost:5000';
@@ -234,21 +235,18 @@ export class TelegramService implements OnModuleInit {
     parameters: { type: 'object', properties: { cameraName: { type: 'string' } }, required: ['cameraName'] },
   })
   async sendCameraSnapshot({ cameraName }: { cameraName: string }) {
-    // 1. Resolve camera using Registry (safely)
     const camera = await this.registryService.resolveCamera(cameraName);
     if (!camera) throw new Error(`Camera ${cameraName} não encontrada.`);
 
     const url = `${this.frigateUrl}/api/${camera.frigateName}/latest.jpg`;
     
     try {
-      // 2. Fetch the image BUFFER from local network
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Falha ao baixar imagem: ${response.statusText}`);
       
       const arrayBuffer = await response.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      // 3. Send BUFFER to Telegram (Telegram servers cannot reach localhost)
       await this.bot.telegram.sendPhoto(this.myChatId, { source: buffer }, { 
         caption: `📸 Snapshot: ${camera.name}` 
       });

@@ -15,6 +15,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { AiModule } from './ai/ai.module';
 import { ChatCompletionModule } from './llm/chat-completion/chat-completion.module'; 
 import { TelegramModule } from './telegram/telegram.module';
+import { RegistryModule } from './registry/registry.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { TelegramModule } from './telegram/telegram.module';
     NotificationsModule,
     AiModule,
     ChatCompletionModule,
+    RegistryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

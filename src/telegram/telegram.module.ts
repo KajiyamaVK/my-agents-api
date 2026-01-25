@@ -1,10 +1,12 @@
+// src/telegram/telegram.module.ts
 import { Module } from '@nestjs/common';
 import { TelegramService } from './telegram.service';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AiModule } from '../ai/ai.module';
-import { TokenModule } from '../llm/token/token.module'; // Ensure TokenService is also available if needed
+import { TokenModule } from '../llm/token/token.module';
+import { RegistryModule } from '../registry/registry.module'; // UPDATED IMPORT
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import { TokenModule } from '../llm/token/token.module'; // Ensure TokenService 
       inject: [ConfigService],
     }),
     PrismaModule,
-    AiModule, // Required for RegistryService
+    AiModule,
     TokenModule,
+    RegistryModule, // Added
   ],
   providers: [TelegramService],
   exports: [TelegramService],
