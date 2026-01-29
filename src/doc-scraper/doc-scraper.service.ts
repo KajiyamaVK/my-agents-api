@@ -3,6 +3,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 import * as fs from 'fs';
 import * as path from 'path';
+import { ScrapeDocsDto, ScrapeMode } from './dto/scrape-docs.dto';
 
 @Injectable()
 export class DocScraperService {
@@ -59,6 +60,33 @@ export class DocScraperService {
       status: 'pending',
       message: 'Tarefa de scraping adicionada à fila.',
       url,
+    };
+  }
+
+  async scrapeDynamic(dto: ScrapeDocsDto, token: string) {
+    this.logger.log(`Adicionando tarefa de scraping dinâmico para: ${dto.url}`);
+
+    await this.docQueue.add(
+      'scrape-dynamic', // Use a distinct job name or just 'scrape' with type in data
+      { 
+        url: dto.url,
+        mode: ScrapeMode.DYNAMIC,
+        schema: dto.schema,
+        targetSelector: dto.targetSelector,
+        scrollIterations: dto.scrollIterations,
+        token // Pass token to job
+      },
+      {
+        attempts: 3,
+        backoff: 5000,
+        removeOnComplete: true,
+      },
+    );
+
+    return {
+      status: 'pending',
+      message: 'Tarefa de scraping dinâmico adicionada à fila.',
+      url: dto.url,
     };
   }
 

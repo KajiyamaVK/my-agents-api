@@ -22,6 +22,14 @@ export class DocScraperController {
     return await this.scraperService.scrapeDocumentation(dto.url);
   }
 
+  @Post('scrape-dynamic')
+  @UsePipes(new ValidationPipe())
+  async scrapeDynamic(@Body() dto: ScrapeDocsDto, @Token() token: string) {
+    // Ensure mode is set to dynamic for this endpoint
+    dto.mode = dto.mode || 'dynamic' as any;
+    return await this.scraperService.scrapeDynamic(dto, token);
+  }
+
   @Post('merge')
   async mergeDocs(@Body('domain') domain: string) {
     // Ex: { "domain": "docs.frigate.video" }

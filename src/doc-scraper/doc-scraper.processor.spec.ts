@@ -6,6 +6,8 @@ import { PlaywrightCrawler } from 'crawlee';
 import * as fs from 'fs';
 import * as path from 'path';
 
+import { ChatCompletionService } from '../llm/chat-completion/chat-completion.service';
+
 // 1. Mock dependencies
 jest.mock('crawlee');
 jest.mock('fs');
@@ -15,6 +17,7 @@ describe('DocScraperProcessor', () => {
   let processor: DocScraperProcessor;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let eventEmitter: EventEmitter2;
+  let chatCompletionService: ChatCompletionService;
 
   // Variable to capture the internal handler defined inside process()
   let capturedRequestHandler: any;
@@ -43,11 +46,20 @@ describe('DocScraperProcessor', () => {
           provide: EventEmitter2,
           useValue: { emit: jest.fn() },
         },
+        {
+          provide: ChatCompletionService,
+          useValue: { 
+            createChatCompletion: jest.fn().mockResolvedValue({
+              choices: [{ message: { content: '{"mock": "data"}' } }] 
+            }) 
+          },
+        },
       ],
     }).compile();
 
     processor = module.get<DocScraperProcessor>(DocScraperProcessor);
     eventEmitter = module.get<EventEmitter2>(EventEmitter2);
+    chatCompletionService = module.get<ChatCompletionService>(ChatCompletionService);
   });
 
   it('should be defined', () => {

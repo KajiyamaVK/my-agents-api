@@ -96,3 +96,46 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Doc Scraper API
+
+### 1. Scrape Documentation (Markdown)
+**Endpoint:** `POST /doc-scraper/scrape`
+
+Scrapes a documentation site and converts it to Markdown.
+
+**Body:**
+```json
+{
+  "url": "https://docs.example.com"
+}
+```
+
+### 2. Scrape Dynamic Site (Structured Data)
+**Endpoint:** `POST /doc-scraper/scrape-dynamic`
+
+Scrapes dynamic sites using infinite scroll and extracts structured data using selectors or LLM fallback.
+
+**Body:**
+```json
+{
+  "url": "https://dynamic-site.com",
+  "mode": "dynamic",
+  "scrollIterations": 5,
+  "targetSelector": ".product-item",
+  "schema": {
+    "products": [
+      {
+        "name": "string",
+        "price": "number",
+        "description": "string"
+      }
+    ]
+  }
+}
+```
+- `url`: Target URL.
+- `mode`: Must be "dynamic".
+- `scrollIterations`: Number of times to scroll to bottom for lazy loading (default: 0).
+- `targetSelector`: CSS selector to extract data directly (optional).
+- `schema`: JSON schema to guide the LLM extraction if selector fails or for complex parsing (optional).
