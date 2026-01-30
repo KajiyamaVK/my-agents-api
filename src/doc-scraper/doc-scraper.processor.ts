@@ -1,7 +1,7 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq'; 
 import { Job } from 'bullmq';
 import { Logger } from '@nestjs/common';
-import { PlaywrightCrawler } from 'crawlee';
+import { PlaywrightCrawler, utils } from 'crawlee';
 import TurndownService from 'turndown';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -51,10 +51,52 @@ export class DocScraperProcessor extends WorkerHost {
       requestHandler: async ({ page, log }) => {
         // Infinite Scroll
         if (scrollIterations > 0) {
-          log.info(`Scrolling ${scrollIterations} times...`);
-          for (let i = 0; i < scrollIterations; i++) {
-            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-            await page.waitForTimeout(1000); // Wait for lazy load
+          log.info(`Scrolling ${scrollIterations} times (max)...`);
+          
+          // 1. Identify scrollable element (if any) that is better than window
+          // Look for element with overflow-y: auto/scroll and scrollHeight > clientHeight
+          const scrollableSelector = await page.evaluate(() => {
+              const elements = Array.from(document.querySelectorAll('div, main, section, ul'));
+              // Sort by scrollHeight descending to find the main container likely
+              elements.sort((a, b) => b.scrollHeight - a.scrollHeight);
+              
+              for (const el of elements) {
+                  const style = window.getComputedStyle(el);
+                  if (el.scrollHeight > el.clientHeight && (style.overflowY === 'auto' || style.overflowY === 'scroll')) {
+                      // Construct a unique selector or rely on class
+                      if (el.id) return `#${el.id}`;
+                      if (el.className) return `.${el.className.split(' ').join('.')}`;
+                      return el.tagName; // Fallback, might be weak
+                  }
+              }
+              return null;
+          });
+
+          if (scrollableSelector) {
+             const selector = scrollableSelector.toLowerCase(); // Ensure valid
+             log.info(`Found specific scrollable container: ${selector}. Using manual scroll.`);
+             
+             for (let i = 0; i < scrollIterations; i++) {
+                 // Scroll to bottom of this element
+                 await page.evaluate((sel) => {
+                     const el = document.querySelector(sel);
+                     if (el) el.scrollTo(0, el.scrollHeight);
+                 }, selector);
+                 
+                 await page.waitForTimeout(2000 + Math.random() * 1000); // Wait for load (2-3s)
+             }
+          } else {
+             // Fallback to window infinite scroll
+             log.info('No specific scroll container found. Using window infiniteScroll.');
+             let currentScrolls = 0;
+             await utils.playwright.infiniteScroll(page, {
+                waitForSecs: 2,
+                stopScrollCallback: async () => {
+                    currentScrolls++;
+                    if (currentScrolls >= scrollIterations) return true;
+                    return false;
+                }
+             });
           }
         }
 
@@ -63,10 +105,9 @@ export class DocScraperProcessor extends WorkerHost {
         // Strategy 1: Target Selector
         if (targetSelector) {
             try {
-                // If schema implies an array, we might want $$eval
-                // For simplicity, let's assume we want text content of matches
+                // Use innerText to avoid script/style content and get rendered text
                 extractedData = await page.$$eval(targetSelector, (elements) => {
-                    return elements.map(el => el.textContent?.trim()).filter(Boolean);
+                    return elements.map(el => (el as HTMLElement).innerText?.trim()).filter(Boolean);
                 });
                 log.info(`Extracted ${extractedData.length} items using selector ${targetSelector}`);
             } catch (e) {

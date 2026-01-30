@@ -69,7 +69,8 @@ export class WhatsappService implements OnModuleInit {
     if (!this.isReady) throw new Error('WhatsApp não está pronto.');
     try {
       const contact = await this.registryService.resolveContact(to);
-      const contactId = contact ? contact.whatsappId : `${to.replace(/\D/g, '')}@c.us`;
+      const contactId = contact?.whatsappId || `${to.replace(/\D/g, '')}@c.us`;
+      if (!contactId) throw new Error('WhatsApp ID not found/generated');
       await this.client.sendMessage(contactId, message);
       return `Mensagem enviada via WhatsApp para ${to}`;
     } catch (e) { throw new Error(`Falha no WhatsApp: ${e.message}`); }

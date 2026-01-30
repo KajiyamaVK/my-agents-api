@@ -61,11 +61,29 @@ export class RegistryService implements OnModuleInit {
       // Sync Contacts
       if (config.contacts) {
         for (const contact of config.contacts) {
-          await this.prisma.contact.upsert({
-            where: { alias: contact.alias.toLowerCase() },
-            update: { whatsappId: contact.whatsappId, isMe: contact.isMe || false },
-            create: { alias: contact.alias.toLowerCase(), whatsappId: contact.whatsappId, isMe: contact.isMe || false },
+          // Manual upsert logic since alias is not unique in schema and telegramChatId is required
+          const existing = await this.prisma.contact.findFirst({
+             where: { alias: contact.alias.toLowerCase() }
           });
+
+          if (existing) {
+             await this.prisma.contact.update({
+               where: { id: existing.id },
+               data: { whatsappId: contact.whatsappId, isMe: contact.isMe || false }
+             });
+          } else {
+             // We need a telegramChatId because it's required and unique. 
+             // Generating a placeholder if not provided, but ensuring uniqueness.
+             // This is a workaround because the schema requires it.
+             await this.prisma.contact.create({
+               data: { 
+                 alias: contact.alias.toLowerCase(), 
+                 whatsappId: contact.whatsappId, 
+                 isMe: contact.isMe || false,
+                 telegramChatId: `placeholder_${Date.now()}_${Math.random().toString(36).substring(7)}` 
+               }
+             });
+          }
         }
       }
 
@@ -94,7 +112,8 @@ export class RegistryService implements OnModuleInit {
     if (['me', 'mim', 'self', 'meu'].includes(lowerTerm)) {
       return this.prisma.contact.findFirst({ where: { isMe: true } });
     }
-    return this.prisma.contact.findUnique({ where: { alias: lowerTerm } });
+    // alias is not unique in schema, so use findFirst
+    return this.prisma.contact.findFirst({ where: { alias: lowerTerm } });
   }
 
   async resolveCamera(name: string) {

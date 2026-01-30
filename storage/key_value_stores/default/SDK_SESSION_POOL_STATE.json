@@ -1,0 +1,119 @@
+{
+  "usableSessionsCount": 2,
+  "retiredSessionsCount": 0,
+  "sessions": [
+    {
+      "id": "session_mVF1GbBS6b",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": []
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-30T08:29:30.222Z",
+      "createdAt": "2026-01-30T07:39:30.222Z",
+      "usageCount": 0,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    },
+    {
+      "id": "session_34DM9t0G6A",
+      "cookieJar": {
+        "version": "tough-cookie@6.0.0",
+        "storeType": "MemoryCookieStore",
+        "rejectPublicSuffixes": true,
+        "enableLooseMode": false,
+        "allowSpecialUseDomain": true,
+        "prefixSecurity": "silent",
+        "cookies": [
+          {
+            "key": "PHPSESSID",
+            "value": "184d4cfbc1d2ff3c4a7034bfeab0472c",
+            "expires": "2026-01-30T08:29:35.882Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "secure": true,
+            "httpOnly": true,
+            "hostOnly": true,
+            "creation": "2026-01-30T07:39:35.884Z",
+            "lastAccessed": "2026-01-30T07:39:35.884Z"
+          },
+          {
+            "key": "_gcl_au",
+            "value": "1.1.965853662.1769758775",
+            "expires": "2026-04-30T07:39:35.000Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-01-30T07:39:35.888Z",
+            "lastAccessed": "2026-01-30T07:39:35.888Z"
+          },
+          {
+            "key": "_fbp",
+            "value": "fb.2.1769758775607.179034835293159068",
+            "expires": "2026-04-30T07:39:35.000Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-01-30T07:39:35.888Z",
+            "lastAccessed": "2026-01-30T07:39:35.888Z"
+          },
+          {
+            "key": "_gid",
+            "value": "GA1.3.298391922.1769758776",
+            "expires": "2026-01-31T07:39:35.000Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-01-30T07:39:35.888Z",
+            "lastAccessed": "2026-01-30T07:39:35.888Z"
+          },
+          {
+            "key": "_gat_gtag_UA_77281332_1",
+            "value": "1",
+            "expires": "2026-01-30T07:40:35.000Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-01-30T07:39:35.888Z",
+            "lastAccessed": "2026-01-30T07:39:35.888Z"
+          },
+          {
+            "key": "_ga",
+            "value": "GA1.1.449522073.1769758776",
+            "expires": "2027-03-06T07:39:35.786Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-01-30T07:39:35.888Z",
+            "lastAccessed": "2026-01-30T07:39:35.888Z"
+          },
+          {
+            "key": "_ga_N1GNPTSP5V",
+            "value": "GS2.1.s1769758775$o1$g1$t1769758775$j60$l0$h0",
+            "expires": "2027-03-06T07:39:35.834Z",
+            "domain": "visaoimoveisindaiatuba.com.br",
+            "path": "/",
+            "hostOnly": false,
+            "creation": "2026-01-30T07:39:35.888Z",
+            "lastAccessed": "2026-01-30T07:39:35.888Z"
+          }
+        ]
+      },
+      "userData": {},
+      "maxErrorScore": 3,
+      "errorScoreDecrement": 0.5,
+      "expiresAt": "2026-01-30T08:29:30.226Z",
+      "createdAt": "2026-01-30T07:39:30.226Z",
+      "usageCount": 1,
+      "maxUsageCount": 50,
+      "errorScore": 0
+    }
+  ]
+}
