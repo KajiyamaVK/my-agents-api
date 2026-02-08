@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { getBotToken } from 'nestjs-telegraf';
+import { getQueueToken } from '@nestjs/bullmq';
 import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
 import { TelegramService } from '../../src/telegram/telegram.service';
@@ -8,6 +9,7 @@ import { DocScraperService } from '../../src/doc-scraper/doc-scraper.service';
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
+import { BullMQMock } from '../fixtures/bullmq.mock';
 
 // Mock do Telegraf para evitar erros de conexão e teardown
 const mockTelegraf = {
@@ -49,6 +51,11 @@ describe('DocScraperController (e2e)', () => {
       // FIX: Mockando o serviço para retornar 201 sem checar o disco
       .overrideProvider(DocScraperService)
       .useValue(DocScraperServiceMock)
+      // Mock BullMQ queues to prevent Redis connections
+      .overrideProvider(getQueueToken('doc-scraper'))
+      .useValue(BullMQMock)
+      .overrideProvider(getQueueToken('notifications'))
+      .useValue(BullMQMock)
       .compile();
 
     app = moduleFixture.createNestApplication();

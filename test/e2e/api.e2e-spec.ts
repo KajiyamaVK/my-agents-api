@@ -3,10 +3,12 @@ import { INestApplication } from '@nestjs/common';
 import { WhatsappService } from '../../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from '../fixtures/whatsapp.mock';
 import { getBotToken } from 'nestjs-telegraf';
+import { getQueueToken } from '@nestjs/bullmq';
 import { TelegramService } from '../../src/telegram/telegram.service';
 const request = require('supertest');
 import { AppModule } from '../../src/app.module';
 import { FlowAuthGuard } from '../../src/common/guards/flow.guard';
+import { BullMQMock } from '../fixtures/bullmq.mock';
 
 // Updated mock to satisfy the nestjs-telegraf discovery service
 const mockTelegraf = {
@@ -74,6 +76,11 @@ describe('API (e2e)', () => {
       // 3. Keep your existing WhatsApp mock
       .overrideProvider(WhatsappService)
       .useValue(WhatsappServiceMock)
+      // 4. Mock BullMQ queues to prevent Redis connections
+      .overrideProvider(getQueueToken('doc-scraper'))
+      .useValue(BullMQMock)
+      .overrideProvider(getQueueToken('notifications'))
+      .useValue(BullMQMock)
       .compile();
 
     app = moduleFixture.createNestApplication();

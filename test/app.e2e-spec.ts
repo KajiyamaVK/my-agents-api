@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getBotToken } from 'nestjs-telegraf';
+import { getQueueToken } from '@nestjs/bullmq';
 import { INestApplication } from '@nestjs/common';
 const request = require('supertest');
 import { AppModule } from './../src/app.module';
 import { WhatsappService } from '../src/whatsapp/whatsapp.service';
 import { WhatsappServiceMock } from './fixtures/whatsapp.mock';
+import { BullMQMock } from './fixtures/bullmq.mock';
 
 const mockTelegraf = {
   telegram: {
@@ -33,6 +35,10 @@ describe('AppController (e2e)', () => {
       .useValue(mockTelegraf)
       .overrideProvider(WhatsappService)
       .useValue(WhatsappServiceMock)
+      .overrideProvider(getQueueToken('doc-scraper'))
+      .useValue(BullMQMock)
+      .overrideProvider(getQueueToken('notifications'))
+      .useValue(BullMQMock)
       .compile();
 
     app = moduleFixture.createNestApplication();
