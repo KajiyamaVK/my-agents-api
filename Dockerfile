@@ -50,6 +50,7 @@ RUN npx playwright install chromium
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV DATABASE_URL="postgresql://system:SystemPass_9b28s1%40@postgres-postgis:5432/my_agents_db?schema=public"
 
 EXPOSE 3000
 

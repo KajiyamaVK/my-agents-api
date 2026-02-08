@@ -13,7 +13,7 @@ import { ScrapeMode } from './dto/scrape-docs.dto';
 export class DocScraperProcessor extends WorkerHost {
   private readonly logger = new Logger(DocScraperProcessor.name);
   private readonly outputBaseDir = './scraped_docs';
-  private readonly structuredDataDir = path.join(this.outputBaseDir, 'structured-data');
+
 
   constructor(
     private eventEmitter: EventEmitter2,
@@ -22,9 +22,6 @@ export class DocScraperProcessor extends WorkerHost {
     super();
     if (!fs.existsSync(this.outputBaseDir)) {
       fs.mkdirSync(this.outputBaseDir, { recursive: true });
-    }
-    if (!fs.existsSync(this.structuredDataDir)) {
-      fs.mkdirSync(this.structuredDataDir, { recursive: true });
     }
   }
 
@@ -44,7 +41,14 @@ export class DocScraperProcessor extends WorkerHost {
     const urlObj = new URL(url);
     const domainName = urlObj.hostname.replace('www.', '');
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const outputFile = path.join(this.structuredDataDir, `${domainName}-${timestamp}.json`);
+    
+    // Create domain-specific directory
+    const outputDir = path.join(this.outputBaseDir, domainName);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    const outputFile = path.join(outputDir, `${timestamp}.json`);
 
     const crawler = new PlaywrightCrawler({
       headless: true,

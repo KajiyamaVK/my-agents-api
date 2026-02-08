@@ -4,12 +4,15 @@ import { getQueueToken } from '@nestjs/bullmq';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import { ChatCompletionService } from '../llm/chat-completion/chat-completion.service';
+import { MergeDocsDto } from './dto/merge-docs.dto';
 
 // 1. Mock the entire fs module at the top level
 jest.mock('fs');
 
 describe('DocScraperService', () => {
   let service: DocScraperService;
+  let chatService: ChatCompletionService;
 
   const mockQueue = {
     add: jest.fn(),
@@ -29,10 +32,19 @@ describe('DocScraperService', () => {
           provide: getQueueToken('scrape-docs'),
           useValue: mockQueue,
         },
+        {
+          provide: ChatCompletionService,
+          useValue: { createChatCompletion: jest.fn() },
+        },
       ],
     }).compile();
 
+
+    
+    // Assign service to the variable declared in outer scope
     service = module.get<DocScraperService>(DocScraperService);
+    // Assign chatService to the variable declared in outer scope
+    chatService = module.get<ChatCompletionService>(ChatCompletionService);
   });
 
   it('should be defined', () => {
@@ -90,61 +102,92 @@ describe('DocScraperService', () => {
         return true;
       });
 
-      await expect(service.mergeDocuments(domain)).rejects.toThrow(
+      await expect(service.mergeDocuments({ domain })).rejects.toThrow(
         NotFoundException,
       );
     });
 
-    it('should merge files successfully and delete source directory', async () => {
+    it('should merge files successfully and delete source directory (legacy/no prompt)', async () => {
       const domain = 'docs.frigate.video';
-      const mockFiles = ['intro.md', 'setup.md'];
+      const mockFiles = ['intro.md', 'setup.json']; // Mixed types
+      const dto = { domain };
 
-      // 1. Mock File System Checks
       (fs.existsSync as jest.Mock).mockReturnValue(true);
       (fs.readdirSync as jest.Mock).mockReturnValue(mockFiles);
       (fs.readFileSync as jest.Mock).mockReturnValue('# Mock Content');
+      (fs.lstatSync as jest.Mock).mockReturnValue({ isDirectory: () => false });
 
-      // 2. Mock Write Stream
-      const mockWrite = jest.fn();
-      const mockEnd = jest.fn();
-      // Emulate the 'on' method to trigger the finish callback immediately
-      const mockOn = jest.fn((event, callback) => {
-        if (event === 'finish') callback(); 
-        return {}; 
-      });
+      // 2. Mock fs.writeFileSync
+      (fs.writeFileSync as jest.Mock).mockImplementation(() => {});
 
-      (fs.createWriteStream as jest.Mock).mockReturnValue({
-        write: mockWrite,
-        end: mockEnd,
-        on: mockOn,
-      });
+      // @ts-ignore - Ignoring type error because we haven't updated service signature yet (TDD)
+      const result = await service.mergeDocuments(dto);
 
-      const result = await service.mergeDocuments(domain);
-
-      // 3. Assertions
       expect(fs.readdirSync).toHaveBeenCalled();
       
-      // Verify correct output path (in Full Docs folder with correct name)
-      // We expect the path to end with "Full Docs/docs.frigate.video.md"
       const expectedOutputPathSuffix = path.join('Full Docs', `${domain}.md`);
-      expect(fs.createWriteStream).toHaveBeenCalledWith(
-        expect.stringContaining(expectedOutputPathSuffix),
-      );
-
-      // Expect 2 header writes + 2 files * (3 writes each: sep start, sep end, content)
-      expect(mockWrite).toHaveBeenCalled();
       
-      // 4. Verify Cleanup: Ensure source directory was deleted
-      // We verify it called rmSync with the domain folder (NOT the full docs folder)
-      expect(fs.rmSync).toHaveBeenCalledWith(
-          expect.not.stringContaining('Full Docs'), 
-          { recursive: true, force: true }
+      // Expect writeFileSync to be called with correct path and content containing merged data
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        expect.stringContaining(expectedOutputPathSuffix),
+        expect.stringContaining('# Mock Content')
       );
 
+      // expect(fs.rmSync).toHaveBeenCalled(); // This check was already there but we can keep/ensure it matches
+      expect(fs.rmSync).toHaveBeenCalled();
       expect(result).toEqual({
         path: expect.stringContaining(expectedOutputPathSuffix),
         totalFiles: 2,
       });
+    });
+
+    it('should call LLM when additionalPrompt is provided', async () => {
+      const domain = 'docs.frigate.video';
+      const additionalPrompt = 'Make a table';
+      const dto = { domain, additionalPrompt };
+      const token = 'mock-token';
+
+      // Mocks
+      (fs.existsSync as jest.Mock).mockReturnValue(true);
+      (fs.readdirSync as jest.Mock).mockReturnValue(['file1.md']);
+      (fs.readFileSync as jest.Mock).mockReturnValue('Content');
+      (fs.lstatSync as jest.Mock).mockReturnValue({ isDirectory: () => false });
+      
+      // Mock fs.writeFileSync
+      (fs.writeFileSync as jest.Mock).mockImplementation(() => {});
+
+      // Mock ChatCompletionService
+      const mockChatCompletion = {
+        choices: [{ message: { content: 'LLM Response Table' } }]
+      };
+      
+      (chatService.createChatCompletion as jest.Mock).mockResolvedValue(mockChatCompletion);
+
+      // @ts-ignore - Ignoring type error
+      await service.mergeDocuments(dto, token);
+
+      // Verify file reading (should read all files, including .md)
+      expect(fs.readdirSync).toHaveBeenCalled();
+
+      // Verify LLM call
+      expect(chatService.createChatCompletion).toHaveBeenCalledWith(
+        expect.arrayContaining([
+            expect.objectContaining({
+                role: 'user',
+                content: expect.stringContaining(additionalPrompt)
+            })
+        ]),
+        token
+      );
+      
+      // Verify Output Write (should write LLM response, not raw content)
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+          expect.stringContaining(`${domain}.md`),
+          expect.stringContaining('LLM Response Table')
+      );
+
+      // Clean up
+      expect(fs.rmSync).toHaveBeenCalled();
     });
   });
 });

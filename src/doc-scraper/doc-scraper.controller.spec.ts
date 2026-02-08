@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DocScraperController } from './doc-scraper.controller';
 import { DocScraperService } from './doc-scraper.service';
 import { ScrapeDocsDto, ScrapeMode } from './dto/scrape-docs.dto';
+import { MergeDocsDto } from './dto/merge-docs.dto';
 import { FlowAuthGuard } from '../common/guards/flow.guard';
 import { ExecutionContext } from '@nestjs/common';
 
@@ -95,14 +96,15 @@ describe('DocScraperController', () => {
   });
 
   describe('mergeDocs', () => {
-    it('should call service.mergeDocuments with domain', async () => {
-      const domain = 'docs.example.com';
+    it('should call service.mergeDocuments with dto and token', async () => {
+      const dto: MergeDocsDto = { domain: 'docs.example.com' };
+      const token = 'test-token';
       
       mockService.mergeDocuments.mockResolvedValue({ path: 'merged.md' });
 
-      await controller.mergeDocs(domain);
+      await controller.mergeDocs(dto, token);
 
-      expect(service.mergeDocuments).toHaveBeenCalledWith(domain);
+      expect(service.mergeDocuments).toHaveBeenCalledWith(dto, token);
     });
   });
 });

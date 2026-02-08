@@ -7,9 +7,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { DocScraperService } from './doc-scraper.service';
-import { ScrapeDocsDto } from './dto/scrape-docs.dto';
+import { MergeDocsDto } from './dto/merge-docs.dto';
 import { FlowAuthGuard } from '../common/guards/flow.guard';
+import { ScrapeDocsDto } from './dto/scrape-docs.dto';
 import { Token } from '../common/decorators/token.decorator';
+// ... (imports)
 
 @Controller('doc-scraper')
 @UseGuards(FlowAuthGuard)
@@ -31,8 +33,7 @@ export class DocScraperController {
   }
 
   @Post('merge')
-  async mergeDocs(@Body('domain') domain: string) {
-    // Ex: { "domain": "docs.frigate.video" }
-    return await this.scraperService.mergeDocuments(domain);
+  async mergeDocs(@Body() dto: MergeDocsDto, @Token() token: string) {
+    return await this.scraperService.mergeDocuments(dto, token);
   }
 }

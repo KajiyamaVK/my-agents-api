@@ -1,5 +1,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "prisma.pinToPrisma6": true
+  "prisma.pinToPrisma6": true,
+  "window.zoomLevel": 1,
+  "editor.fontSize": 16
 }

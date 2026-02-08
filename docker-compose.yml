@@ -7,7 +7,7 @@ services:
       - '3000:3000'
     environment:
       - PORT=3000
-      - DATABASE_URL=file:../dev.db
+      - DATABASE_URL=postgresql://system:SystemPass_9b28s1%40@postgres-postgis:5432/my_agents_db?schema=public
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - MY_TELEGRAM_CHAT_ID=${MY_TELEGRAM_CHAT_ID}
       - FLOW_CLIENT_ID=${FLOW_CLIENT_ID}
@@ -23,7 +23,6 @@ services:
     depends_on:
       - redis
     volumes:
-      - ./prisma/dev.db:/app/dev.db
       - ./scraped_docs:/app/scraped_docs
       - ./.wwebjs_auth:/app/.wwebjs_auth
       - ../../.config:/app/.config
