@@ -12,6 +12,7 @@ const mockTelegraf = {
   telegram: {
     sendMessage: jest.fn().mockResolvedValue({}),
     sendPhoto: jest.fn().mockResolvedValue({}),
+    setMyCommands: jest.fn().mockResolvedValue({}),
   },
   use: jest.fn().mockReturnThis(),
   on: jest.fn().mockReturnThis(),

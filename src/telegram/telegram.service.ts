@@ -45,9 +45,9 @@ export class TelegramService implements OnModuleInit {
         { command: 'approved', description: 'Gerenciar usuários ativos' },
         { command: 'rejected', description: 'Lista de usuários recusados' },
       ]);
-      this.logger.log('Telegram commands registered.');
+      this.logger.log({ msg: 'Telegram commands registered.' });
     } catch (e) {
-      this.logger.error(`Failed to register commands: ${e.message}`);
+      this.logger.error({ msg: 'Failed to register commands', error: e.message });
     }
   }
 
@@ -302,7 +302,7 @@ export class TelegramService implements OnModuleInit {
       
       return `Snapshot de ${cameraName} enviado com sucesso via Telegram.`;
     } catch (e) {
-      this.logger.error(`Failed to send snapshot: ${e.message}`);
+      this.logger.error({ msg: 'Failed to send snapshot', error: e.message });
       throw new Error(`Erro ao enviar foto: ${e.message}`);
     }
   }
