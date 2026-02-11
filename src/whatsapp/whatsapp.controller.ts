@@ -49,24 +49,12 @@ export class WhatsappController {
     const targetCamera = cameraName || 'cam_13';
     const results: string[] = [];
 
-    // 1. WhatsApp Notification
-    try {
-      await this.whatsappService.sendCameraSnapshotToSelf({
-        cameraAlias: targetCamera,
-        customTitle: 'Ding Dong! Campainha tocou!'
-      });
-      results.push('WhatsApp sent');
-    } catch (e) {
-      this.logger.error(`Failed to send WhatsApp doorbell: ${e.message}`);
-      results.push(`WhatsApp failed: ${e.message}`);
-    }
-
-    // 2. Telegram Notification
+    // Telegram Notification Only
     try {
       await this.telegramService.sendCameraSnapshot({ cameraName: targetCamera });
       results.push('Telegram sent');
     } catch (e) {
-      this.logger.error(`Failed to send Telegram doorbell: ${e.message}`);
+      this.logger.error({ msg: 'Failed to send Telegram doorbell', error: e.message });
       results.push(`Telegram failed: ${e.message}`);
     }
 
