@@ -9,7 +9,7 @@ export class QueueMonitorController {
 
   @Get('status')
   async getStatus() {
-    this.logger.log('Requesting BullMQ queue status...');
+    this.logger.log({ msg: 'Requesting BullMQ queue status...' });
     
     // This calls the utility method we added to the service
     const status = await this.queueMonitor.getQueueStatus();

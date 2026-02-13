@@ -23,16 +23,16 @@ export class QueueMonitorService implements OnModuleInit {
     });
 
     this.setupListeners();
-    this.logger.log('Queue Monitor initialized for: scrape-docs');
+    this.logger.log({ msg: 'Queue Monitor initialized for: scrape-docs' });
   }
 
   private setupListeners() {
     this.queueEvents.on('stalled', ({ jobId }) => {
-      this.logger.warn(`⚠️ Job ${jobId} is stalled! This might indicate a crash or OOM.`);
+      this.logger.warn({ msg: '⚠️ Job is stalled! This might indicate a crash or OOM.', jobId });
     });
 
     this.queueEvents.on('failed', ({ jobId, failedReason }) => {
-      this.logger.error(`❌ Job ${jobId} failed definitively: ${failedReason}`);
+      this.logger.error({ msg: '❌ Job failed definitively', jobId, failedReason });
     });
   }
 

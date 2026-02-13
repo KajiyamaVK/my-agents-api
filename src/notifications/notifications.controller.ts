@@ -26,7 +26,7 @@ export class NotificationsController {
             });
             results.push('WhatsApp sent');
         } catch (e) {
-            this.logger.error(`Failed to send WhatsApp doorbell: ${e.message}`);
+            this.logger.error({ msg: 'Failed to send WhatsApp doorbell', error: e.message });
             results.push(`WhatsApp failed: ${e.message}`);
         }
 
@@ -35,7 +35,7 @@ export class NotificationsController {
             await this.telegramService.sendCameraSnapshot({ cameraName: targetCamera });
             results.push('Telegram sent');
         } catch (e) {
-            this.logger.error(`Failed to send Telegram doorbell: ${e.message}`);
+            this.logger.error({ msg: 'Failed to send Telegram doorbell', error: e.message });
             results.push(`Telegram failed: ${e.message}`);
         }
 

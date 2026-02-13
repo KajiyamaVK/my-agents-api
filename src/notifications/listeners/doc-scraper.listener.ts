@@ -10,7 +10,7 @@ export class DocScraperListener {
 
   @OnEvent('docScraper.completed')
   async handleScraperCompleted(payload: { jobId: string; url: string; outputPath: string }) {
-    this.logger.log(`Job ${payload.jobId} completed. Sending Telegram notification...`);
+    this.logger.log({ msg: 'Job completed. Sending Telegram notification...', jobId: payload.jobId });
 
     const message = 
       `✅ *Scraping Concluído!*\n\n` +
@@ -22,7 +22,7 @@ export class DocScraperListener {
       // Using TelegramService to send to the default admin Chat ID
       await this.telegramService.sendMessage(message); 
     } catch (error) {
-      this.logger.error(`Failed to send Telegram notification: ${error.message}`);
+      this.logger.error({ msg: 'Failed to send Telegram notification', error: error.message });
     }
   }
 
@@ -36,7 +36,7 @@ export class DocScraperListener {
     try {
       await this.telegramService.sendMessage(message);
     } catch (error) {
-      this.logger.error(`Failed to send Telegram failure notification: ${error.message}`);
+      this.logger.error({ msg: 'Failed to send Telegram failure notification', error: error.message });
     }
   }
 }

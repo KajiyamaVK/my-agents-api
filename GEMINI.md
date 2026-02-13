@@ -17,6 +17,7 @@ The user can edit this file to add or change instructions for the Gemini CLI age
 - **Update Documentation**: Every time we add, remove, or update API endpoints or features, update `README.md` with detailed usage instructions.
 - **Bruno Configuration**: Bruno configuration must be kept in sync with actual API endpoints. When updating, removing, or adding something to functions, changes must be reflected in Bruno config files immediately.
 - **Test Preservation**: When code is not being updated, added, or removed, no content should change in tests. This is a strict shield against LLM mistakes; do not modify existing tests unless the feature they test is explicitly being changed.
+- **Structured Logging**: `this.logger` must always accept an object as the first parameter to facilitate log ingestion by Loki. Avoid passing simple strings; instead, wrap context and messages in an object (e.g., `this.logger.log({ msg: 'Processing', id: 123 })`).
 
 ## Vibe Coding & TDD Workflow
 

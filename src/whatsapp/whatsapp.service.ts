@@ -45,7 +45,7 @@ export class WhatsappService implements OnModuleInit {
 
   private initializeClient() {
     this.client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
-    this.client.on('ready', () => { this.isReady = true; this.logger.log('WhatsApp Client is ready!'); });
+    this.client.on('ready', () => { this.isReady = true; this.logger.log({ msg: 'WhatsApp Client is ready!' }); });
   }
 
   private removeSessionLocks(directory: string) {
@@ -53,7 +53,7 @@ export class WhatsappService implements OnModuleInit {
     if (!fs.existsSync(resolvedPath)) return;
     try {
       execSync(`find "${resolvedPath}" -name "Singleton*" -delete`);
-    } catch (e) { this.logger.error(`Cleanup failed: ${e.message}`); }
+    } catch (e) { this.logger.error({ msg: 'Cleanup failed', error: e.message }); }
   }
 
   @AiTool({
@@ -90,7 +90,7 @@ export class WhatsappService implements OnModuleInit {
       await this.client.sendMessage(myId, media, { caption });
       return `Image sent to self`;
     } catch (e) {
-      this.logger.error(`Failed to send image to self: ${e.message}`);
+      this.logger.error({ msg: 'Failed to send image to self', error: e.message });
       throw new Error(`Failed to send image: ${e.message}`);
     }
   }

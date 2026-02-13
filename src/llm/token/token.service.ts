@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TokenService {
+  private readonly logger = new Logger(TokenService.name);
+
   constructor(private configService: ConfigService) {}
   async createToken() {
     const clientId = this.configService.getOrThrow<string>('FLOW_CLIENT_ID');
@@ -36,7 +38,7 @@ export class TokenService {
       });
 
       const data = await response.json();
-      console.log('Response Status:', JSON.stringify(data));
+      this.logger.debug({ msg: 'Response Status', data: JSON.stringify(data) });
       if (response.ok) {
         return data;
       }

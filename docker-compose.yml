@@ -7,7 +7,7 @@ services:
       - '3000:3000'
     environment:
       - PORT=3000
-      - DATABASE_URL=postgresql://system:SystemPass_9b28s1%40@postgres-postgis:5432/my_agents_db?schema=public
+      - DATABASE_URL=file:./dev.db
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - MY_TELEGRAM_CHAT_ID=${MY_TELEGRAM_CHAT_ID}
       - FLOW_CLIENT_ID=${FLOW_CLIENT_ID}
