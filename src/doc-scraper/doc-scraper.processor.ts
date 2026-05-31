@@ -36,7 +36,7 @@ export class DocScraperProcessor extends WorkerHost {
   }
 
   private async processDynamic(job: Job<any>): Promise<any> {
-    this.logger.log(`Starting dynamic scrape for ${job.data.url}`);
+    this.logger.log({ msg: 'Starting dynamic scrape', url: job.data.url });
     const { url, scrollIterations = 0, schema, targetSelector } = job.data;
     const urlObj = new URL(url);
     const domainName = urlObj.hostname.replace('www.', '');
@@ -251,7 +251,7 @@ export class DocScraperProcessor extends WorkerHost {
 
   @OnWorkerEvent('completed')
   onCompleted(job: Job, result: any) {
-    this.logger.log(`Job ${job.id} finalizado com sucesso.`);
+    this.logger.log({ msg: 'Job finalizado com sucesso', jobId: job.id });
     this.eventEmitter.emit('docScraper.completed', {
       jobId: job.id,
       url: job.data.url,
@@ -261,7 +261,7 @@ export class DocScraperProcessor extends WorkerHost {
 
   @OnWorkerEvent('failed')
   onFailed(job: Job, error: Error) {
-    this.logger.error(`Job ${job.id} falhou: ${error.message}`);
+    this.logger.error({ msg: 'Job falhou', jobId: job.id, error: error.message });
     this.eventEmitter.emit('docScraper.failed', {
       jobId: job.id,
       url: job.data?.url,

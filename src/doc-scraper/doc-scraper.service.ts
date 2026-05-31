@@ -43,13 +43,13 @@ export class DocScraperService {
     const existingFullDocPath = path.join(this.fullDocsDir, `${domain}.md`);
 
     if (fs.existsSync(existingFullDocPath)) {
-      this.logger.warn(`Scrape aborted: Full documentation for ${domain} already exists at ${existingFullDocPath}.`);
+      this.logger.warn({ msg: 'Scrape aborted: Full documentation already exists', domain, path: existingFullDocPath });
       throw new BadRequestException(
         `Documentation for ${domain} already exists. Please delete the full version before scraping again.`,
       );
     }
 
-    this.logger.log(`Adicionando tarefa de scraping para: ${url}`);
+    this.logger.log({ msg: 'Adicionando tarefa de scraping', url });
 
     await this.docQueue.add(
       'scrape',
@@ -69,7 +69,7 @@ export class DocScraperService {
   }
 
   async scrapeDynamic(dto: ScrapeDocsDto, token: string) {
-    this.logger.log(`Adicionando tarefa de scraping dinâmico para: ${dto.url}`);
+    this.logger.log({ msg: 'Adicionando tarefa de scraping dinâmico', url: dto.url });
 
     await this.docQueue.add(
       'scrape-dynamic', // Use a distinct job name or just 'scrape' with type in data
@@ -102,7 +102,7 @@ export class DocScraperService {
     const { domain, additionalPrompt } = dto;
 
     if (!domain) {
-      this.logger.error('Merge failed: domain argument is undefined or null');
+      this.logger.error({ msg: 'Merge failed: domain argument is undefined or null' });
       throw new BadRequestException('Domain is required for merging documents.');
     }
 
@@ -119,11 +119,11 @@ export class DocScraperService {
     const files = fs.readdirSync(sourceDir);
 
     if (files.length === 0) {
-      this.logger.warn(`No files found in source directory: ${sourceDir} (Output Base Dir: ${this.outputBaseDir})`);
+      this.logger.warn({ msg: 'No files found in source directory', sourceDir, outputBaseDir: this.outputBaseDir });
       return { path: null, totalFiles: 0 };
     }
 
-    this.logger.log(`Merging ${files.length} files for ${domain} into ${outputFile}...`);
+    this.logger.log({ msg: 'Merging files', domain, count: files.length, outputFile });
 
     let mergedContent = `# Full Documentation for ${domain}\nGenerated on: ${new Date().toISOString()}\n\n`;
 
@@ -144,7 +144,7 @@ export class DocScraperService {
 
     // Use LLM if additionalPrompt is provided
     if (additionalPrompt && token) {
-      this.logger.log(`Processing merged content with LLM using prompt: "${additionalPrompt}"`);
+      this.logger.log({ msg: 'Processing merged content with LLM', prompt: additionalPrompt });
       const messages = [
         {
           role: 'user',
@@ -157,10 +157,10 @@ export class DocScraperService {
         if (response && response.choices && response.choices.length > 0) {
           finalContent = response.choices[0].message.content;
         } else {
-             this.logger.warn('LLM returned no content, falling back to raw merged content.');
+             this.logger.warn({ msg: 'LLM returned no content, falling back to raw merged content.' });
         }
       } catch (error) {
-        this.logger.error(`LLM processing failed: ${error.message}`, error.stack);
+        this.logger.error({ msg: 'LLM processing failed', error: error.message, stack: error.stack });
         // Fallback or throw? User requested logic implies we want the LLM output. 
         // Failing back to raw content is safer than failing the whole request, but might be unexpected.
         // For now, let's log and keep raw content or maybe append an error note? 
@@ -172,16 +172,16 @@ export class DocScraperService {
 
     // Write Final Content
     fs.writeFileSync(outputFile, finalContent);
-    this.logger.log(`Merge complete: ${outputFile}`);
+    this.logger.log({ msg: 'Merge complete', outputFile });
 
     // Cleanup: Delete the folder containing the parts
     try {
       if (fs.existsSync(sourceDir)) {
         fs.rmSync(sourceDir, { recursive: true, force: true });
-        this.logger.log(`Deleted source directory: ${sourceDir}`);
+        this.logger.log({ msg: 'Deleted source directory', sourceDir });
       }
     } catch (err) {
-      this.logger.error(`Failed to delete source directory ${sourceDir}: ${err.message}`);
+      this.logger.error({ msg: 'Failed to delete source directory', sourceDir, error: err.message });
     }
     
     return { path: outputFile, totalFiles: files.length };

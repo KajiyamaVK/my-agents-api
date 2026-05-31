@@ -23,22 +23,19 @@ export class QueueMonitorService implements OnModuleInit {
     });
 
     this.setupListeners();
-    this.logger.log('Queue Monitor initialized for: scrape-docs');
+    this.logger.log({ msg: 'Queue Monitor initialized for: scrape-docs' });
   }
 
   private setupListeners() {
     this.queueEvents.on('stalled', ({ jobId }) => {
-      this.logger.warn(`⚠️ Job ${jobId} is stalled! This might indicate a crash or OOM.`);
+      this.logger.warn({ msg: '⚠️ Job is stalled! This might indicate a crash or OOM.', jobId });
     });
 
     this.queueEvents.on('failed', ({ jobId, failedReason }) => {
-      this.logger.error(`❌ Job ${jobId} failed definitively: ${failedReason}`);
+      this.logger.error({ msg: '❌ Job failed definitively', jobId, failedReason });
     });
   }
 
-  /**
-   * Utility to check current health status of the queue
-   */
   async getQueueStatus() {
     const [waiting, active, completed, failed, delayed] = await Promise.all([
       this.scraperQueue.getWaitingCount(),
@@ -49,5 +46,17 @@ export class QueueMonitorService implements OnModuleInit {
     ]);
 
     return { waiting, active, completed, failed, delayed };
+  }
+
+  async getActiveJobs() {
+    const jobs = await this.scraperQueue.getActive();
+    return jobs.map((job) => ({
+      id: job.id,
+      name: job.name,
+      data: job.data,
+      progress: job.progress,
+      attemptsMade: job.attemptsMade,
+      processedOn: job.processedOn ? new Date(job.processedOn).toISOString() : null,
+    }));
   }
 }

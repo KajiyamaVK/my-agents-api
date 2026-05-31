@@ -12,7 +12,7 @@
       "type": "folder",
       "name": "Chat Completion",
       "items": [
-        { "type": "file", "path": "Chat Completion/Create Chat Completion.bru" }
+        { "type": "file", "path": "Chat Completion/Chat Completion.bru" }
       ]
     },
     {
@@ -22,7 +22,31 @@
         { "type": "file", "path": "Token/Create Token.bru" },
         { "type": "file", "path": "Token/Token Health.bru" }
       ]
+    },
+    {
+      "type": "folder",
+      "name": "Doc Scraper",
+      "items": [
+        { "type": "file", "path": "Doc Scraper/Scrape Docs.bru" },
+        { "type": "file", "path": "Doc Scraper/Scrape Dynamic.bru" },
+        { "type": "file", "path": "Doc Scraper/Merge Docs.bru" }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Registry",
+      "items": [
+        { "type": "file", "path": "Registry/Get Debug Resources.bru" }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "Notifications",
+      "items": [
+        { "type": "file", "path": "Notifications/Queue Status.bru" },
+        { "type": "file", "path": "Notifications/Queue Active Jobs.bru" }
+      ]
     }
   ],
-  "environments": ["environments/local.bru", "environments/local.json"]
+  "environments": ["environments/local.bru", "environments/prod.bru"]
 }

@@ -1,0 +1,15 @@
+meta {
+  name: Queue Active Jobs
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/notifications/queue/active
+  body: none
+  auth: inherit
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}

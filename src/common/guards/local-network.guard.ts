@@ -21,7 +21,7 @@ export class LocalNetworkGuard implements CanActivate {
     const isLocal = allowedPrefixes.some(prefix => clientIp.includes(prefix));
 
     if (!isLocal) {
-      this.logger.warn(`Blocked external access attempt to local endpoint from IP: ${clientIp}`);
+      this.logger.warn({ msg: 'Blocked external access attempt to local endpoint', ip: clientIp });
       return false;
     }
 

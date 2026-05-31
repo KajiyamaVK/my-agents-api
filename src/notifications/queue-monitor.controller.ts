@@ -9,15 +9,24 @@ export class QueueMonitorController {
 
   @Get('status')
   async getStatus() {
-    this.logger.log('Requesting BullMQ queue status...');
-    
-    // This calls the utility method we added to the service
+    this.logger.log({ msg: 'Requesting BullMQ queue status...' });
     const status = await this.queueMonitor.getQueueStatus();
-    
     return {
       timestamp: new Date().toISOString(),
       queue: 'scrape-docs',
       metrics: status,
+    };
+  }
+
+  @Get('active')
+  async getActiveJobs() {
+    this.logger.log({ msg: 'Requesting active BullMQ jobs...' });
+    const jobs = await this.queueMonitor.getActiveJobs();
+    return {
+      timestamp: new Date().toISOString(),
+      queue: 'scrape-docs',
+      count: jobs.length,
+      jobs,
     };
   }
 }

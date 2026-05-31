@@ -6,6 +6,7 @@ import { BullModule } from '@nestjs/bullmq';
 import { QueueMonitorService } from './queue-monitor.service';
 import { QueueMonitorController } from './queue-monitor.controller';
 import { NotificationsController } from './notifications.controller';
+import { FrigateFixerService } from './frigate-fixer.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { NotificationsController } from './notifications.controller';
     }),
   ],
   controllers: [QueueMonitorController, NotificationsController],
-  providers: [DocScraperListener, QueueMonitorService],
+  providers: [DocScraperListener, QueueMonitorService, FrigateFixerService],
   exports: [QueueMonitorService],
 })
 export class NotificationsModule { }

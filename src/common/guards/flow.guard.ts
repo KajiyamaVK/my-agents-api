@@ -41,7 +41,7 @@ export class FlowAuthGuard implements CanActivate {
       
       return true;
     } catch (error) {
-      this.logger.error(`JWT Decoding Failed: ${error.message}`); 
+      this.logger.error({ msg: 'JWT Decoding Failed', error: error.message }); 
       throw new UnauthorizedException('Invalid token');
     }
   }

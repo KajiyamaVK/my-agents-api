@@ -36,17 +36,17 @@ export class AgentOrchestratorService {
       
       // If the provider returns a 401, we attempt to get a fresh token from our TokenService
       if (res?.status === 'error' && res.details?.includes('Status 401')) {
-        this.logger.warn('Token expired mid-orchestration. Requesting fresh token from TokenService...');
+        this.logger.warn({ msg: 'Token expired mid-orchestration. Requesting fresh token from TokenService...' });
         
         const tokenResponse = await this.tokenService.createToken();
         
         if (tokenResponse && tokenResponse.access_token) {
           activeToken = tokenResponse.access_token;
-          this.logger.log('Token refreshed successfully. Retrying LLM call.');
+          this.logger.log({ msg: 'Token refreshed successfully. Retrying LLM call.' });
           // Retry exactly once with the new token
           res = await this.chatCompletion.createChatCompletion(messages, activeToken, functions);
         } else {
-          this.logger.error(`Token refresh failed: ${tokenResponse?.details || 'Unknown error'}`);
+          this.logger.error({ msg: 'Token refresh failed', details: tokenResponse?.details || 'Unknown error' });
         }
       }
       return res;
@@ -102,7 +102,7 @@ export class AgentOrchestratorService {
     
     // BEST PRACTICE: Added safety check for null/undefined token before logging slice
     const tokenPreview = activeToken ? `...${activeToken.slice(-10)}` : 'None';
-    this.logger.log(`Orchestration finished. Final token used: ${tokenPreview}`);
+    this.logger.log({ msg: 'Orchestration finished', tokenPreview });
     
     return finalReply;
   }
@@ -112,13 +112,13 @@ export class AgentOrchestratorService {
       const args = JSON.parse(argsString);
       
       // BEST PRACTICE: Enhanced logging for tool execution and input observability
-      this.logger.log(`Executing tool: ${name} | Args: ${argsString}`);
+      this.logger.log({ msg: 'Executing tool', tool: name, args: argsString });
       
       const output = await this.toolDiscovery.execute(name, args);
       const content = typeof output === 'string' ? output : JSON.stringify(output);
 
       // Log the result to see what the tool returned to the orchestrator
-      this.logger.log(`Tool [${name}] output: ${content.substring(0, 100)}${content.length > 100 ? '...' : ''}`);
+      this.logger.log({ msg: `Tool [${name}] output`, content: content.substring(0, 100) + (content.length > 100 ? '...' : '') });
 
       // Add result with proper role: 'tool' for tool_calls, 'function' for legacy
       messages.push({
@@ -128,7 +128,7 @@ export class AgentOrchestratorService {
         content: content,
       });
     } catch (error) {
-      this.logger.error(`Tool execution failed [${name}]: ${error.message}`);
+      this.logger.error({ msg: `Tool execution failed [${name}]`, error: error.message });
       messages.push({
         role: toolId ? 'tool' : 'function',
         name: name,

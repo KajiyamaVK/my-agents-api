@@ -24,26 +24,26 @@ export class RegistryService implements OnModuleInit {
   }
 
   private debugConfigAccess() {
-    this.logger.warn(`[DEBUG] Checking configuration...`);
-    this.logger.log(`[DEBUG] CWD: ${process.cwd()}`);
-    this.logger.log(`[DEBUG] Target Path: ${this.configPath}`);
+    this.logger.warn({ msg: '[DEBUG] Checking configuration...' });
+    this.logger.log({ msg: '[DEBUG] CWD', cwd: process.cwd() });
+    this.logger.log({ msg: '[DEBUG] Target Path', path: this.configPath });
 
     const dir = path.dirname(this.configPath);
     if (fs.existsSync(dir)) {
       try {
         const files = fs.readdirSync(dir);
-        this.logger.log(`[DEBUG] Files found in ${dir}: [${files.join(', ')}]`);
+        this.logger.log({ msg: `[DEBUG] Files found in ${dir}`, files });
       } catch (e) {
-        this.logger.error(`[DEBUG] Cannot read directory ${dir}: ${e.message}`);
+        this.logger.error({ msg: `[DEBUG] Cannot read directory ${dir}`, error: e.message });
       }
     } else {
-      this.logger.error(`[DEBUG] Directory ${dir} does NOT exist inside the container!`);
+      this.logger.error({ msg: `[DEBUG] Directory does NOT exist inside the container!`, dir });
     }
   }
 
   private async syncFromLocalFile() {
     if (!fs.existsSync(this.configPath)) {
-      this.logger.warn(`FAILED: Config file not found at ${this.configPath}. Skipping sync.`);
+      this.logger.warn({ msg: `FAILED: Config file not found at ${this.configPath}. Skipping sync.` });
       return;
     }
 
@@ -52,11 +52,15 @@ export class RegistryService implements OnModuleInit {
       const config = yaml.load(fileContent) as ResourceConfig;
 
       if (!config) {
-        this.logger.warn('YAML file is empty or invalid.');
+        this.logger.warn({ msg: 'YAML file is empty or invalid.' });
         return;
       }
 
-      this.logger.log(`Starting sync... Found ${config.cameras?.length || 0} cameras and ${config.contacts?.length || 0} contacts in YAML.`);
+      this.logger.log({ 
+        msg: 'Starting sync...', 
+        cameras: config.cameras?.length || 0, 
+        contacts: config.contacts?.length || 0 
+      });
 
       // Sync Contacts
       if (config.contacts) {
@@ -98,9 +102,9 @@ export class RegistryService implements OnModuleInit {
         }
       }
 
-      this.logger.log('Sync completed successfully.');
+      this.logger.log({ msg: 'Sync completed successfully.' });
     } catch (error) {
-      this.logger.error(`Sync failed: ${error.message}`);
+      this.logger.error({ msg: 'Sync failed', error: error.message });
     }
   }
 
