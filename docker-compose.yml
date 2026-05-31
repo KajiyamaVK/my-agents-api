@@ -2,7 +2,7 @@ services:
   api:
     build: .
     container_name: my-agents-api
-    restart: unless-stopped
+    restart: always
     ports:
       - '3000:3000'
     environment:
@@ -18,14 +18,37 @@ services:
       - FRIGATE_URL=http://frigate:5000
       - NODE_ENV=production
       - CRAWLEE_STORAGE_DIR=/app/scraped_docs/storage
-      - REDIS_HOST=redis
+      - REDIS_HOST=my-agents-redis
       - REDIS_PORT=6379
+      # Claude CLI auth — required for the frigate auto-fix feature
+      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL}
+      - ANTHROPIC_AUTH_TOKEN=${ANTHROPIC_AUTH_TOKEN}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL}
+      - CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=${CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS}
     depends_on:
       - redis
+    group_add:
+      # docker group GID — grants the node user access to /var/run/docker.sock
+      - '986'
     volumes:
       - ./scraped_docs:/app/scraped_docs
       - ./.wwebjs_auth:/app/.wwebjs_auth
       - ../../.config:/app/.config
+      # Claude CLI binary (read-only) — required for the frigate auto-fix feature
+      - /home/kajiyamavk/.local/share/claude/versions/2.1.132:/usr/local/bin/claude:ro
+      # Claude CLI settings file — required for skill discovery and config
+      - /home/kajiyamavk/.claude:/home/node/.claude
+      - /home/kajiyamavk/.claude.json:/home/node/.claude.json
+      # Docker-in-container — required for fix-frigate skill (docker ps, docker logs, docker compose)
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /usr/libexec/docker:/usr/libexec/docker:ro
+      # Frigate config dir — fix-frigate skill reads and edits config.yml, runs docker compose here
+      - /home/kajiyamavk/.config/frigate:/home/node/.config/frigate
+      # ONVIF discovery scripts — fix-frigate skill runs Python discovery from this path
+      - /home/kajiyamavk/src/myCams:/home/node/src/myCams:ro
+      # Claude Code project settings — allows the fix-frigate bash commands without prompting
+      - /home/kajiyamavk/src/my-agents-api/.claude:/app/.claude:ro
     networks:
       - proxy-net
 

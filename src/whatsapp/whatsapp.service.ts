@@ -40,7 +40,13 @@ export class WhatsappService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    if (this.client) this.client.initialize();
+    if (this.client) {
+      // Intentionally not awaited — Chrome launch failures must not crash the process.
+      // WhatsApp will be unavailable but all other services continue normally.
+      this.client.initialize().catch((error: Error) => {
+        this.logger.warn({ msg: 'WhatsApp client failed to initialize — service unavailable', error: error.message });
+      });
+    }
   }
 
   private initializeClient() {

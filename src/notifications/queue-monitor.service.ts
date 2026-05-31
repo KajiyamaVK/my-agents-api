@@ -36,9 +36,6 @@ export class QueueMonitorService implements OnModuleInit {
     });
   }
 
-  /**
-   * Utility to check current health status of the queue
-   */
   async getQueueStatus() {
     const [waiting, active, completed, failed, delayed] = await Promise.all([
       this.scraperQueue.getWaitingCount(),
@@ -49,5 +46,17 @@ export class QueueMonitorService implements OnModuleInit {
     ]);
 
     return { waiting, active, completed, failed, delayed };
+  }
+
+  async getActiveJobs() {
+    const jobs = await this.scraperQueue.getActive();
+    return jobs.map((job) => ({
+      id: job.id,
+      name: job.name,
+      data: job.data,
+      progress: job.progress,
+      attemptsMade: job.attemptsMade,
+      processedOn: job.processedOn ? new Date(job.processedOn).toISOString() : null,
+    }));
   }
 }
